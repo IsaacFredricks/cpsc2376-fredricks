@@ -29,16 +29,25 @@ int main(){
             std::cout << "You chose to deposit money\n";
 
             double deposit {getDouble("Enter an ammount to deposit: ")};
+
+            balance += deposit;
+
+            writeToFile(fileName, balance);
         }   
 
         else if(choice == 3){
             std::cout << "You chose to withdraw money\n";
 
             double withdraw {getDouble("Enter an ammount to withdraw: ")};
+
+            balance -= withdraw;
+
+            writeToFile(fileName, balance);
         }
 
         else if(choice == 4){
             std::cout << "Bye.";
+            
             break;
         }
 
@@ -62,13 +71,13 @@ int getInt(const std::string& prompt){//like getInt from practice01
         if(std::cin.fail() || input < 0){
             std::cin.clear(); //clears the error
         
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             //discards invalid input
         
              std::cout << "Inproper input. please try again.\n";
         }
         else{
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return input;
             //discards any extra input
             break;//exits loop
@@ -86,13 +95,13 @@ double getDouble(const std::string& prompt){//like getInt but for doubles
         if(std::cin.fail() || input < 0){
             std::cin.clear(); //clears the error
         
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             //discards invalid input
         
              std::cout << "Inproper input. please try again.\n";
         }
         else{
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return input;
             //discards any extra input
             break;//exits loop
