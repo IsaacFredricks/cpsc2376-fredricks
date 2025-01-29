@@ -6,7 +6,7 @@
 int getInt(const std::string& prompt);//forward declarations
 double getDouble(const std::string& prompt);
 void writeToFile(const std::string& fileName, double balance);
-void readFile(const std::string& fileName, double& balance);
+void readFile(const std::string& fileName, double& balance);//for initial checks
 void checkBalance(const std::string& fileName);
 
 int main(){
@@ -24,6 +24,7 @@ int main(){
             std::cout << "You chose to check balance\n";
 
             checkBalance(fileName);
+
         }
 
         else if(choice == 2){
@@ -151,6 +152,7 @@ void checkBalance(const std::string& fileName){
 
     if(!inF.is_open()){
         std::cout << "Failed to open file for reading.\n";
+
     }
 
     else{
