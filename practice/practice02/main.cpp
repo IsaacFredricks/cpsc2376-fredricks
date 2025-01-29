@@ -5,15 +5,15 @@
 
 int getInt(const std::string& prompt);//forward declarations
 double getDouble(const std::string& prompt);
+void writeToFile(const std::string& fileName, double balance);
+void readFile(const std::string& fileName, double& balance);
 void checkBalance(const std::string& fileName);
-void writeToFile(std::string& fileName, double balance);
-
 
 int main(){
     //insert code here
-    double balance{};//if the txt file can't be read, set the balance to $100.00
     std::string fileName("account_balance.txt");
-    checkBalance(fileName);//checks if the file is there on startup
+    double balance{};//if the txt file can't be read, set the balance to $100.00
+    readFile(fileName, balance);//checks if the file is there at startup
 
     while(true){
         std::cout << "\n======Menu======\n1. Check Balance\n2. Deposit Money\n3. Withdraw money\n4. Exit\n";
@@ -28,19 +28,26 @@ int main(){
         else if(choice == 2){
             std::cout << "You chose to deposit money\n";
 
-            double deposit {getDouble("Enter an ammount to deposit: ")};
+            double deposit {getDouble("Enter an ammount to deposit: $")};
 
             balance += deposit;
 
-            writeToFile(fileName, balance);
+            writeToFile(fileName, balance);//updates balance
         }   
 
         else if(choice == 3){
             std::cout << "You chose to withdraw money\n";
 
-            double withdraw {getDouble("Enter an ammount to withdraw: ")};
+            double withdraw {getDouble("Enter an ammount to withdraw: $")};
 
-            balance -= withdraw;
+
+            if(withdraw > balance){
+                std::cout << "You don't have enough money for that!\n";
+            }
+            
+            else{
+                balance -= withdraw;
+            }
 
             writeToFile(fileName, balance);
         }
@@ -76,6 +83,7 @@ int getInt(const std::string& prompt){//like getInt from practice01
         
              std::cout << "Inproper input. please try again.\n";
         }
+
         else{
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return input;
@@ -100,6 +108,7 @@ double getDouble(const std::string& prompt){//like getInt but for doubles
         
              std::cout << "Inproper input. please try again.\n";
         }
+
         else{
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             return input;
@@ -109,10 +118,43 @@ double getDouble(const std::string& prompt){//like getInt but for doubles
     }
 }
 
+void writeToFile(const std::string& fileName, double balance){
+    std::ofstream outf(fileName);//opens file
+
+    outf << balance;//overwrites the first line of account_balance.txt
+    outf.close();//makes sure that file is saved
+
+}
+
+void readFile(const std::string& fileName, double& balance){
+    std::ifstream inF(fileName);
+    
+    if(!inF.is_open()){//if writing to a file that doesn't exist, it will make a new one
+        inF.close();//very important! can't read and write to files at once
+        balance = 100.00;
+
+        writeToFile(fileName, balance);
+        std::cout << "Failed to open file. Setting balance to $" << balance << '\n';
+    }
+
+    else{
+        inF >> balance;//gets balance amount from file
+    }
+}
+
+
 void checkBalance(const std::string& fileName){
+    std::ifstream inF(fileName);
+    std::string line {};
 
+    if(!inF.is_open()){
+        std::cout << "Failed to open file for reading.\n";
+    }
+
+    else{
+        while(inF >> line){
+            std::cout << "Account balance: $" << line << '\n';
+        }
+    }
 }
 
-void writeToFile(std::string& fileName, double balance){
-
-}
