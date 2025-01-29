@@ -2,21 +2,36 @@
 #include <fstream>//for file input/output
 #include <limits>//for getInt
 
-
 int getInt(const std::string& prompt);//forward declarations
 double getDouble(const std::string& prompt);
-void writeToFile(const std::string& fileName, double balance);
-void readFile(const std::string& fileName, double& balance);//for initial checks
-void checkBalance(const std::string& fileName);
+bool writeToFile(const std::string& fileName, double balance);
+bool checkBalance(const std::string& fileName);
+
 
 int main(){
     //insert code here
-    std::string fileName("account_balance.txt");
+    std::string fileName{"account_balance.txt"};
     double balance{};//if the txt file can't be read, set the balance to $100.00
-    readFile(fileName, balance);//checks if the file is there at startup
+
+    std::ifstream inF(fileName);
+
+    if(!inF.good()){//checks if file exists. want it to be different text from check balance and writeToFile
+        balance = 100.00;
+
+        writeToFile(fileName, balance);
+        std::cout << "File doesn't exist. Making a new one and setting the initial balance to $" << balance << '\n';
+        inF.close();
+    }
+
+    else{
+        inF >> balance;
+        inF.close();
+        std::cout << "The file exists. The balance is: $" << balance << '\n';
+    }
+    
 
 
-    while(true){
+    while(true){//menu
         std::cout << "\n======Menu======\n1. Check Balance\n2. Deposit Money\n3. Withdraw money\n4. Exit\n";
         int choice {getInt("Enter a number 1-4 (inclusive): ")};
 
@@ -25,6 +40,10 @@ int main(){
 
             checkBalance(fileName);
 
+            if(!checkBalance(fileName)){
+                std::cout << "Critical error. Shutting down\n";
+                return 1;//throws an error
+            }
         }
 
         else if(choice == 2){
@@ -35,6 +54,11 @@ int main(){
             balance += deposit;
 
             writeToFile(fileName, balance);//updates balance
+
+            if(!writeToFile(fileName, balance)){
+                std::cout << "Critical error. Shutting down\n";
+                return 1;//throws an error
+            }
         }   
 
         else if(choice == 3){
@@ -51,7 +75,13 @@ int main(){
                 balance -= withdraw;
             }
 
-            writeToFile(fileName, balance);
+
+            writeToFile(fileName, balance); 
+
+            if(!writeToFile(fileName, balance)){
+                std::cout << "Critical error. Shutting down\n";
+                return 1;//throws an error
+            }
         }
 
         else if(choice == 4){
@@ -120,45 +150,40 @@ double getDouble(const std::string& prompt){//like getInt but for doubles
     }
 }
 
-void writeToFile(const std::string& fileName, double balance){
-    std::ofstream outf(fileName);//opens file
+bool writeToFile(const std::string& fileName, double balance){
+    std::ofstream outF(fileName);//opens file
 
-    outf << balance;//overwrites the first line of account_balance.txt
-    outf.close();//makes sure that file is saved
-
-}
-
-void readFile(const std::string& fileName, double& balance){
-    std::ifstream inF(fileName);
-    
-    if(!inF.is_open()){//if writing to a file that doesn't exist, it will make a new one
-        inF.close();//very important! can't read and write to files at once
-        balance = 100.00;
-
-        writeToFile(fileName, balance);
-        std::cout << "Failed to open file. Setting balance to $" << balance << '\n';
+    if(!outF.is_open()){
+        std::cout << "Failed to open file for reading.\n";
+        return false;
     }
 
     else{
-        inF >> balance;//gets balance amount from file
-        std::cout << "Initial balance is: $" << balance << '\n';
+        outF << balance;//overwrites the first line of account_balance.txt
+        outF.close();//makes sure that file is saved
+
     }
+    
+    return true;
 }
 
-
-void checkBalance(const std::string& fileName){
+bool checkBalance(const std::string& fileName){
     std::ifstream inF(fileName);
     std::string line {};
 
     if(!inF.is_open()){
         std::cout << "Failed to open file for reading.\n";
-
+        return false;
     }
 
     else{
         while(inF >> line){
             std::cout << "Account balance: $" << line << '\n';
         }
+
+        inF.close();
     }
+
+    return true;
 }
 
