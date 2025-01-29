@@ -15,6 +15,7 @@ int main(){
     double balance{};//if the txt file can't be read, set the balance to $100.00
     readFile(fileName, balance);//checks if the file is there at startup
 
+
     while(true){
         std::cout << "\n======Menu======\n1. Check Balance\n2. Deposit Money\n3. Withdraw money\n4. Exit\n";
         int choice {getInt("Enter a number 1-4 (inclusive): ")};
@@ -139,6 +140,7 @@ void readFile(const std::string& fileName, double& balance){
 
     else{
         inF >> balance;//gets balance amount from file
+        std::cout << "Initial balance is: $" << balance << '\n';
     }
 }
 
