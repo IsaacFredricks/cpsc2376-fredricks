@@ -19,8 +19,8 @@
 int getInt(const std::string& prompt);
 void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
 std::vector<std::vector<char>> makeBoard();
-bool canMakeMove(std::vector<std::vector<char>>& board, int row, char c);
-void makeMove(std::vector<std::vector<char>>& board, int row, char c);
+bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c);
+void makeMove(std::vector<std::vector<char>>& board, int col, char c);
 bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2);//not done
 bool playAgain();
 
@@ -29,7 +29,7 @@ int main(){
     std::cout << "\n======== Connect 4 =======\n\n";
 
     std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins." 
-    << "*If all of the spaces are taken and no one has won, the game ends in a draw."
+    << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
     << "*Player one uses O's while Player 2 uses @'s.\n*Player 1 starts first.\n\n";
 
     std::cout << "Player 1, enter your name: ";
@@ -49,7 +49,7 @@ int main(){
         }
     }
 
-    std::cin.ignore();//helps any wierdness going between
+    //std::cin.ignore();//helps any wierdness going between
 
     auto gameBoard{ makeBoard() };
 
@@ -69,10 +69,10 @@ int main(){
             piece = 'O';
         }
 
-        int row{ getInt("Enter the row you want to play: ") };
+        int col{ getInt("Enter the column you want to play: ") - 1 };
         
-        if(canMakeMove(gameBoard, row, piece)){
-            makeMove(gameBoard, row, piece);
+        if(canMakeMove(gameBoard, col, piece)){
+            makeMove(gameBoard, col, piece);
             turn++;//increments turn only if able to make a moove
         }
 
@@ -133,18 +133,19 @@ int getInt(const std::string& prompt) {//like getInt from practice01
 }
 
 void printBoard(const std::vector<std::vector<char>>& board) {
-    //enter a row number sometime
-    std::cout << "-------------------\n";
+    
+    std::cout << " 1  2  3  4  5  6  7\n";
+    std::cout << "----------------------\n";
 
     for (auto row : board) {
         for (auto c : row) {
-            std::cout << '|' << c;
+            std::cout << "| " << c;
         }
 
         std::cout << '|';
         std::cout << '\n';
     }
-    std::cout << "-------------------\n";
+    std::cout << "----------------------\n";
 }
 
 std::vector<std::vector<char>> makeBoard(){
@@ -159,8 +160,8 @@ std::vector<std::vector<char>> makeBoard(){
     return board;
 }
 
-bool canMakeMove(std::vector<std::vector<char>>& board, int row, char c){
-    if(board.at(row).at(0) == '@' || board.at(row).at(0) == 'O'){
+bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c){
+    if(board.at(0).at(col) == '@' || board.at(0).at(col) == 'O'){
             std::cout << "All spots on this row are taken. please try again\n";
             return false;
     }
@@ -170,12 +171,12 @@ bool canMakeMove(std::vector<std::vector<char>>& board, int row, char c){
     }
 }
 
-void makeMove(std::vector<std::vector<char>>& board, int row, char c) {
+void makeMove(std::vector<std::vector<char>>& board, int col, char c) {
     //make a for loop that starts at the end and then works itself backwards until it reaches a spot that isn't taken
 
-    for(int i {board.at(row).size() - 1}; i >= 0; i--){
-        if(board.at(row).at(i) == ' '){
-            board.at(row).at(i) = c;//changes row to current char
+    for(int i {board.at(0).size() - 1}; i >= 0; i--){
+        if(board.at(i).at(col) == ' '){
+            board.at(i).at(col) = c;//changes row to current char
         }
     }
     
@@ -186,16 +187,19 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
 
     int player1X {};
     int player1Y {};
-    int player1Z {};
+    int player1Z {};//z means diagonally here
 
     int player2X {};
     int player2Y {};
     int player2Z {};
 
-    for(int i {0}; i < board.size(); i++){//checks if there is a horizontal 4 in a row
+    for(int i {0}; i < board.size(); i++){//checks if 4 in a row
 
-        for(int col {0}; col < board.at(i).size(); col += 2){//i am going insane
-            if(col < 6 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O'){
+        for(int col {0}; col < board.at(i).size(); col++){//i am going insane
+
+            std::cout << "Checking 4 in a row horizontally...\n";
+
+            if(col < 6 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O'){//checks horizontally
                 player1X++;
             }
 
@@ -203,44 +207,87 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                 player2X++;
             }
 
-            else if(col < 6 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == 'O'){
-                player2X++;
-                player1X = 0;
-            }
-
-            else if(col < 6 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == ' '){
-                player2X = 0;
-            }
-
-            else if(col < 6 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == ' '){
-                player1X = 0;
-            }
-
-            else if(col < 6 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == '@'){
+            else if(col < 6 && player2X < 2 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == '@'){
                 player1X++;
                 player2X = 0;
             }
 
-            else{
-                std::cout << "Checking for 4 in a row horizontally...\n";
+            else if(col < 6 && player1X < 2 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == 'O'){
+                player2X++;
+                player1X = 0;
             }
 
-            if(player1X = 2){
+            else if(col < 6 && player2X < 2 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == ' '){
+                player2X = 0;
+            }
+
+            else if(col < 6 && player1X < 2 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == ' '){
+                player1X = 0;
+            }
+
+            else{
+                std::cout << "No 4 in a row in this row\n";
+            }
+
+            std::cout << "Checking 4 in a row vertically...\n";
+
+            if(i < 7 && board.at(i).at(col) == 'O' && board.at(i  + 1).at(col) == 'O'){//checks vertically
+                player1Y++;
+            }
+
+            else if(i < 7 && board.at(i).at(col) == '@' && board.at(i  + 1).at(col) == '@'){
+                player2Y++;
+            }
+
+            else if(col < 6 && player2Y < 2 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == '@'){
+                player1Y++;
+                player2Y = 0;
+            }
+
+            else if(col < 6 && player1Y < 2 && board.at(i).at(col) == '@' && board.at(i + 1).at(col) == 'O'){
+                player2Y++;
+                player1Y = 0;
+            }
+
+            else if(col < 6 && player2Y < 2 && board.at(i).at(col) == '@' && board.at(i + 1).at(col) == ' '){
+                player2Y = 0;
+            }
+
+            else if(col < 6 && player1Y < 2 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == ' '){
+                player1Y = 0;
+            }
+
+            else{
+                std::cout << "No 4 in a row in this column\n";
+            }
+
+            if(player1X == 2 || player1Y == 2 || player1Z == 2){
                 std::cout << player1 << " won!\n";
                 return true;
             }
 
-            else if(player2X = 2){
+            else if(player2X == 2 || player2Y || player2Z){
                 std::cout << player2 << " won!\n";
                 return true;
             }
 
         }
 
-        //resets the x variables
+        
+        //resets the x & y variables
         player1X = 0;
         player2X = 0;
+        player1Y = 0;
+        player2Y = 0;
+
     }
+
+    std::cout << "Checking for 4 in a row diagonally\n";
+    //need a normal for loop for this one and a revverse for loop to check diagonally
+    for(int i {0}; i < board.size(); i++){
+
+    }
+    
 
     //checks if draw
     if(board.at(0).at(0) != ' ' && board.at(0).at(1) != ' ' && board.at(0).at(2) != ' ' 
