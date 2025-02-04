@@ -12,14 +12,15 @@
 *Function for Make grid with | and _
 *Way to replay the game
 *Functions to check input
-*If at end no person wins, it�s a draw
+*If at end no person wins, its a draw
 */
 
 //forward declarations here
 int getInt(const std::string& prompt);
 void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
 std::vector<std::vector<char>> makeBoard();
-void makeMove(std::vector<std::vector<char>>& board, int col, char c);
+bool canMakeMove(std::vector<std::vector<char>>& board, int row, char c);
+void makeMove(std::vector<std::vector<char>>& board, int row, char c);
 //bool isOver(std::array<std::array<char, 7>, 6>& board);//not done
 bool playAgain();
 
@@ -44,17 +45,28 @@ int main(){
     printBoard(gameBoard);
 
     int turn{1};// tells what turn it is. Odd is player 1, even is player 2
+    char piece {};//game piece. changes based off of person
+
     while (true) {
         if (turn % 2 == 0) {
-                std::cout << player2 << ", ";
-                int col{ getInt("Enter the column you want to play: ") };
-                makeMove(gameBoard, col, '@');
+            std::cout << player2 << ", ";
+            piece = '@';
         }
 
         else {
             std::cout << player1 << ", ";
-            int col{ getInt("Enter the column you want to play: ") };
-            makeMove(gameBoard, col, 'O');
+            piece = 'O';
+        }
+
+        int row{ getInt("Enter the row you want to play: ") };
+        
+        if(canMakeMove(gameBoard, row, piece)){
+            makeMove(gameBoard, row, piece);
+            turn++;//increments turn only if able to make a moove
+        }
+
+        else{
+            std::cout << "Unable to make move there. Try another spot\n";
         }
 
         printBoard(gameBoard);
@@ -76,7 +88,6 @@ int main(){
             }
         }*/
 
-        turn++;//increments turn
     }
     return 0;//creator: Isaac Fredricks
 }
@@ -134,8 +145,26 @@ std::vector<std::vector<char>> makeBoard(){
     return board;
 }
 
-void makeMove(std::vector<std::vector<char>>& board, int col, char c) {//not done
+bool canMakeMove(std::vector<std::vector<char>>& board, int row, char c){
+    if(board.at(row).at(0) == '@' || board.at(row).at(0) == 'O'){
+            std::cout << "All spots on this row are taken. please try again\n";
+            return false;
+    }
+
+    else{
+        return true;
+    }
+}
+
+void makeMove(std::vector<std::vector<char>>& board, int row, char c) {//not done
     //make a for loop that starts at the end and then works itself backwards until it reaches a spot that isn't taken
+
+    for(int i {board.at(row).size() - 1}; i >= 0; i--){
+        if(board.at(row).at(i) == ' '){
+            board.at(row).at(i) = c;//changes row to current char
+        }
+    }
+    
 }
 
 /*
