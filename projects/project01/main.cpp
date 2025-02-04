@@ -207,38 +207,41 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
         for(int col {0}; col < board.at(i).size(); col++){//i am going insane
 
             if(i < 5 && col < 6){
-                //checks vertically
+                //checks horizontally
+                //doesn't work right now
                 if(board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O'){
-                    player1Y++;
-                }
-
-                else if(board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O'){
-                    player2Y++;
-                }
-
-                else if(player1Y > 3 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) != 'O'){
-                    player1Y = 1;
-                }
-
-                else if(player2Y > 3 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) != '@'){
-                    player2Y = 1;
-                }
-
-                //checks vertically
-                if(board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'O'){
                     player1X++;
                 }
 
-                else if(board.at(i).at(col) == '@' && board.at(i + 1).at(col) == '@'){
+                else if(board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O'){
                     player2X++;
                 }
 
-                else if(player1X > 3 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) != 'O'){
+                else if(player1Y > 2 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) != 'O'){
                     player1X = 1;
                 }
 
-                else if(player2X > 3 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col) != '@'){
+                else if(player2Y > 2 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) != '@'){
                     player2X = 1;
+                }
+                
+                
+                //checks vertically
+                //works
+                if(board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'O'){
+                    player1Y++;
+                }
+
+                else if(board.at(i).at(col) == '@' && board.at(i + 1).at(col) == '@'){
+                    player2Y++;
+                }
+
+                else if(player1X > 2 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) != 'O'){
+                    player1Y = 1;
+                }
+
+                else if(player2X > 2 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col) != '@'){
+                    player2Y = 1;
                 }
 
             }
