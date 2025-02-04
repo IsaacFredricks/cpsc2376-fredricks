@@ -21,22 +21,33 @@ void printBoard(const std::vector<std::vector<char>>& board);//don't want to cha
 std::vector<std::vector<char>> makeBoard();
 bool canMakeMove(std::vector<std::vector<char>>& board, int row, char c);
 void makeMove(std::vector<std::vector<char>>& board, int row, char c);
-//bool isOver(std::array<std::array<char, 7>, 6>& board);//not done
+bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2);//not done
 bool playAgain();
 
 
 int main(){
     std::cout << "\n======== Connect 4 =======\n\n";
 
-    std::cout << "Rules: 1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins. Player one uses O's while Player 2 uses @'s. Player 1 starts first.\n";
+    std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins." 
+    << "*If all of the spaces are taken and no one has won, the game ends in a draw."
+    << "*Player one uses O's while Player 2 uses @'s.\n*Player 1 starts first.\n\n";
 
     std::cout << "Player 1, enter your name: ";
     std::string player1{};
+    std::string player2{};
     std::getline(std::cin, player1);
 
-    std::cout << "\nPlayer 2, enter your name: ";
-    std::string player2{};
-    std::getline(std::cin, player2);
+    while(true){//checks to see if the names are the same
+        std::cout << "\nPlayer 2, enter your name: ";
+        std::getline(std::cin, player2);
+        if(player1 == player2){
+            std::cout << "Pick a different name.\n";
+        }
+
+        else{
+            break;
+        }
+    }
 
     std::cin.ignore();//helps any wierdness going between
 
@@ -73,20 +84,21 @@ int main(){
 
         //check to see who won
         //uncomment when done
-        /*if (isOver(gameBoard)) {
+        if (isOver(gameBoard, player1, player2)) {
             //print who won
             bool replay{ playAgain() };
 
             if (replay) {
                 std::cout << "Starting a new game. Clearing the board\n";
                 gameBoard = makeBoard();
+                turn = 1;
             }
 
             else {
                 std::cout << "Ending the game. Goodbye!\n";
                 break;//ends loop
             }
-        }*/
+        }
 
     }
     return 0;//creator: Isaac Fredricks
@@ -121,13 +133,15 @@ int getInt(const std::string& prompt) {//like getInt from practice01
 }
 
 void printBoard(const std::vector<std::vector<char>>& board) {
+    //enter a row number sometime
     std::cout << "-------------------\n";
 
     for (auto row : board) {
         for (auto c : row) {
-            std::cout << ' ' << c << ' ';
+            std::cout << '|' << c;
         }
-    
+
+        std::cout << '|';
         std::cout << '\n';
     }
     std::cout << "-------------------\n";
@@ -156,7 +170,7 @@ bool canMakeMove(std::vector<std::vector<char>>& board, int row, char c){
     }
 }
 
-void makeMove(std::vector<std::vector<char>>& board, int row, char c) {//not done
+void makeMove(std::vector<std::vector<char>>& board, int row, char c) {
     //make a for loop that starts at the end and then works itself backwards until it reaches a spot that isn't taken
 
     for(int i {board.at(row).size() - 1}; i >= 0; i--){
@@ -167,17 +181,78 @@ void makeMove(std::vector<std::vector<char>>& board, int row, char c) {//not don
     
 }
 
-/*
-bool isOver(std::vector<std::vector<char>>& board) {//not done
 
+bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2){//not done
 
-    if(player one got a 4 in a row){
-        std::cout << "Player Won";
+    int player1X {};
+    int player1Y {};
+    int player1Z {};
 
+    int player2X {};
+    int player2Y {};
+    int player2Z {};
 
+    for(int i {0}; i < board.size(); i++){//checks if there is a horizontal 4 in a row
+
+        for(int col {0}; col < board.at(i).size(); col += 2){//i am going insane
+            if(col < 6 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O'){
+                player1X++;
+            }
+
+            else if(col < 6 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == '@'){
+                player2X++;
+            }
+
+            else if(col < 6 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == 'O'){
+                player2X++;
+                player1X = 0;
+            }
+
+            else if(col < 6 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == ' '){
+                player2X = 0;
+            }
+
+            else if(col < 6 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == ' '){
+                player1X = 0;
+            }
+
+            else if(col < 6 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == '@'){
+                player1X++;
+                player2X = 0;
+            }
+
+            else{
+                std::cout << "Checking for 4 in a row horizontally...\n";
+            }
+
+            if(player1X = 2){
+                std::cout << player1 << " won!\n";
+                return true;
+            }
+
+            else if(player2X = 2){
+                std::cout << player2 << " won!\n";
+                return true;
+            }
+
+        }
+
+        //resets the x variables
+        player1X = 0;
+        player2X = 0;
+    }
+
+    //checks if draw
+    if(board.at(0).at(0) != ' ' && board.at(0).at(1) != ' ' && board.at(0).at(2) != ' ' 
+    && board.at(0).at(3) != ' ' && board.at(0).at(4) != ' ' && board.at(0).at(5) != ' ') {
+        std::cout << "It's a draw!\n";
+        return true;
+    }
+
+    return false;
     //checks who won or if its a draw
 }
-*/
+
 
 bool playAgain() {
     while (true) {
