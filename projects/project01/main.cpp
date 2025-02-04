@@ -1,5 +1,5 @@
 #include <iostream>//no ai used
-#include <array>//for game Board
+#include <vector>//for game Board
 #include <limits>//for edge testing
 #include <string>//for getLine
 
@@ -17,9 +17,9 @@
 
 //forward declarations here
 int getInt(const std::string& prompt);
-void printBoard(const std::array<std::array<char, 7>, 6>& board);//don't want to change the board with this one
-std::array<std::array<char, 7>, 6> makeBoard();
-void makeMove(std::array<std::array<char, 7>, 6>& board, int col, char c);
+void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
+std::vector<std::vector<char>> makeBoard();
+void makeMove(std::vector<std::vector<char>>& board, int col, char c);
 //bool isOver(std::array<std::array<char, 7>, 6>& board);//not done
 bool playAgain();
 
@@ -27,14 +27,13 @@ bool playAgain();
 int main(){
     std::cout << "\n======== Connect 4 =======\n\n";
 
-    std::cout << "Rules: 1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins.\n"
-    << "Player one uses O's while Player 2 uses @'s. Player 1 starts first.\n";
+    std::cout << "Rules: 1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins. Player one uses O's while Player 2 uses @'s. Player 1 starts first.\n";
 
     std::cout << "Player 1, enter your name: ";
     std::string player1{};
     std::getline(std::cin, player1);
 
-    std::cout << "Player 2, enter your name: ";
+    std::cout << "\nPlayer 2, enter your name: ";
     std::string player2{};
     std::getline(std::cin, player2);
 
@@ -47,17 +46,18 @@ int main(){
     int turn{1};// tells what turn it is. Odd is player 1, even is player 2
     while (true) {
         if (turn % 2 == 0) {
-                std::cout << player2 << " ";
-                int col{ getInt("Enter the column you want to play") };
+                std::cout << player2 << ", ";
+                int col{ getInt("Enter the column you want to play: ") };
                 makeMove(gameBoard, col, '@');
         }
 
         else {
-            std::cout << player1 << " ";
-            int col{ getInt("Enter the column you want to play") };
+            std::cout << player1 << ", ";
+            int col{ getInt("Enter the column you want to play: ") };
             makeMove(gameBoard, col, 'O');
         }
 
+        printBoard(gameBoard);
 
         //check to see who won
         //uncomment when done
@@ -109,7 +109,7 @@ int getInt(const std::string& prompt) {//like getInt from practice01
 
 }
 
-void printBoard(std::array<std::array<char, 7>, 6>& board) {
+void printBoard(const std::vector<std::vector<char>>& board) {
     std::cout << "-------------------\n";
 
     for (auto row : board) {
@@ -122,22 +122,28 @@ void printBoard(std::array<std::array<char, 7>, 6>& board) {
     std::cout << "-------------------\n";
 }
 
-std::array<std::array<char, 7>, 6> makeBoard(){
-    std::array<std::array<char, 7>, 6> board {};
+std::vector<std::vector<char>> makeBoard(){
+    std::vector<std::vector<char>> board = 
+        {{' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' '}};
 
     return board;
 }
 
-void makeMove(std::array<std::array<char, 7>, 6>& board, int col, char c) {//not done
-
+void makeMove(std::vector<std::vector<char>>& board, int col, char c) {//not done
+    //make a for loop that starts at the end and then works itself backwards until it reaches a spot that isn't taken
 }
 
 /*
-bool isOver(std::array<std::array<char, 7>, 6>& board) {//not done
+bool isOver(std::vector<std::vector<char>>& board) {//not done
 
 
     if(player one got a 4 in a row){
-        std::cout << "Player One Won";
+        std::cout << "Player Won";
 
 
     //checks who won or if its a draw
