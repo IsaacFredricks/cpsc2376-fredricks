@@ -12,13 +12,13 @@
 *Function for Make grid with | and _
 *Way to replay the game
 *Functions to check input
-*If at end no person wins, it’s a draw
+*If at end no person wins, itï¿½s a draw
 */
 
 //forward declarations here
 int getInt(const std::string& prompt);
 void printBoard(const std::array<std::array<char, 7>, 6>& board);//don't want to change the board with this one
-std::array<std::array<char, 7>, 6>& makeBoard();
+std::array<std::array<char, 7>, 6> makeBoard();
 void makeMove(std::array<std::array<char, 7>, 6>& board, int col, char c);
 //bool isOver(std::array<std::array<char, 7>, 6>& board);//not done
 bool playAgain();
@@ -122,8 +122,8 @@ void printBoard(std::array<std::array<char, 7>, 6>& board) {
     std::cout << "-------------------\n";
 }
 
-std::array<std::array<char, 7>, 6>& makeBoard(){
-    std::array<std::array< char, 7>, 6> board;
+std::array<std::array<char, 7>, 6> makeBoard(){
+    std::array<std::array<char, 7>, 6> board {};
 
     return board;
 }
