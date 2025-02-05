@@ -196,7 +196,7 @@ bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c){
 void makeMove(std::vector<std::vector<char>>& board, int col, char c) {
     //make a for loop that starts at the end and then works itself backwards until it reaches a spot that isn't taken
 
-    for(int i {board.size() - 1}; i >= 0; i--){
+    for(int i {static_cast<int>(board.size()) - 1}; i >= 0; i--){
         if(board.at(i).at(col) == ' '){
             board.at(i).at(col) = c;//changes row to current char
             break;
@@ -293,7 +293,7 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                     player1Y = 0;
                 }
 
-                else if(player2Y > 1 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col) == 'O'){
+                else if(player2Y > 1 && board.at(i).at(col) == '@' && board.at(i + 1).at(col) == 'O'){
                     player2Y = 0;
                 }
 
@@ -325,7 +325,7 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
 
             if(i < 5 && col < 6){
 
-                if(board.at(i).at(col) == 'O' && board.at(i +1).at(col + 1) == 'O'){
+                if(board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == 'O'){
                     player1Z++;
                 }
 
@@ -350,12 +350,12 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
     player2Z = 0;
     //std::cout << "checking forwards diagonal\n";
 
-    for(int i {board.size() - 1}; i >= 0; i--){//forwards diagonal
+    for(int i {static_cast<int>(board.size()) - 1}; i >= 0; i--){//forwards diagonal
 
         std::cout << "player 1 z: " << player1Z << '\n';
         std::cout << "player 2 z: " << player2Z << '\n';
 
-        for(int col {board.at(i).size() - 1}; col >= 0; col--){//currently doesn't work
+        for(int col {static_cast<int>(board.at(i).size()) - 1}; col >= 0; col--){//currently doesn't work
         
             if(i > 0 && col > 0){//checks horizontally
 
