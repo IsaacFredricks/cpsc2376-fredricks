@@ -287,7 +287,7 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
         }
     }
 
-    for(int i {0}; i < board.size(); i++){//reverse diagonal. doesn't work
+    for(int i {0}; i < board.size(); i++){//reverse diagonal.
 
 
         for(int col {0}; col < board.at(i).size(); col++){
@@ -320,7 +320,7 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                     player1Z = 0;
                 }
 
-                else if(player2Z > 1 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col + 1l) == 'O'){
+                else if(player2Z > 1 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col + 1) == 'O'){
                     player2Z = 0;
                 }
 
@@ -329,7 +329,7 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
         }
     }
     
-    player1Z = 0;//resets z values
+    player1Z = 0;
     player2Z = 0;
 
     for(int i {board.size() - 1}; i >= 0; i--){//forwards diagonal
