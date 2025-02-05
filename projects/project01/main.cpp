@@ -328,7 +328,10 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
             
         }
     }
-    /*
+    
+    player1Z = 0;//resets z values
+    player2Z = 0;
+
     for(int i {board.size() - 1}; i >= 0; i--){//forwards diagonal
         for(int col {board.at(i).size() - 1}; col >= 0; col--){//currently doesn't work
             if(i < 5 && col < 6){//checks horizontally
@@ -346,25 +349,25 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                     return true;
                 }
                 
-                if(board.at(i).at(col) == 'O' && board.at(i - 1).at(col - 1) == 'O'){
+                if(board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == 'O'){
                     player1Z++;
                 }
 
-                else if(board.at(i).at(col) == '@' && board.at(i - 1).at(col - 1) == '@'){
+                else if(board.at(i).at(col) == '@' && board.at(i + 1).at(col + 1) == '@'){
                     player2Z++;
                 }
 
-                else if(player1Z > 1 && board.at(i).at(col) == 'O' && board.at(i - 1).at(col - 1) == '@'){
+                else if(player1Z > 1 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == '@'){
                     player1Z = 0;
                 }
 
-                else if(player2Z > 1 &&board.at(i).at(col) == '@' && board.at(i - 1).at(col - 1) == 'O'){
+                else if(player2Z > 1 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col + 1) == 'O'){
                     player2Z = 0;
                 }
 
             }
         }
-    }*/
+    }
 
     //checks if draw
     if(board.at(0).at(0) != ' ' && board.at(0).at(1) != ' ' && board.at(0).at(2) != ' ' 
