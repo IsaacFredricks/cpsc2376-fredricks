@@ -201,15 +201,29 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
     int player2Y {};
     int player2Z {};
 
+    //the for loops check each spot and the one right next to it to see if there is a 4 in a row
+
     for(int i {0}; i < board.size(); i++){//checks if 4 in a row
 
 
         for(int col {0}; col < board.at(i).size(); col++){//checks horizontally
+            
+            if(player1X == 3){
+                std::cout << player1 << " won!\n";
+                return true;
+            }
+
+            else if(player2X == 3){
+                std::cout << player2 << " won!\n";
+                return true;
+            }
 
             if(col < 6){
                
                 //std::cout << "player 1 x: " << player1X << '\n';//comment out later
-                //std::cout << "player 2 x: " << player2X << '\n';
+                //std::cout << "player 2 x: " << player2X << '\n';\
+
+                
 
                 if(board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O'){
                     player1X++;
@@ -219,12 +233,12 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                     player2X++;
                 }
 
-                else if(player1Y > 2 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == '@'){
-                    player1X = 1;
+                else if(player1Y > 1 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == '@'){
+                    player1X = 0;
                 }
 
-                else if(player2Y > 2 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == 'O'){
-                    player2X = 1;
+                else if(player2Y > 1 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == 'O'){
+                    player2X = 0;
                 }
               
             }
@@ -237,20 +251,20 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
 
         for(int col {0}; col < board.at(i).size(); col++){//checks horizontally
 
-            if(i < 5){
-
-                //std::cout << "player 1 y: " << player1Y << '\n';
-                //std::cout << "player 2 y: " << player2Y << '\n';
-
-                if(player1X == 3 || player1Y == 3){
+            if(player1Y == 3){
                     std::cout << player1 << " won!\n";
                     return true;
                 }
 
-                else if(player2X == 3 || player2Y == 3){
+                else if(player2Y == 3){
                     std::cout << player2 << " won!\n";
                     return true;
-                }
+            }
+
+            if(i < 5){
+
+                //std::cout << "player 1 y: " << player1Y << '\n';
+                //std::cout << "player 2 y: " << player2Y << '\n';
                 
                 if(board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'O'){
                     player1Y++;
@@ -261,11 +275,11 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                 }
 
                 else if(player1Y > 1 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == '@'){
-                    player1Y = 1;
+                    player1Y = 0;
                 }
 
                 else if(player2Y > 1 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col) == 'O'){
-                    player2Y = 1;
+                    player2Y = 0;
                 }
 
             }
@@ -273,25 +287,26 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
         }
     }
 
-    for(int i {0}; i < board.size(); i++){//reverse diagonal
+    for(int i {0}; i < board.size(); i++){//reverse diagonal. doesn't work
 
 
         for(int col {0}; col < board.at(i).size(); col++){
+
+            
+            if(player1Z == 3){
+                std::cout << player1 << " won!\n";
+                return true;
+             }
+
+            else if(player2Z == 3){
+                std::cout << player2 << " won!\n";
+                return true;
+            }
 
             if(i < 5 && col < 6){//checks horizontally
 
                 //std::cout << "player 1 z: " << player1Z << '\n';
                 //std::cout << "player 2 z: " << player2Z << '\n';
-
-                if(player1Z == 3 || player1Z == 3){
-                    std::cout << player1 << " won!\n";
-                    return true;
-                }
-
-                else if(player2Z == 3 || player2Z == 3){
-                    std::cout << player2 << " won!\n";
-                    return true;
-                }
                 
                 if(board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == 'O'){
                     player1Z++;
@@ -302,20 +317,18 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                 }
 
                 else if(player1Z > 1 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == '@'){
-                    player1Z = 1;
+                    player1Z = 0;
                 }
 
                 else if(player2Z > 1 &&board.at(i).at(col) == '@' && board.at(i + 1).at(col + 1l) == 'O'){
-                    player2Z = 1;
+                    player2Z = 0;
                 }
 
             }
             
         }
     }
-
     /*
-    
     for(int i {board.size() - 1}; i >= 0; i--){//forwards diagonal
         for(int col {board.at(i).size() - 1}; col >= 0; col--){//currently doesn't work
             if(i < 5 && col < 6){//checks horizontally
@@ -323,12 +336,12 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                 //std::cout << "player 1 z: " << player1Z << '\n';
                 //std::cout << "player 2 z: " << player2Z << '\n';
 
-                if(player1Z == 3 || player1Z == 3){
+                if(player1Z == 3){
                     std::cout << player1 << " won!\n";
                     return true;
                 }
 
-                else if(player2Z == 3 || player2Z == 3){
+                else if(player2Z == 3){
                     std::cout << player2 << " won!\n";
                     return true;
                 }
@@ -342,11 +355,11 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
                 }
 
                 else if(player1Z > 1 && board.at(i).at(col) == 'O' && board.at(i - 1).at(col - 1) == '@'){
-                    player1Z = 1;
+                    player1Z = 0;
                 }
 
                 else if(player2Z > 1 &&board.at(i).at(col) == '@' && board.at(i - 1).at(col - 1) == 'O'){
-                    player2Z = 1;
+                    player2Z = 0;
                 }
 
             }
