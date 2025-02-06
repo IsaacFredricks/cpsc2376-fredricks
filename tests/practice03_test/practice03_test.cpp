@@ -66,14 +66,16 @@ namespace practice03test
 		{
 			std::vector<int> emptyVector{};
 
-			Assert::AreEqual(0, MathUtils::findMax(emptyVector));
+			auto funct = [] {MathUtils::findMax(emptyVector)};
+
+			Assert::ExpectException<std::invalid_argument>(funct);
 		}
 
 		TEST_METHOD(TestFindMax3)
 		{
 			std::vector<int> mixedNums{-11, 33, 1, 4};
 
-			Assert::AreEqual(0, MathUtils::findMax(mixedNums));
+			Assert::AreEqual(33, MathUtils::findMax(mixedNums));
 		}
 
 

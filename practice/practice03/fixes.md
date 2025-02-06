@@ -24,13 +24,21 @@ bugs:
 
 *line 9: <= instead of <
 
-*line 10:
+*line 16: < instead of <=
 
-*
+*line 17: should be < instead of > and should be numbers.at(i)
 
-*
+*line 25: should not return 0. should throw exception
 
-*
+*line 26: not listed as bug but should be numbers.at(i)
+
+*line 27: should be > instead of >= and should be numbers.at(i)
+
+*line 28: i should be 0 and <= should be <
+
+*line 29: not labeled as bug but numbers[i] should be numbers.at(i)
+
+*line 39: not listed but should have std::boolalpha
 
 
 
