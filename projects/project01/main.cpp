@@ -17,151 +17,42 @@
 
 //forward declarations here
 int getInt(const std::string& prompt);
-void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
+Statuses::Status printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
 std::vector<std::vector<char>> makeBoard();
 bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c);
 void makeMove(std::vector<std::vector<char>>& board, int col, char c);
-bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2);
+bool gameStatus(const std::vector<std::vector<char>>& board);
 bool playAgain();
+void play(std::vector<std::vector<char>>& board);
 
+//namespace for checking the status of the game
+namespace Statuses{
+    enum class Status{
+        ONGOING,
+        PLAYER_1_WINS,
+        PLAYER_2_WINS,
+        DRAW,
+    };
+}
 
 int main(){
     std::cout << "\n======== Connect 4 =======\n\n";
 
     std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins." 
     << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
-    << "*Player one uses O's while Player 2 uses @'s.\n*Player 1 starts first.\n\n";
+    << "*Player one uses O's while Player 2 uses @'s.\n*Player 1 starts first.\n"
+    << "Pieces will go down to the lowest possible row\n\n";
 
-    std::string player1{};
-    std::string player2{};
-
-    while(true){
-        std::cout << "Player 1, enter your name: ";
-   
-        std::getline(std::cin, player1);
-
-        if(player1 == " " || player1.length() == 0) {
-            std::cout << "Invalid input. Pick a different name.\n";
-        }
-
-        else if (player1 == "Isaac") {
-            std::cout << "Hey that's my name! Get your own!\n";
-        }
-
-        else{
-            std::cout << '\n';
-            break;
-        }
-    }
-
-    while(true){//checks to see if the names are the same
-        std::cout << "\nPlayer 2, enter your name: ";
-        
-        std::getline(std::cin, player2);
-
-        if(player1 == player2 || player2 == " " || player2.length() == 0){
-            std::cout << "Invalid input. Pick a different name.\n";
-        }
-
-        else if (player2 == "Isaac") {
-            std::cout << "Hey that's my name! Get your own!\n";
-        }
-
-        else{
-            std::cout << '\n';
-            break;
-        }
-    }
 
     //std::cin.ignore();
 
-    auto gameBoard{ makeBoard() };
+    auto board{ makeBoard() };
 
-    printBoard(gameBoard);
+    printBoard(board);
 
-    int turns{1};// tells what turn it is. Odd is player 1, even is player 2
-    char piece {};//game piece. changes based off of person
+    play(board);
 
-    while (true) {
-        std::cout << '\n';
-
-        if (turns % 2 == 0) {
-            std::cout << player2 << ", ";
-            piece = '@';
-        }
-
-        else {
-            std::cout << player1 << ", ";
-            piece = 'O';
-        }
-
-        int col{ getInt("Enter the column you want to play: ") - 1 };
-        
-        if(canMakeMove(gameBoard, col, piece)){
-            makeMove(gameBoard, col, piece);
-            turns++;//increments turn only if able to make a moove
-        }
-
-        else{
-            std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
-        }
-
-
-        std::cout << '\n';
-        printBoard(gameBoard);
-
-        //check to see who won
-
-        if (isOver(gameBoard, player1, player2)) {
-            //print who won
-            std::cout << "Total number of turns: " << turns << '\n';
-            bool replay{ playAgain() };
-
-            if (replay) {
-                std::cout << "Starting a new game. Clearing the board\n";
-                gameBoard = makeBoard();
-
-                printBoard(gameBoard);
-
-                turns = 1;
-            }
-
-            else {
-                std::cout << "Ending the game. Goodbye!\n";
-                break;//ends loop
-            }
-        }
-
-    }
-    return 0;//creator: Isaac Fredricks
-}
-
-//functions down here
-int getInt(const std::string& prompt) {//like getInt from practice01
-
-    int input{};
-
-    while (true) {
-        std::cout << prompt;
-        std::cin >> input;
-
-        if (std::cin.fail() || input < 1 || input > 7) {
-            std::cin.clear(); //clears the error
-
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            //discards invalid input
-
-            std::cout << "Inproper input. please try again.\n";
-        }
-
-        else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            return input;
-            //discards any extra input
-            break;//exits loop
-        }
-    }
-
+    return 0;
 }
 
 void printBoard(const std::vector<std::vector<char>>& board) {
@@ -215,8 +106,7 @@ void makeMove(std::vector<std::vector<char>>& board, int col, char c) {
     
 }
 
-
-bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2){
+Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
 
     int player1X {};
     int player1Y {};
@@ -234,12 +124,12 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
         for(int col {0}; col < board.at(i).size(); col++){//checks horizontally
             
             if(player1X == 3){
-                std::cout << player1 << " won!\n";
+                std::cout << "Player 1 won!\n";
                 return true;
             }
 
             if(player2X == 3){
-                std::cout << player2 << " won!\n";
+                std::cout << "Player 2 won!\n";
                 return true;
             }
 
@@ -276,12 +166,12 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
         for(int col {0}; col < board.at(i).size(); col++){//checks vertically
 
             if(player1Y == 3){
-                std::cout << player1 << " won!\n";
+                std::cout << "Player 1 won!\n";
                 return true;
             }
 
             if(player2Y == 3){
-                std::cout << player2 << " won!\n";
+                std::cout << "Player 2 won!\n";
                 return true;
             }
 
@@ -317,13 +207,13 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
             if (i <= 2 && col <= 3) {
 
                 if ((board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == 'O' && board.at(i + 2).at(col + 2) == 'O' && board.at(i + 3).at(col + 3) == 'O')) {
-                    std::cout << player1 << " won!\n";
+                    std::cout << "Player 1 won!\n";
                     return true;
                 }
                 
                 
                 else if ((board.at(i).at(col) == '@' && board.at(i + 1).at(col + 1) == '@' && board.at(i + 2).at(col + 2) == '@' && board.at(i + 3).at(col + 3) == '@')) {
-                    std::cout << player2 << " won!\n";
+                    std::cout << "Player 2 won!\n";
                     return true;
                 }
 
@@ -331,13 +221,13 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
 
             if (i >= 2 && col <= 3) {
                 if ((board.at(i).at(col) == 'O' && board.at(i - 1).at(col + 1) == 'O' && board.at(i - 2).at(col + 2) == 'O' && board.at(i - 3).at(col + 3) == 'O')) {
-                    std::cout << player1 << " won!\n";
+                    std::cout << "Player 1 won!\n";
                     return true;
                 }
 
 
                 else if ((board.at(i).at(col) == '@' && board.at(i - 1).at(col + 1) == '@' && board.at(i - 2).at(col + 2) == '@' && board.at(i - 3).at(col + 3) == '@')) {
-                    std::cout << player2 << " won!\n";
+                    std::cout << "Player 2 won!\n";
                     return true;
                 }
             }
@@ -376,5 +266,90 @@ bool playAgain() {
             std::cout << "Invalid input. Try again\n";
         }
 
+    }
+}
+
+void play(std::vector<std::vector<char>>& board){
+
+    int turns{1};// tells what turn it is. Odd is player 1, even is player 2
+    char piece{};
+     while (true) {
+        std::cout << '\n';
+
+        if (turns % 2 == 0) {
+            std::cout << "Player 2, ";
+            piece = '@';
+        }
+
+        else {
+            std::cout << "Player 1, ";
+            piece = 'O';
+        }
+
+        int col{ getInt("Enter the column you want to play: ") - 1 };
+        
+        if(canMakeMove(board, col, piece)){
+            makeMove(board, col, piece);
+            turns++;//increments turn only if able to make a moove
+        }
+
+        else{
+            std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+        }
+
+
+        std::cout << '\n';
+        printBoard(board);
+
+        //check to see who won
+
+        if (gameStatus(board)){
+            //print who won
+            std::cout << "Total number of turns: " << turns << '\n';
+            bool replay{ playAgain() };
+
+            if (replay) {
+                std::cout << "Starting a new game. Clearing the board\n";
+                board = makeBoard();
+
+                printBoard(board);
+
+                turns = 1;
+            }
+
+            else {
+                std::cout << "Ending the game. Goodbye!\n";
+                break;//ends loop
+            }
+        }
+
+    }
+    //creator: Isaac Fredricks
+}
+
+//functions down here
+int getInt(const std::string& prompt) {//like getInt from practice01
+
+    int input{};
+
+    while (true) {
+        std::cout << prompt;
+        std::cin >> input;
+
+        if (std::cin.fail() || input < 1 || input > 7) {
+            std::cin.clear(); //clears the error
+
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards invalid input
+
+            std::cout << "Inproper input. please try again.\n";
+        }
+
+        else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return input;
+            //discards any extra input
+            break;//exits loop
+        }
     }
 }
