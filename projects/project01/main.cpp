@@ -21,7 +21,7 @@ void printBoard(const std::vector<std::vector<char>>& board);//don't want to cha
 std::vector<std::vector<char>> makeBoard();
 bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c);
 void makeMove(std::vector<std::vector<char>>& board, int col, char c);
-bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2);//not done
+bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2);
 bool playAgain();
 
 
@@ -73,7 +73,7 @@ int main(){
         }
     }
 
-    //std::cin.ignore();//helps any wierdness going between
+    //std::cin.ignore();
 
     auto gameBoard{ makeBoard() };
 
@@ -106,6 +106,8 @@ int main(){
             std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
         }
 
+
+        std::cout << '\n';
         printBoard(gameBoard);
 
         //check to see who won
@@ -214,7 +216,7 @@ void makeMove(std::vector<std::vector<char>>& board, int col, char c) {
 }
 
 
-bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2){//not done
+bool isOver(const std::vector<std::vector<char>>& board, const std::string& player1, const std::string& player2){
 
     int player1X {};
     int player1Y {};
@@ -352,7 +354,6 @@ bool isOver(const std::vector<std::vector<char>>& board, const std::string& play
     }
 
     return false;
-    //checks who won or if its a draw
 }
 
 
