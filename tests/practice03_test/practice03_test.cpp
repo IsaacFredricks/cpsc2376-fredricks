@@ -66,9 +66,7 @@ namespace practice03test
 		{
 			std::vector<int> emptyVector{};
 
-			auto funct = [] {MathUtils::findMax(emptyVector)};
-
-			Assert::ExpectException<std::invalid_argument>(funct);
+			Assert::ExpectException<std::runtime_error>([emptyVector]() { MathUtils::findMax(emptyVector); });
 		}
 
 		TEST_METHOD(TestFindMax3)

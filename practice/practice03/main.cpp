@@ -22,7 +22,7 @@ public:
     }
 
     static int findMax(const std::vector<int>& numbers) {
-        if (numbers.empty()) throw std::invalid_argument("Invalid. Vector is empty");
+        if (numbers.empty()) throw std::runtime_error("Invalid. Vector is empty");
         
         int maxVal = numbers.at(0);
         for (size_t i = 0; i < numbers.size(); i++) {
