@@ -8,7 +8,7 @@
 * make a text-based game
 *I'm going to make connect 4
 *7x6 two dimensional array
-*Use D and O for pieces
+*Use C and O for pieces
 *Function for Make grid with | and _
 *Way to replay the game
 *Functions to check input
@@ -16,7 +16,7 @@
 */
 
 //namespace for checking the status of the game
-namespace Statuses{
+namespace Statuses{//used learn c++ for enums chapter 13
     enum class Status{
         ONGOING,
         PLAYER_1_WINS,
@@ -42,7 +42,7 @@ namespace Pieces{
 
 //forward declarations here
 int getInt(const std::string& prompt);
-void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
+void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one so const
 std::vector<std::vector<char>> makeBoard();
 bool canMakeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
 void makeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
@@ -58,14 +58,11 @@ int main(){
     << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
     << "*Pieces will go down to the lowest possible row\n\n";
 
-
-    //std::cin.ignore();
-
     auto board{ makeBoard() };
 
     printBoard(board);
 
-    play(board);
+    play(board);//where all of the game stuff happens
 
     return 0;
 }
@@ -113,7 +110,7 @@ void printBoard(const std::vector<std::vector<char>>& board) {
     std::cout << "----------------------\n";
 }
 
-std::vector<std::vector<char>> makeBoard(){
+std::vector<std::vector<char>> makeBoard(){//self explanitory
     std::vector<std::vector<char>> board = 
         {{' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -160,10 +157,10 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
     
     for(int i {0}; i < board.size(); i++){//checks if 4 in a row
 
-        //std::cout << "player 1 x: " << player1X << '\n';//comment out later
+        //std::cout << "player 1 x: " << player1X << '\n';
         //std::cout << "player 2 x: " << player2X << '\n';
 
-        for(int col {0}; col < board.at(i).size(); col++){//checks horizontally
+        for(int col {0}; col < board.at(i).size(); col++){
             
             if(player1X == 3){
                 //std::cout << "won by x\n";
@@ -281,7 +278,7 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
 
     }
 
-    //checks if draw
+    //checks if draw. should be a draw if all of the spots are taken and no one has one yet
     if(board.at(0).at(0) != ' ' && board.at(0).at(1) != ' ' && board.at(0).at(2) != ' ' 
     && board.at(0).at(3) != ' ' && board.at(0).at(4) != ' ' && board.at(0).at(5) != ' ') {
         return Statuses::Status::DRAW;
