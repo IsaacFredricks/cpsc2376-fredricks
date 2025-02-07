@@ -160,16 +160,18 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
     
     for(int i {0}; i < board.size(); i++){//checks if 4 in a row
 
-        std::cout << "player 1 x: " << player1X << '\n';//comment out later
-        std::cout << "player 2 x: " << player2X << '\n';
+        //std::cout << "player 1 x: " << player1X << '\n';//comment out later
+        //std::cout << "player 2 x: " << player2X << '\n';
 
         for(int col {0}; col < board.at(i).size(); col++){//checks horizontally
             
             if(player1X == 3){
+                //std::cout << "won by x\n";
                 return Statuses::Status::PLAYER_1_WINS;
             }
 
             if(player2X == 3){
+                //std::cout << "won by x\n";
                 return Statuses::Status::PLAYER_2_WINS;
             }
 
@@ -200,16 +202,18 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
 
     for(int i {0}; i < board.size(); i++){//checks if 4 in a row
 
-        std::cout << "player 1 y: " << player1Y << '\n';
-        std::cout << "player 2 y: " << player2Y << '\n';
+        //std::cout << "player 1 y: " << player1Y << '\n';
+        //std::cout << "player 2 y: " << player2Y << '\n';
 
         for(int col {0}; col < board.at(i).size(); col++){//checks vertically
 
             if(player1Y == 3){
+                //std::cout << "won by y\n";
                 return Statuses::Status::PLAYER_1_WINS;
             }
 
             if(player2Y == 3){
+                //std::cout << "won by y\n";
                 return Statuses::Status::PLAYER_2_WINS;
             }
 
@@ -232,6 +236,9 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
                 }
 
             }
+            //resets after each row
+            player1Y = 0;
+            player2Y = 0;
             
         }
     }
@@ -245,11 +252,13 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
             if (i <= 2 && col <= 3) {
 
                 if ((board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == 'O' && board.at(i + 2).at(col + 2) == 'O' && board.at(i + 3).at(col + 3) == 'O')) {
+                    //std::cout << "won by z\n";
                     return Statuses::Status::PLAYER_1_WINS;
                 }
                 
                 
                 else if ((board.at(i).at(col) == 'C' && board.at(i + 1).at(col + 1) == 'C' && board.at(i + 2).at(col + 2) == 'C' && board.at(i + 3).at(col + 3) == 'C')) {
+                    //std::cout << "won by z\n";
                     return Statuses::Status::PLAYER_2_WINS;
                 }
 
@@ -257,11 +266,13 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
 
             if (i >= 2 && col <= 3) {
                 if ((board.at(i).at(col) == 'O' && board.at(i - 1).at(col + 1) == 'O' && board.at(i - 2).at(col + 2) == 'O' && board.at(i - 3).at(col + 3) == 'O')) {
-                   return Statuses::Status::PLAYER_1_WINS;
+                    //std::cout << "won by z\n";
+                    return Statuses::Status::PLAYER_1_WINS;
                 }
 
 
                 else if ((board.at(i).at(col) == 'C' && board.at(i - 1).at(col + 1) == 'C' && board.at(i - 2).at(col + 2) == 'C' && board.at(i - 3).at(col + 3) == 'C')) {
+                    //std::cout << "won by z\n";
                     return Statuses::Status::PLAYER_2_WINS;
                 }
             }
