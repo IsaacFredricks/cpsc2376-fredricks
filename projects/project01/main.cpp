@@ -8,22 +8,12 @@
 * make a text-based game
 *I'm going to make connect 4
 *7x6 two dimensional array
-*Use chars @ and O
+*Use D and O for pieces
 *Function for Make grid with | and _
 *Way to replay the game
 *Functions to check input
 *If at end no person wins, its a draw
 */
-
-//forward declarations here
-int getInt(const std::string& prompt);
-Statuses::Status printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
-std::vector<std::vector<char>> makeBoard();
-bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c);
-void makeMove(std::vector<std::vector<char>>& board, int col, char c);
-bool gameStatus(const std::vector<std::vector<char>>& board);
-bool playAgain();
-void play(std::vector<std::vector<char>>& board);
 
 //namespace for checking the status of the game
 namespace Statuses{
@@ -35,13 +25,38 @@ namespace Statuses{
     };
 }
 
+namespace Pieces{
+    enum class Piece{
+        O,
+        C,
+    };
+
+    char pieceToChar(Piece p){
+        if(p == Pieces::Piece::O){
+            return 'O';
+        }
+
+        return 'C';
+    }
+}
+
+//forward declarations here
+int getInt(const std::string& prompt);
+void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one
+std::vector<std::vector<char>> makeBoard();
+bool canMakeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
+void makeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
+Statuses::Status gameStatus(const std::vector<std::vector<char>>& board);
+bool playAgain();
+void play(std::vector<std::vector<char>>& board);
+
 int main(){
     std::cout << "\n======== Connect 4 =======\n\n";
 
     std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins." 
     << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
-    << "*Player one uses O's while Player 2 uses @'s.\n*Player 1 starts first.\n"
-    << "Pieces will go down to the lowest possible row\n\n";
+    << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
+    << "*Pieces will go down to the lowest possible row\n\n";
 
 
     //std::cin.ignore();
@@ -54,6 +69,33 @@ int main(){
 
     return 0;
 }
+
+int getInt(const std::string& prompt) {//like getInt from practice01
+
+    int input{};
+
+    while (true) {
+        std::cout << prompt;
+        std::cin >> input;
+
+        if (std::cin.fail() || input < 1 || input > 7) {
+            std::cin.clear(); //clears the error
+
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards invalid input
+
+            std::cout << "Inproper input. please try again.\n";
+        }
+
+        else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            return input;
+            //discards any extra input
+            break;//exits loop
+        }
+    }
+}
+
 
 void printBoard(const std::vector<std::vector<char>>& board) {
     
@@ -83,8 +125,8 @@ std::vector<std::vector<char>> makeBoard(){
     return board;
 }
 
-bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c){
-    if(board.at(0).at(col) == '@' || board.at(0).at(col) == 'O'){
+bool canMakeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece){
+    if(board.at(0).at(col) == 'C' || board.at(0).at(col) == 'O'){
             std::cout << "All spots on this row are taken. please try again\n";
             return false;
     }
@@ -94,12 +136,12 @@ bool canMakeMove(std::vector<std::vector<char>>& board, int col, char c){
     }
 }
 
-void makeMove(std::vector<std::vector<char>>& board, int col, char c) {
+void makeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece) {
     //make a for loop that starts at the end and then works itself backwards until it reaches a spot that isn't taken
 
     for(int i {static_cast<int>(board.size()) - 1}; i >= 0; i--){
         if(board.at(i).at(col) == ' '){
-            board.at(i).at(col) = c;//changes row to current char
+            board.at(i).at(col) = Pieces::pieceToChar(gamePiece);//changes row to current char
             break;
         }
     }
@@ -118,19 +160,17 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
     
     for(int i {0}; i < board.size(); i++){//checks if 4 in a row
 
-        //std::cout << "player 1 x: " << player1X << '\n';//comment out later
-       // std::cout << "player 2 x: " << player2X << '\n';
+        std::cout << "player 1 x: " << player1X << '\n';//comment out later
+        std::cout << "player 2 x: " << player2X << '\n';
 
         for(int col {0}; col < board.at(i).size(); col++){//checks horizontally
             
             if(player1X == 3){
-                std::cout << "Player 1 won!\n";
-                return true;
+                return Statuses::Status::PLAYER_1_WINS;
             }
 
             if(player2X == 3){
-                std::cout << "Player 2 won!\n";
-                return true;
+                return Statuses::Status::PLAYER_2_WINS;
             }
 
             if(col < 6){
@@ -139,15 +179,15 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
                     player1X++;
                 }
 
-                else if(board.at(i).at(col) == '@' && board.at(i).at(col + 1) == '@'){
+                else if(board.at(i).at(col) == 'C' && board.at(i).at(col + 1) == 'C'){
                     player2X++;
                 }
 
-                else if(player1X > 1 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == '@'){
+                else if(player1X > 1 && board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'C'){
                     player1X = 0;
                 }
 
-                else if(player2X > 1 && board.at(i).at(col) == '@' && board.at(i).at(col + 1) == 'O'){
+                else if(player2X > 1 && board.at(i).at(col) == 'C' && board.at(i).at(col + 1) == 'O'){
                     player2X = 0;
                 }
               
@@ -160,19 +200,17 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
 
     for(int i {0}; i < board.size(); i++){//checks if 4 in a row
 
-        //std::cout << "player 1 y: " << player1Y << '\n';
-        //std::cout << "player 2 y: " << player2Y << '\n';
+        std::cout << "player 1 y: " << player1Y << '\n';
+        std::cout << "player 2 y: " << player2Y << '\n';
 
         for(int col {0}; col < board.at(i).size(); col++){//checks vertically
 
             if(player1Y == 3){
-                std::cout << "Player 1 won!\n";
-                return true;
+                return Statuses::Status::PLAYER_1_WINS;
             }
 
             if(player2Y == 3){
-                std::cout << "Player 2 won!\n";
-                return true;
+                return Statuses::Status::PLAYER_2_WINS;
             }
 
             if(i < 5){
@@ -181,15 +219,15 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
                     player1Y++;
                 }
 
-                else if(board.at(i).at(col) == '@' && board.at(i + 1).at(col) == '@'){
+                else if(board.at(i).at(col) == 'C' && board.at(i + 1).at(col) == 'C'){
                     player2Y++;
                 }
 
-                else if(player1Y > 1 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == '@'){
+                else if(player1Y > 1 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'C'){
                     player1Y = 0;
                 }
 
-                else if(player2Y > 1 && board.at(i).at(col) == '@' && board.at(i + 1).at(col) == 'O'){
+                else if(player2Y > 1 && board.at(i).at(col) == 'C' && board.at(i + 1).at(col) == 'O'){
                     player2Y = 0;
                 }
 
@@ -207,28 +245,24 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
             if (i <= 2 && col <= 3) {
 
                 if ((board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == 'O' && board.at(i + 2).at(col + 2) == 'O' && board.at(i + 3).at(col + 3) == 'O')) {
-                    std::cout << "Player 1 won!\n";
-                    return true;
+                    return Statuses::Status::PLAYER_1_WINS;
                 }
                 
                 
-                else if ((board.at(i).at(col) == '@' && board.at(i + 1).at(col + 1) == '@' && board.at(i + 2).at(col + 2) == '@' && board.at(i + 3).at(col + 3) == '@')) {
-                    std::cout << "Player 2 won!\n";
-                    return true;
+                else if ((board.at(i).at(col) == 'C' && board.at(i + 1).at(col + 1) == 'C' && board.at(i + 2).at(col + 2) == 'C' && board.at(i + 3).at(col + 3) == 'C')) {
+                    return Statuses::Status::PLAYER_2_WINS;
                 }
 
             }
 
             if (i >= 2 && col <= 3) {
                 if ((board.at(i).at(col) == 'O' && board.at(i - 1).at(col + 1) == 'O' && board.at(i - 2).at(col + 2) == 'O' && board.at(i - 3).at(col + 3) == 'O')) {
-                    std::cout << "Player 1 won!\n";
-                    return true;
+                   return Statuses::Status::PLAYER_1_WINS;
                 }
 
 
-                else if ((board.at(i).at(col) == '@' && board.at(i - 1).at(col + 1) == '@' && board.at(i - 2).at(col + 2) == '@' && board.at(i - 3).at(col + 3) == '@')) {
-                    std::cout << "Player 2 won!\n";
-                    return true;
+                else if ((board.at(i).at(col) == 'C' && board.at(i - 1).at(col + 1) == 'C' && board.at(i - 2).at(col + 2) == 'C' && board.at(i - 3).at(col + 3) == 'C')) {
+                    return Statuses::Status::PLAYER_2_WINS;
                 }
             }
             
@@ -239,11 +273,10 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
     //checks if draw
     if(board.at(0).at(0) != ' ' && board.at(0).at(1) != ' ' && board.at(0).at(2) != ' ' 
     && board.at(0).at(3) != ' ' && board.at(0).at(4) != ' ' && board.at(0).at(5) != ' ') {
-        std::cout << "It's a draw!\n";
-        return true;
+        return Statuses::Status::DRAW;
     }
 
-    return false;
+    return Statuses::Status::ONGOING;
 }
 
 
@@ -272,29 +305,43 @@ bool playAgain() {
 void play(std::vector<std::vector<char>>& board){
 
     int turns{1};// tells what turn it is. Odd is player 1, even is player 2
-    char piece{};
+    Pieces::Piece player1Piece = Pieces::Piece::O;
+    Pieces::Piece player2Piece = Pieces::Piece::C;
+    
+
      while (true) {
+        int col {};
+
         std::cout << '\n';
 
         if (turns % 2 == 0) {
             std::cout << "Player 2, ";
-            piece = '@';
+
+            col = getInt("Enter the column you want to play: ") - 1;
+        
+            if(canMakeMove(board, col, player2Piece)){
+                makeMove(board, col, player2Piece);
+                turns++;//increments turn only if able to make a moove
+            }
+
+            else{
+                std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+            }
         }
 
         else {
             std::cout << "Player 1, ";
-            piece = 'O';
-        }
 
-        int col{ getInt("Enter the column you want to play: ") - 1 };
+            col = getInt("Enter the column you want to play: ") - 1;
         
-        if(canMakeMove(board, col, piece)){
-            makeMove(board, col, piece);
-            turns++;//increments turn only if able to make a moove
-        }
+            if(canMakeMove(board, col, player1Piece)){
+                makeMove(board, col, player1Piece);
+                turns++;//increments turn only if able to make a moove
+            }
 
-        else{
-            std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+            else{
+                std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+            }
         }
 
 
@@ -303,9 +350,23 @@ void play(std::vector<std::vector<char>>& board){
 
         //check to see who won
 
-        if (gameStatus(board)){
+        if (gameStatus(board) == Statuses::Status::PLAYER_1_WINS || gameStatus(board) == Statuses::Status::PLAYER_2_WINS\
+        || gameStatus(board) == Statuses::Status::DRAW){
             //print who won
             std::cout << "Total number of turns: " << turns << '\n';
+
+            if(gameStatus(board) == Statuses::Status::PLAYER_1_WINS){
+                std::cout << "Player 1 wins!\n";
+            }
+
+            else if(gameStatus(board) == Statuses::Status::PLAYER_2_WINS){
+                std::cout << "Player 2 wins!\n";
+            }
+
+            else if(gameStatus(board) == Statuses::Status::DRAW){
+                std::cout << "Draw!\n";
+            }
+
             bool replay{ playAgain() };
 
             if (replay) {
@@ -325,31 +386,4 @@ void play(std::vector<std::vector<char>>& board){
 
     }
     //creator: Isaac Fredricks
-}
-
-//functions down here
-int getInt(const std::string& prompt) {//like getInt from practice01
-
-    int input{};
-
-    while (true) {
-        std::cout << prompt;
-        std::cin >> input;
-
-        if (std::cin.fail() || input < 1 || input > 7) {
-            std::cin.clear(); //clears the error
-
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            //discards invalid input
-
-            std::cout << "Inproper input. please try again.\n";
-        }
-
-        else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            return input;
-            //discards any extra input
-            break;//exits loop
-        }
-    }
 }
