@@ -48,7 +48,7 @@ bool canMakeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece g
 void makeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
 Statuses::Status gameStatus(const std::vector<std::vector<char>>& board);
 bool playAgain();
-void play(std::vector<std::vector<char>>& board);
+void play(std::vector<std::vector<char>>& board, int turns, Pieces::Piece player1Piece, Pieces::Piece Player2Piece);
 
 int main(){
     std::cout << "\n======== Connect 4 =======\n\n";
@@ -63,7 +63,57 @@ int main(){
 
     printBoard(board);
 
-    play(board);//where all of the game stuff happens
+    int turns{1};// tells what turn it is. Odd is player 1, even is player 2
+    Pieces::Piece player1Piece = Pieces::Piece::O;
+    Pieces::Piece player2Piece = Pieces::Piece::C;
+    
+
+     while (true) {
+        
+        play(board, turns, player1Piece, player2Piece);
+        turns++;
+
+        std::cout << '\n';
+        printBoard(board);
+
+        //check to see who won
+
+        if (gameStatus(board) == Statuses::Status::PLAYER_1_WINS || gameStatus(board) == Statuses::Status::PLAYER_2_WINS\
+        || gameStatus(board) == Statuses::Status::DRAW){
+            //print who won
+            std::cout << "Total number of turns: " << turns << '\n';
+
+            if(gameStatus(board) == Statuses::Status::PLAYER_1_WINS){
+                std::cout << "Player 1 wins!\n";
+            }
+
+            else if(gameStatus(board) == Statuses::Status::PLAYER_2_WINS){
+                std::cout << "Player 2 wins!\n";
+            }
+
+            else if(gameStatus(board) == Statuses::Status::DRAW){
+                std::cout << "Draw!\n";
+            }
+
+            bool replay{ playAgain() };
+
+            if (replay) {
+                std::cout << "Starting a new game. Clearing the board\n";
+                board = makeBoard();
+
+                printBoard(board);
+
+                turns = 1;
+            }
+
+            else {
+                std::cout << "Ending the game. Goodbye!\n";
+                break;//ends loop
+            }
+        }
+
+
+    }
 
     return 0;
 }
@@ -76,7 +126,7 @@ int getInt(const std::string& prompt) {//like getInt from practice01
         std::cout << prompt;
         std::cin >> input;
 
-        if (std::cin.fail() || input < 1 || input > 7) {
+        if (std::cin.fail() || input < 1 || input > 7 || std::cin.peek() != '\n') {//peek looks at next character in queue
             std::cin.clear(); //clears the error
 
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -149,9 +199,8 @@ void makeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece game
 Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
 
     int player1X {};
-    int player1Y {};
     int player2X {};
-    int player2Y {};
+
     //the for loops check each spot and the one right next to it to see if there is a 4 in a row
 
     //std::cout << "checking horizontally\n";
@@ -204,39 +253,18 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
         //std::cout << "player 2 y: " << player2Y << '\n';
 
         for(int col {0}; col < board.at(i).size(); col++){//checks vertically
-
-            if(player1Y == 3){
-                //std::cout << "won by y\n";
-                return Statuses::Status::PLAYER_1_WINS;
-            }
-
-            if(player2Y == 3){
-                //std::cout << "won by y\n";
-                return Statuses::Status::PLAYER_2_WINS;
-            }
-
-            if(i < 5){
+            if(i <= 2){
+                if ((board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'O' && board.at(i + 2).at(col) == 'O' && board.at(i + 3).at(col) == 'O')) {
+                    //std::cout << "won by z\n";
+                    return Statuses::Status::PLAYER_1_WINS;
+                }
                 
-                if(board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'O'){
-                    player1Y++;
+                
+                else if ((board.at(i).at(col) == 'C' && board.at(i + 1).at(col) == 'C' && board.at(i + 2).at(col) == 'C' && board.at(i + 3).at(col) == 'C')) {
+                    //std::cout << "won by z\n";
+                    return Statuses::Status::PLAYER_2_WINS;
                 }
-
-                else if(board.at(i).at(col) == 'C' && board.at(i + 1).at(col) == 'C'){
-                    player2Y++;
-                }
-
-                else if(player1Y > 1 && board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'C'){
-                    player1Y = 0;
-                }
-
-                else if(player2Y > 1 && board.at(i).at(col) == 'C' && board.at(i + 1).at(col) == 'O'){
-                    player2Y = 0;
-                }
-
             }
-            //resets after each row
-            player1Y = 0;
-            player2Y = 0;
             
         }
     }
@@ -316,14 +344,8 @@ bool playAgain() {
     }
 }
 
-void play(std::vector<std::vector<char>>& board){
-
-    int turns{1};// tells what turn it is. Odd is player 1, even is player 2
-    Pieces::Piece player1Piece = Pieces::Piece::O;
-    Pieces::Piece player2Piece = Pieces::Piece::C;
-    
-
-     while (true) {
+void play(std::vector<std::vector<char>>& board, int turns, Pieces::Piece player1Piece, Pieces::Piece player2Piece){
+    while(true){
         int col {};
 
         std::cout << '\n';
@@ -335,7 +357,7 @@ void play(std::vector<std::vector<char>>& board){
         
             if(canMakeMove(board, col, player2Piece)){
                 makeMove(board, col, player2Piece);
-                turns++;//increments turn only if able to make a moove
+                break;
             }
 
             else{
@@ -350,54 +372,14 @@ void play(std::vector<std::vector<char>>& board){
         
             if(canMakeMove(board, col, player1Piece)){
                 makeMove(board, col, player1Piece);
-                turns++;//increments turn only if able to make a moove
+                break;
             }
 
             else{
                 std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
             }
         }
-
-
-        std::cout << '\n';
-        printBoard(board);
-
-        //check to see who won
-
-        if (gameStatus(board) == Statuses::Status::PLAYER_1_WINS || gameStatus(board) == Statuses::Status::PLAYER_2_WINS\
-        || gameStatus(board) == Statuses::Status::DRAW){
-            //print who won
-            std::cout << "Total number of turns: " << turns << '\n';
-
-            if(gameStatus(board) == Statuses::Status::PLAYER_1_WINS){
-                std::cout << "Player 1 wins!\n";
-            }
-
-            else if(gameStatus(board) == Statuses::Status::PLAYER_2_WINS){
-                std::cout << "Player 2 wins!\n";
-            }
-
-            else if(gameStatus(board) == Statuses::Status::DRAW){
-                std::cout << "Draw!\n";
-            }
-
-            bool replay{ playAgain() };
-
-            if (replay) {
-                std::cout << "Starting a new game. Clearing the board\n";
-                board = makeBoard();
-
-                printBoard(board);
-
-                turns = 1;
-            }
-
-            else {
-                std::cout << "Ending the game. Goodbye!\n";
-                break;//ends loop
-            }
-        }
-
     }
+    
     //creator: Isaac Fredricks
 }
