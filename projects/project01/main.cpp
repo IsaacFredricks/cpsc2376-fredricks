@@ -56,7 +56,8 @@ int main(){
     std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins." 
     << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
     << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
-    << "*Pieces will go down to the lowest possible row\n\n";
+    << "*Pieces will go down to the lowest possible row\n"
+    << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
     auto board{ makeBoard() };
 
@@ -291,16 +292,21 @@ Statuses::Status gameStatus(const std::vector<std::vector<char>>& board){
 bool playAgain() {
     while (true) {
         std::cout << "Want to play again? y or n: ";
-        char c{};
-        std::cin >> c;
+        std::string letter{};
+        std::cin >> letter;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         
-        if (c == 'y' || c == 'Y') {
+        if (letter == "y" || letter == "Y") {
             std::cout << "Here we go again!\n";
             return true;
         }
 
-        else if (c == 'n' || c == 'N') {
+        else if (letter == "n"|| letter == "N") {
             return false;
+        }
+
+        else if(letter.size() > 1){
+            std::cout << "Too long of an input. Don't input anything more than Y or N\n";
         }
 
         else {
