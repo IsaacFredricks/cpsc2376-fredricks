@@ -4,6 +4,7 @@
 
 //forward declarations
 int getInt(const std::string& prompt);
+double getDouble(const std::string& prompt);
 void convertTemperature(double temp, char scale = 'F');//'F' is default arguement
 
 int main(){
@@ -12,16 +13,22 @@ int main(){
 
     while(true){
         std::cout << "1. Convert Celsius to Fahrenheit\n"
-        << "2. Convert Fahrenheit to Celsius\n3. Quit";
+        << "2. Convert Fahrenheit to Celsius\n3. Quit\n";
 
         int choice = getInt("Choose an option: ");
 
         if(choice == 1){
             std::cout << "You chose to Convert Celsius to Fahrenheit\n";
+            temp = getDouble("Enter temperature: ");
+
+            convertTemperature(temp);
         }
 
         else if(choice == 2){
             std::cout << "You chose to Convert Fahrenheit to Celsius\n";
+            temp = getDouble("Enter temperature: ");
+
+            convertTemperature(temp, 'C');
         }
 
         else if(choice == 3){
@@ -37,7 +44,7 @@ int main(){
     return 0;
 }
 
-int getInt(std::string& prompt){//from project01
+int getInt(const std::string& prompt){//from project01
 
     int input{};
 
@@ -63,17 +70,42 @@ int getInt(std::string& prompt){//from project01
     return input;
 }
 
+double getDouble(const std::string& prompt){
+    double input{};
 
-void convertTemperature(double temp, char scale){//degree symbol source: https://stackoverflow.com/questions/23777226/how-to-display-degree-celsius-in-a-string-in-c
+    while (true) {
+        std::cout << prompt;
+        std::cin >> input;
+
+        if (std::cin.fail() || std::cin.peek() != '\n') {//peek looks at next character in queue
+            std::cin.clear(); //clears the error
+
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards invalid input
+
+            std::cout << "Inproper input. please try again.\n";
+        }
+
+        else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards any extra input
+            break;//exits loop
+        }
+    }
+    return input;
+}
+
+
+void convertTemperature(double temp, char scale){
     if(scale == 'F'){//formula source: https://www.calculatorsoup.com/calculators/conversions/celsius-to-fahrenheit.php
-        temp = (temp * (9/5) + 32);
+        temp = (temp * (9.0/5.0) + 32.0);
 
-        std::cout << "Converted: " << temp << "\xB0" << "F\n";
+        std::cout << "Converted: " << temp << " degrees F\n";
     }
 
-    if(scale == 'C'){//formula source: https://www.calculatorsoup.com/calculators/conversions/fahrenheit-to-celsius.php
-        temp = ((temp - 32) / (9/5));
+    else if(scale == 'C'){//formula source: https://www.calculatorsoup.com/calculators/conversions/fahrenheit-to-celsius.php
+        temp = ((temp - 32.0) / (9.0/5.0));
 
-         std::cout << "Converted: " << temp << "\xB0" << "C\n";
+         std::cout << "Converted: " << temp << " degrees C\n";
     }
 }
