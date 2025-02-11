@@ -48,7 +48,7 @@ bool canMakeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece g
 void makeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
 Statuses::Status gameStatus(const std::vector<std::vector<char>>& board);
 bool playAgain();
-void play(std::vector<std::vector<char>>& board, int turns, Pieces::Piece player1Piece, Pieces::Piece Player2Piece);
+void play(std::vector<std::vector<char>>& board, int turns);
 
 int main(){
     std::cout << "\n======== Connect 4 =======\n\n";
@@ -64,42 +64,47 @@ int main(){
     printBoard(board);
 
     int turns{1};// tells what turn it is. Odd is player 1, even is player 2
-    Pieces::Piece player1Piece = Pieces::Piece::O;
-    Pieces::Piece player2Piece = Pieces::Piece::C;
     
 
      while (true) {
         
-        play(board, turns, player1Piece, player2Piece);
+        play(board, turns);
         turns++;
 
         std::cout << '\n';
         printBoard(board);
 
         //check to see who won
+        Statuses::Status stats = gameStatus(board);
 
-        if (gameStatus(board) == Statuses::Status::PLAYER_1_WINS || gameStatus(board) == Statuses::Status::PLAYER_2_WINS\
-        || gameStatus(board) == Statuses::Status::DRAW){
+        if (stats == Statuses::Status::PLAYER_1_WINS || stats == Statuses::Status::PLAYER_2_WINS\
+        || stats == Statuses::Status::DRAW){
             //print who won
             std::cout << "Total number of turns: " << turns << '\n';
 
-            if(gameStatus(board) == Statuses::Status::PLAYER_1_WINS){
+            if(stats == Statuses::Status::PLAYER_1_WINS){
                 std::cout << "Player 1 wins!\n";
             }
 
-            else if(gameStatus(board) == Statuses::Status::PLAYER_2_WINS){
+            else if(stats == Statuses::Status::PLAYER_2_WINS){
                 std::cout << "Player 2 wins!\n";
             }
 
-            else if(gameStatus(board) == Statuses::Status::DRAW){
+            else if(stats == Statuses::Status::DRAW){
                 std::cout << "Draw!\n";
             }
 
             bool replay{ playAgain() };
 
             if (replay) {
-                std::cout << "Starting a new game. Clearing the board\n";
+                std::cout << "Starting a new game. Clearing the board\n\n";
                 board = makeBoard();
+
+                std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins." 
+                << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
+                << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
+                << "*Pieces will go down to the lowest possible row\n"
+                << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
                 printBoard(board);
 
@@ -321,8 +326,7 @@ bool playAgain() {
     while (true) {
         std::cout << "Want to play again? y or n: ";
         std::string letter{};
-        std::cin >> letter;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        getline(std::cin, letter);
         
         if (letter == "y" || letter == "Y") {
             std::cout << "Here we go again!\n";
@@ -337,6 +341,10 @@ bool playAgain() {
             std::cout << "Too long of an input. Don't input anything more than Y or N\n";
         }
 
+        else if(letter.size() == 0){
+            std::cout << "You inputed nothing! Try again\n";
+        }
+
         else {
             std::cout << "Invalid input. Try again\n";
         }
@@ -344,19 +352,21 @@ bool playAgain() {
     }
 }
 
-void play(std::vector<std::vector<char>>& board, int turns, Pieces::Piece player1Piece, Pieces::Piece player2Piece){
+void play(std::vector<std::vector<char>>& board, int turns){
     while(true){
         int col {};
+        Pieces::Piece playerPiece {};
 
         std::cout << '\n';
 
         if (turns % 2 == 0) {
+            playerPiece = Pieces::Piece::C;
             std::cout << "Player 2, ";
 
             col = getInt("Enter the column you want to play: ") - 1;
         
-            if(canMakeMove(board, col, player2Piece)){
-                makeMove(board, col, player2Piece);
+            if(canMakeMove(board, col, playerPiece)){
+                makeMove(board, col, playerPiece);
                 break;
             }
 
@@ -366,12 +376,13 @@ void play(std::vector<std::vector<char>>& board, int turns, Pieces::Piece player
         }
 
         else {
+            playerPiece = Pieces::Piece::O;
             std::cout << "Player 1, ";
 
             col = getInt("Enter the column you want to play: ") - 1;
         
-            if(canMakeMove(board, col, player1Piece)){
-                makeMove(board, col, player1Piece);
+            if(canMakeMove(board, col, playerPiece)){
+                makeMove(board, col, playerPiece);
                 break;
             }
 
