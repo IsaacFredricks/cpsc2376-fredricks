@@ -38,7 +38,7 @@ int getChoice(const std::string& prompt){//from project01
         std::cout << prompt;
         std::cin >> input;
 
-        if (std::cin.fail() || input == 0 || std::cin.peek() != '\n') {//peek looks at next character in queue
+        if (std::cin.fail() || input <= 0 || std::cin.peek() != '\n') {//peek looks at next character in queue
             std::cin.clear(); //clears the error
 
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
