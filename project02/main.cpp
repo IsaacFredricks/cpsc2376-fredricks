@@ -2,6 +2,7 @@
 #include <vector>//for game Board
 #include <limits>//for edge testing
 #include <string>//for getLine
+#include "connectFour.h"
 
 /*GOALS:
 * make game class/object oriented
@@ -15,40 +16,13 @@
 *If at end no person wins, its a draw
 */
 
-//namespace for checking the status of the game
-namespace Statuses {//used learn c++ for enums chapter 13
-    enum class Status {
-        ONGOING,
-        PLAYER_1_WINS,
-        PLAYER_2_WINS,
-        DRAW,
-    };
-}
 
-namespace Pieces {
-    enum class Piece {
-        O,
-        C,
-    };
-
-    char pieceToChar(Piece p) {
-        if (p == Pieces::Piece::O) {
-            return 'O';
-        }
-
-        return 'C';
-    }
-}
 
 //forward declarations here
 int getInt(const std::string& prompt);
-void printBoard(const std::vector<std::vector<char>>& board);//don't want to change the board with this one so const
-std::vector<std::vector<char>> makeBoard();
-bool canMakeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
-void makeMove(std::vector<std::vector<char>>& board, int col, Pieces::Piece gamePiece);
-Statuses::Status gameStatus(const std::vector<std::vector<char>>& board);
+
 bool playAgain();
-void play(std::vector<std::vector<char>>& board, int turns);
+
 
 int main() {
     std::cout << "\n======== Connect 4 =======\n\n";

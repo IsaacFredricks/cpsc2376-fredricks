@@ -1,5 +1,10 @@
 #pragma once
 
-int getAge();
+class Person {
+	int age{};
 
-void setAge(int age);
+public:
+	int getAge();
+
+	void setAge(int age);
+};

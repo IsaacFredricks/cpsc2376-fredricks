@@ -9,8 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "practice03", "practice\prac
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "practice03_test", "tests\practice03_test\practice03_test.vcxproj", "{02F74A95-F7A1-4610-B166-5016B74D612F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "practice05", "pract\pract.vcxproj", "{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "practice06", "practice06\practice06.vcxproj", "{5966FC94-8DFA-4445-B48B-B5F490B83532}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "practice07", "practice07\practice07.vcxproj", "{2BAFE2DD-0CCB-4624-BC95-E2881B47FFCA}"
@@ -49,14 +47,6 @@ Global
 		{02F74A95-F7A1-4610-B166-5016B74D612F}.Release|x64.Build.0 = Release|x64
 		{02F74A95-F7A1-4610-B166-5016B74D612F}.Release|x86.ActiveCfg = Release|Win32
 		{02F74A95-F7A1-4610-B166-5016B74D612F}.Release|x86.Build.0 = Release|Win32
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Debug|x64.ActiveCfg = Debug|x64
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Debug|x64.Build.0 = Debug|x64
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Debug|x86.ActiveCfg = Debug|Win32
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Debug|x86.Build.0 = Debug|Win32
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Release|x64.ActiveCfg = Release|x64
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Release|x64.Build.0 = Release|x64
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Release|x86.ActiveCfg = Release|Win32
-		{BCBF74A3-3ED8-4AA0-B5E6-966BA9C59CA4}.Release|x86.Build.0 = Release|Win32
 		{5966FC94-8DFA-4445-B48B-B5F490B83532}.Debug|x64.ActiveCfg = Debug|x64
 		{5966FC94-8DFA-4445-B48B-B5F490B83532}.Debug|x64.Build.0 = Debug|x64
 		{5966FC94-8DFA-4445-B48B-B5F490B83532}.Debug|x86.ActiveCfg = Debug|Win32
