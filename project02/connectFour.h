@@ -17,10 +17,16 @@ public:
 	* makeMove()
 	* getGameStatus()
 	* setCol
+	* setPiece
 	*/
+	static enum class Status;
+	//static b/c don't need multiple of the same status and pieces
 
+	static enum class Piece;
 	ConnectFour();//constructor
-	void setCol();
+	void setCol(int col);
+	int getCol();
+	void setPiece(Piece gamePiece);
 	std::vector<std::vector<char>> makeBoard();
 	void printBoard();
 	bool canMakeMove();
@@ -28,10 +34,6 @@ public:
 	Status gameStatus();
 	void play();
 		//used learn c++ for enums chapter 13
-	static enum class Status;
-	//static b/c don't need multiple of the same status and pieces
 
-	static enum class Piece;
-
-	char pieceToChar(Piece p);
+	char pieceToChar();
 };
