@@ -13,16 +13,22 @@
 * setCol
 */
 
-ConnectFour::ConnectFour() {//constructor
-    turns = 1;
+//used learn c++ for enums chapter 13
+static enum class Status { ONGOING, PLAYER_1_WINS, PLAYER_2_WINS, DRAW };
+//static b/c don't need multiple of the same status and pieces
+
+static enum class Piece { O, C };
+
+char ConnectFour::pieceToChar() {
+    if (gamePiece == Piece::O) {
+        return 'O';
+    }
+
+    return 'C';
 }
 
-void ConnectFour::setCol(int col) {
-    this->col = col;
-}
-
-int ConnectFour::getCol() {
-    int num {};
+void ConnectFour::setCol() {
+    int num{};
 
     while (true) {
         std::cout << "Enter what column you want to play: ";
@@ -39,12 +45,13 @@ int ConnectFour::getCol() {
 
         else {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            return num - 1;
+            col = num - 1;
             //discards any extra input
             break;//exits loop
         }
     }
 }
+
 
 void ConnectFour::setPiece(Piece gamePiece) {
     this->gamePiece = gamePiece;
@@ -60,6 +67,18 @@ std::vector<std::vector<char>> ConnectFour::makeBoard() {
     {' ', ' ', ' ', ' ', ' ', ' ', ' '} };
 
     return board;
+}
+
+void ConnectFour::setTurns(int turns) {
+    this->turns = turns;
+}
+
+int ConnectFour::getTurns() {
+    return turns;
+}
+
+void ConnectFour::incrementTurn() {
+    turns++;
 }
 
 void ConnectFour::printBoard() {
@@ -204,7 +223,7 @@ void ConnectFour::play() {
             setPiece(Piece::C);
             std::cout << "Player 2, ";
 
-            setCol(getCol());
+            setCol();
 
             if (canMakeMove()) {
                 makeMove();
@@ -220,7 +239,7 @@ void ConnectFour::play() {
             setPiece(Piece::O);
             std::cout << "Player 1, ";
 
-            setCol(getCol());
+            setCol();
 
             if (canMakeMove()) {
                 makeMove();
@@ -234,18 +253,4 @@ void ConnectFour::play() {
     }
 
     //creator: Isaac Fredricks
-}
-
-//used learn c++ for enums chapter 13
-static enum class Status {ONGOING, PLAYER_1_WINS, PLAYER_2_WINS, DRAW};
-//static b/c don't need multiple of the same status and pieces
-
-static enum class Piece {O, C};
-
-char ConnectFour::pieceToChar() {
-            if (gamePiece == Piece::O) {
-                return 'O';
-            }
-
-            return 'C';
 }

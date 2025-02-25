@@ -22,6 +22,10 @@
 bool playAgain();
 
 int main() {
+
+    ConnectFour currentGame;//makes game object
+    currentGame.makeBoard();//creats a new game board
+
     std::cout << "\n======== Connect 4 =======\n\n";
 
     std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins."
@@ -30,38 +34,37 @@ int main() {
         << "*Pieces will go down to the lowest possible row\n"
         << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
-    auto board{ makeBoard() };
 
-    printBoard(board);
+    currentGame.printBoard();
 
-    int turns{ 1 };// tells what turn it is. Odd is player 1, even is player 2
+    
 
 
     while (true) {
 
-        play(board, turns);
-        turns++;
+        currentGame.play();
+        currentGame.incrementTurn();
 
         std::cout << '\n';
-        printBoard(board);
+        currentGame.printBoard();
 
         //check to see who won
-        Status stats = ConnectFour::gameStatus(board);
+        Status stats = currentGame.gameStatus();
 
         if (stats == Status::PLAYER_1_WINS || stats == Status::PLAYER_2_WINS
             || stats == Status::DRAW) {
             //print who won
-            std::cout << "Total number of turns: " << turns << '\n';
+            std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';
 
             if (stats == Status::PLAYER_1_WINS) {
                 std::cout << "Player 1 wins!\n";
             }
 
-            else if (stats == Statuses::Status::PLAYER_2_WINS) {
+            else if (stats == Status::PLAYER_2_WINS) {
                 std::cout << "Player 2 wins!\n";
             }
 
-            else if (stats == Statuses::Status::DRAW) {
+            else if (stats == Status::DRAW) {
                 std::cout << "Draw!\n";
             }
 
@@ -69,7 +72,7 @@ int main() {
 
             if (replay) {
                 std::cout << "Starting a new game. Clearing the board\n\n";
-                board = makeBoard();
+                currentGame.makeBoard();
 
                 std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins."
                     << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
@@ -77,9 +80,9 @@ int main() {
                     << "*Pieces will go down to the lowest possible row\n"
                     << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
-                printBoard(board);
+                currentGame.printBoard();
 
-                turns = 1;
+                currentGame.setTurns(1);
             }
 
             else {
