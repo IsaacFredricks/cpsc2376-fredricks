@@ -2,7 +2,7 @@
 #include <vector>//for game Board
 #include <limits>//for edge testing
 #include <string>//for getLine
-#include "connectFour.cpp"
+#include "connectFour.h"//works fine in vs if its just .h. Change to .cpp if using codebin or github codespaces
 /*GOALS:
 * make game class/object oriented
 * make a text-based game
