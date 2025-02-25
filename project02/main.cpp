@@ -3,7 +3,6 @@
 #include <limits>//for edge testing
 #include <string>//for getLine
 #include "connectFour.h"
-
 /*GOALS:
 * make game class/object oriented
 * make a text-based game
@@ -43,7 +42,7 @@ int main() {
     while (true) {
 
         currentGame.play();
-        currentGame.incrementTurn();
+        currentGame.incrementTurn();//the first time running it should increment turns to 1
 
         std::cout << '\n';
         currentGame.printBoard();
@@ -51,20 +50,20 @@ int main() {
         //check to see who won
         Status stats = currentGame.gameStatus();
 
-        if (stats == Status::PLAYER_1_WINS || stats == Status::PLAYER_2_WINS
-            || stats == Status::DRAW) {
+        if (stats == PLAYER_1_WINS || stats == PLAYER_2_WINS
+            || stats == DRAW) {
             //print who won
             std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';
 
-            if (stats == Status::PLAYER_1_WINS) {
+            if (stats == PLAYER_1_WINS) {
                 std::cout << "Player 1 wins!\n";
             }
 
-            else if (stats == Status::PLAYER_2_WINS) {
+            else if (stats == PLAYER_2_WINS) {
                 std::cout << "Player 2 wins!\n";
             }
 
-            else if (stats == Status::DRAW) {
+            else if (stats == DRAW) {
                 std::cout << "Draw!\n";
             }
 

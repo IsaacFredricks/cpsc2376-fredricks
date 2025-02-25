@@ -9,10 +9,10 @@ private://private by default but good to put it out
 	Piece gamePiece;
 
 public:
-	static enum class Status;
+	static enum Status;
 	//static b/c don't need multiple of the same status and pieces
 
-	static enum class Piece;
+	static enum Piece;
 	void setCol();
 	void setPiece(Piece gamePiece);
 	void setTurns(int turns);

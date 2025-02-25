@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <limits>
 #include "connectFour.h"
 
 
@@ -14,10 +15,10 @@
 */
 
 //used learn c++ for enums chapter 13
-static enum class Status { ONGOING, PLAYER_1_WINS, PLAYER_2_WINS, DRAW };
+static enum Status { ONGOING, PLAYER_1_WINS, PLAYER_2_WINS, DRAW };
 //static b/c don't need multiple of the same status and pieces
 
-static enum class Piece { O, C };
+static enum Piece { O, C };
 
 char ConnectFour::pieceToChar() {
     if (gamePiece == Piece::O) {
@@ -132,13 +133,13 @@ Status ConnectFour::gameStatus() {
             if (col <= 3) {
                 if ((board.at(i).at(col) == 'O' && board.at(i).at(col + 1) == 'O' && board.at(i).at(col + 2) == 'O' && board.at(i).at(col + 3) == 'O')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_1_WINS;
+                    return PLAYER_1_WINS;
                 }
 
 
                 else if ((board.at(i).at(col) == 'C' && board.at(i).at(col + 1) == 'C' && board.at(i).at(col + 2) == 'C' && board.at(i).at(col + 3) == 'C')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_2_WINS;
+                    return PLAYER_2_WINS;
                 }
 
             }
@@ -154,13 +155,13 @@ Status ConnectFour::gameStatus() {
             if (i <= 2) {
                 if ((board.at(i).at(col) == 'O' && board.at(i + 1).at(col) == 'O' && board.at(i + 2).at(col) == 'O' && board.at(i + 3).at(col) == 'O')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_1_WINS;
+                    return PLAYER_1_WINS;
                 }
 
 
                 else if ((board.at(i).at(col) == 'C' && board.at(i + 1).at(col) == 'C' && board.at(i + 2).at(col) == 'C' && board.at(i + 3).at(col) == 'C')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_2_WINS;
+                    return PLAYER_2_WINS;
                 }
             }
 
@@ -177,13 +178,13 @@ Status ConnectFour::gameStatus() {
 
                 if ((board.at(i).at(col) == 'O' && board.at(i + 1).at(col + 1) == 'O' && board.at(i + 2).at(col + 2) == 'O' && board.at(i + 3).at(col + 3) == 'O')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_1_WINS;
+                    return PLAYER_1_WINS;
                 }
 
 
                 else if ((board.at(i).at(col) == 'C' && board.at(i + 1).at(col + 1) == 'C' && board.at(i + 2).at(col + 2) == 'C' && board.at(i + 3).at(col + 3) == 'C')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_2_WINS;
+                    return PLAYER_2_WINS;
                 }
 
             }
@@ -191,13 +192,13 @@ Status ConnectFour::gameStatus() {
             if (i >= 2 && col <= 3) {
                 if ((board.at(i).at(col) == 'O' && board.at(i - 1).at(col + 1) == 'O' && board.at(i - 2).at(col + 2) == 'O' && board.at(i - 3).at(col + 3) == 'O')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_1_WINS;
+                    return PLAYER_1_WINS;
                 }
 
 
                 else if ((board.at(i).at(col) == 'C' && board.at(i - 1).at(col + 1) == 'C' && board.at(i - 2).at(col + 2) == 'C' && board.at(i - 3).at(col + 3) == 'C')) {
                     //std::cout << "won by z\n";
-                    return Status::PLAYER_2_WINS;
+                    return PLAYER_2_WINS;
                 }
             }
 
@@ -208,10 +209,10 @@ Status ConnectFour::gameStatus() {
     //checks if draw. should be a draw if all of the spots are taken and no one has one yet
     if (board.at(0).at(0) != ' ' && board.at(0).at(1) != ' ' && board.at(0).at(2) != ' '
         && board.at(0).at(3) != ' ' && board.at(0).at(4) != ' ' && board.at(0).at(5) != ' ') {
-        return Status::DRAW;
+        return DRAW;
     }
 
-    return Status::ONGOING;
+    return ONGOING;
 }
 
 void ConnectFour::play() {
@@ -220,7 +221,7 @@ void ConnectFour::play() {
         std::cout << '\n';
 
         if (turns % 2 == 0) {
-            setPiece(Piece::C);
+            setPiece(C);
             std::cout << "Player 2, ";
 
             setCol();
@@ -236,7 +237,7 @@ void ConnectFour::play() {
         }
 
         else {
-            setPiece(Piece::O);
+            setPiece(O);
             std::cout << "Player 1, ";
 
             setCol();
