@@ -2,7 +2,7 @@
 #include <vector>//for game Board
 #include <limits>//for edge testing
 #include <string>//for getLine
-#include "connectFour.h"
+#include "connectFour.cpp"
 /*GOALS:
 * make game class/object oriented
 * make a text-based game

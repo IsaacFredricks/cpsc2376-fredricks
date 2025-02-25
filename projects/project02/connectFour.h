@@ -14,7 +14,7 @@ public:
 	void setTurns(int turns);
 	void incrementTurn();
 	int getTurns();
-	std::vector<std::vector<char>> makeBoard();
+	void makeBoard();
 	void printBoard();
 	bool canMakeMove();
 	void makeMove();

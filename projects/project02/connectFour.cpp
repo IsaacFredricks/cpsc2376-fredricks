@@ -13,6 +13,13 @@
 * getGameStatus()
 * setCol
 */
+char ConnectFour::pieceToChar(){
+    if(gamePiece == O){
+        return 'O';
+    }
+
+    return 'C';
+}
 
 void ConnectFour::setCol() {
     int num{};
@@ -44,16 +51,14 @@ void ConnectFour::setPiece(Piece gamePiece) {
     this->gamePiece = gamePiece;
 }
 
-std::vector<std::vector<char>> ConnectFour::makeBoard() {
-    std::vector<std::vector<char>> board =
+void ConnectFour::makeBoard() {
+    board =
     { {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '} };
-
-    return board;
 }
 
 void ConnectFour::setTurns(int turns) {
