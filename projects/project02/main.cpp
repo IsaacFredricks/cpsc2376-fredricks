@@ -37,7 +37,7 @@ int main() {
     currentGame.printBoard();
 
     
-    currentGame.setTurns(1);
+    currentGame.setTurns(1);//sets turns to 1 so player 1 goes first
 
     while (true) {
 
@@ -99,7 +99,7 @@ int main() {
 
 
 
-bool playAgain() {
+bool playAgain() {//doesn't use instance variables so dont put in class
     while (true) {
         std::cout << "Want to play again? y or n: ";
         std::string letter{};

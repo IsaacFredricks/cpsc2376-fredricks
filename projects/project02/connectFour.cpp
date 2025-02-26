@@ -65,7 +65,7 @@ void ConnectFour::setTurns(int turns) {
     this->turns = turns;
 }
 
-int ConnectFour::getTurns() {
+int const ConnectFour::getTurns() {
     return turns;
 }
 

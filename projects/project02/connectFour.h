@@ -13,7 +13,7 @@ public:
 	void setPiece(Piece gamePiece);
 	void setTurns(int turns);
 	void incrementTurn();
-	int getTurns();
+	int const getTurns();
 	void makeBoard();
 	void printBoard();
 	bool canMakeMove();
