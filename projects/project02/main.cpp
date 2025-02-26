@@ -37,7 +37,7 @@ int main() {
     currentGame.printBoard();
 
     
-
+    currentGame.setTurns(1);
 
     while (true) {
 
