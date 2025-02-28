@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include <numeric>//for gcd in simplify
+
 
 class Fraction {
 private:

@@ -2,7 +2,6 @@
 #include "MixedFraction.h"
 #include <string>
 #include <limits>
-#include <numeric>//for gcd in cimplify
 
 
 int getChoice(const std::string& prompt);//from practice05
@@ -13,9 +12,9 @@ int main() {
     Fraction frac;//makes fraction object
 
 	while (true) {
-        std::cout << "1. Enter a fraction\n2. Perform operations (+, -, *, /)\n "
+        std::cout << "1. Enter a fraction\n2. Perform operations (+, -, *, /)\n"
         << "3. Display fraction as mixed fraction\n4. Clear current fraction\n"
-        << " 5. Exit program\n\n";
+        << "5. Exit program\n\n";
 
         std::cout << "Current Fraction : " << frac << "\n\n";
 

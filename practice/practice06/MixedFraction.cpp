@@ -1,7 +1,6 @@
 #include "MixedFraction.h"
 #include <string>
 #include <iostream>
-#include <numeric>//for gcd in simplify
 
 MixedFraction::MixedFraction(int whole, int n, int d) : Fraction(n, d), whole{ whole } {}
 
@@ -17,8 +16,22 @@ int MixedFraction::getWhole() const{
 
 //prints fraction option
 std::ostream& operator<<(std::ostream& os, const MixedFraction& mixFrac) {
-	os << mixFrac.getWhole() << " " << mixFrac.getNumerator() << '/' 
-	<< mixFrac.getDenominator() << '\n';
+	if (mixFrac.getWhole() != 0 && mixFrac.getNumerator() > 0) {
+		os << "It's a mixed fraction" << mixFrac.getWhole() 
+		<< " " << mixFrac.getNumerator() << '/'
+		<< mixFrac.getDenominator() << '\n';
 
+	}
+
+	else if (mixFrac.getNumerator() == 0) {
+		os << "Its a whole number: " << mixFrac.getWhole() << '\n';
+
+	}
+
+	else {
+		os << "It's not big enough to be a mixed fraction"
+		<< mixFrac.getNumerator() << '/'
+		<< mixFrac.getDenominator() << '\n';
+	}
 	return os;
 }

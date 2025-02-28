@@ -1,8 +1,6 @@
 #include "Fraction.h"
 #include <string>
 #include <iostream>
-#include <numeric>//for gcd in simplify
-
 
 Fraction::Fraction() {
 	num = 0;
@@ -25,6 +23,7 @@ void Fraction::setNumerator(int n) {
 
 void Fraction::setDenominator(int d) {
 	if (d == 0) {
+		std::cout << "error: denominator can't be 0. Exiting program\n";
 		throw std::invalid_argument("The denominator can't be 0");
 	}
 
@@ -34,24 +33,23 @@ void Fraction::setDenominator(int d) {
 
 }
 
-//https://www.geeksforgeeks.org/gcd-in-cpp/#gcd-using-inbuilt-function-in-c source  for gcd:
 void Fraction::simplify() {
-	if (den == 0) {
-		throw std::invalid_argument("The denominator can't be 0");
+	int a = num;
+	int b = den;
+
+	// Compute GCD using the Euclidean algorithm
+	while (b != 0) {
+		int temp = b;
+		b = a % b;
+		a = temp;
 	}
+	int divisor = a;
 
-	int gcd = std::gcd(num, den);//gratest common factor
-
-	num /= gcd;
-
-	den /= gcd;
-
-	if (den < 0) {//flips signs
-		num = -num;
-
-		den = -den;
-	}
+	// Simplify the fraction
+	num /= divisor;
+	den /= divisor;
 }
+
 //fraction a/b * c/d = ad + cd/ bd
 Fraction operator+(const Fraction& lhs, const Fraction& rhs) {
 	Fraction frac(((lhs.getNumerator() * rhs.getDenominator())
