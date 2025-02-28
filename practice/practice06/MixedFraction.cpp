@@ -1,8 +1,7 @@
 #include "MixedFraction.h"
 #include <string>
 #include <iostream>
-#include <numeric>//for gcd in cimplify
-#include <algorithm>//also for gcd
+#include <numeric>//for gcd in simplify
 
 MixedFraction::MixedFraction(int whole, int n, int d) : Fraction(n, d), whole{ whole } {}
 

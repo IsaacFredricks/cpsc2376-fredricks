@@ -2,8 +2,7 @@
 #include "Fraction.h"
 #include <string>
 #include <iostream>
-#include <numeric>//for gcd in cimplify
-#include <algorithm>//also for gcd
+#include <numeric>//for gcd in simplify
 
 class MixedFraction : Fraction {//derived from fraction
 private:
