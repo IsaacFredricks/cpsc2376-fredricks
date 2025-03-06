@@ -9,7 +9,7 @@ public:
 
 	enum Piece { O, C };
 
-	void setCol();
+	void setCol(int col);
 	void setPiece(Piece gamePiece);
 	void setTurns(int turns);
 	void incrementTurn();

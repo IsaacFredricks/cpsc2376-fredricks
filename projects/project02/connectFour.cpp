@@ -21,29 +21,8 @@ char ConnectFour::pieceToChar(){
     return 'C';
 }
 
-void ConnectFour::setCol() {
-    int num{};
-
-    while (true) {
-        std::cout << "Enter what column you want to play: ";
-        std::cin >> num;
-
-        if (std::cin.fail() || num < 1 || num > 7 || std::cin.peek() != '\n') {//peek looks at next character in queue
-            std::cin.clear(); //clears the error
-
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            //discards invalid input
-
-            std::cout << "Inproper input. please try again.\n";
-        }
-
-        else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            col = num - 1;
-            //discards any extra input
-            break;//exits loop
-        }
-    }
+void ConnectFour::setCol(int col) {
+    this->col = col;
 }
 
 
@@ -213,9 +192,7 @@ void ConnectFour::play() {
 
         if (turns % 2 == 0) {
             setPiece(C);
-            std::cout << "Player 2, ";
-
-            setCol();
+            std::cout << "(Player 2's turn)\n";
 
             if (canMakeMove()) {
                 makeMove();
@@ -229,9 +206,7 @@ void ConnectFour::play() {
 
         else {
             setPiece(O);
-            std::cout << "Player 1, ";
-
-            setCol();
+            std::cout << "(Player 1's turn)\n";
 
             if (canMakeMove()) {
                 makeMove();

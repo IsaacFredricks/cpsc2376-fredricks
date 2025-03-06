@@ -19,6 +19,7 @@
 
 //forward declaration here
 bool playAgain();
+int getInt(const std::string& prompt);
 
 int main() {
 
@@ -41,7 +42,9 @@ int main() {
 
     while (true) {
 
+        currentGame.setCol(getInt("Enter what column you want to play: ") - 1);
         currentGame.play();
+        
         currentGame.incrementTurn();//the first time running it should increment turns to 1
 
         std::cout << '\n';
@@ -94,6 +97,32 @@ int main() {
     }
 
     return 0;
+}
+
+int getInt(const std::string& prompt) {
+    int num{};
+
+    while (true) {
+        std::cout << "Enter what column you want to play: ";
+        std::cin >> num;
+
+        if (std::cin.fail() || std::cin.peek() != '\n' || num > 7 || num < 1) {//peek looks at next character in queue
+            std::cin.clear(); //clears the error
+
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards invalid input
+
+            std::cout << "Inproper input. please try again.\n";
+        }
+
+        else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards any extra input
+            break;//exits loop
+        }
+    }
+
+    return num;
 }
 
 
