@@ -1,20 +1,70 @@
-// practice07.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+#include <iostream>//no ai used
+#include <vector>
+#include <fstream>//for file i/o
 
-#include <iostream>
+class Employee{//base class. has virtual function so can't instantiate
+private:
+    std::string name;
+    int id;
 
-int main()
-{
+public:
+    Employee(std::string name, int id) : name{name}, id{id} {}
+
+    //pure virtual function
+    virtual double calculateSalary() const = 0;
+
+    virtual void displayInfo() const;
+
+};
+
+class SalariedEmployee : public Employee{//derived class
+private:
+    double monthlySalary;
+
+public:
+    SalariedEmployee(std::string name, int id, double monthlySalary) : Employee{name, id}, monthlySalary{monthlySalary} {}
+    double calculateSalary() const{
+        return monthlySalary;
+    }
+
+    void displayInfo(){
+        //std::cout << name << 
+    }
+
+};
+
+class HourlyEmployee : public Employee{//derived class
+    private:
+        double hourlyRate;
+        int hoursWorked;
+    
+    public:
+        HourlyEmployee(std::string name, int id, double hourlyRate, int hoursWorked) 
+        : Employee{name, id}, hourlyRate{hourlyRate}, hoursWorked{hoursWorked} {}
+
+        double calculateSalary() const{
+            return hourlyRate * hoursWorked;
+        }
+    
+};
+
+class CommissionedEmployee : public Employee{//derived class
+    private:
+        double baseSalary;
+        double salesAmount;
+        double commissionRate;
+    
+    public:
+        CommissionedEmployee(std::string name, int id, double baseSalary, double salesAmount, double commissionRate) 
+        : Employee{name, id}, baseSalary{baseSalary}, salesAmount{salesAmount}, commissionRate{commissionRate} {}
+        double calculateSalary() const{
+            return baseSalary + (salesAmount * commissionRate);
+        }
+    
+};
+
+int main(){
     std::cout << "Hello World!\n";
+
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
