@@ -17,7 +17,7 @@ public:
     //pure virtual function
     virtual double calculateSalary() const = 0;
 
-    virtual void displayInfo() const;
+    virtual void displayInfo() = 0;
 
     std::string& getName(){
         return name;
@@ -41,16 +41,18 @@ public:
         return monthlySalary;
     }
 
-    void displayInfo(){
-        std::cout << "ID: " << getId() << ", Name: " << getName() << ", Type: Salaried, Monthly Salary: " << calculateSalary() << '\n';
+    void displayInfo() override{
+        std::cout << "ID: " << getId() << ", Name: " << getName() << ", Type: Salaried, Monthly Salary: $" << calculateSalary() << '\n';
     }
 
     static Employee* build(std::string s) {//based off of last week's lecture
         std::istringstream ssin(s);
-        std::string name;
-        ssin >> name;
+        std::string type;
+        ssin >> type;
         int id;
         ssin >> id;
+        std::string name;
+        ssin >> name;
         double monthlySalary;
         ssin >> monthlySalary;
         return new SalariedEmployee(name, id, monthlySalary);
@@ -71,17 +73,19 @@ public:
         return hourlyRate * hoursWorked;
     }
 
-    void displayInfo(){
+    void displayInfo() override{
         std::cout << "ID: " << getId() << ", Name: " << getName() << ", Type: Hourly Salary, Hourly Rate: " << hourlyRate
-        << ", Hours Worked: " << hoursWorked << ", Salary: " << calculateSalary() << '\n';
+        << ", Hours Worked: " << hoursWorked << ", Salary: $" << calculateSalary() << '\n';
     }
 
     static Employee* build(std::string s) {
         std::istringstream ssin(s);
-        std::string name;
-        ssin >> name;
+        std::string type;
+        ssin >> type;
         int id;
         ssin >> id;
+        std::string name;
+        ssin >> name;
         double hourlyRate;
         ssin >> hourlyRate;
         int hoursWorked;
@@ -106,17 +110,19 @@ public:
         return baseSalary + (salesAmount * commissionRate);
     }
 
-    void displayInfo(){
-        std::cout << "ID: " << getId() << ", Name: " << getName() << ", Type: Hourly Salary, Base Salary: " << baseSalary
-        << ", Sales Amount: " << salesAmount << ", Commission Rate" << commissionRate << ", Salary: " << calculateSalary() << '\n';
+    void displayInfo() override{
+        std::cout << "ID: " << getId() << ", Name: " << getName() << ", Type: Hourly Salary, Base Salary: $" << baseSalary
+        << ", Sales Amount: " << salesAmount << ", Commission Rate: " << commissionRate << "%, Salary: $" << calculateSalary() << '\n';
     }
 
     static Employee* build(std::string s) {
         std::istringstream ssin(s);
-        std::string name;
-        ssin >> name;
+        std::string type;
+        ssin >> type;
         int id;
         ssin >> id;
+        std::string name;
+        ssin >> name;
         double baseSalary;
         ssin >> baseSalary;
         double salesAmount;
