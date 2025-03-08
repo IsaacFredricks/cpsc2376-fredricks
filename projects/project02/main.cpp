@@ -33,14 +33,29 @@ int main() {
         << "*Pieces will go down to the lowest possible row\n"
         << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
-    std::cout << "*Player 1's turn*\n";//only for the first turn
-
     currentGame.display();
 
     while (true) {
+        std::cout << '\n';
 
          //index starts at 0 so has to be one less than player's input
-        currentGame.play(getInt("Enter what column you want to play: ") - 1);
+        if (currentGame.getTurns() % 2 == 0) {
+            std::cout << "Player 2, ";
+        }
+
+        else if (currentGame.getTurns() % 2 > 0) {
+            std::cout << "Player 1, ";
+        }
+
+        int col{ getInt("Enter what column you want to play: ") - 1 };
+
+        if (currentGame.canMakeMove(col)) {
+            currentGame.play(col);
+        }
+
+        else {
+            std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+        }
         
         currentGame.incrementTurn();//the first time running it should increment turns to 1
 
@@ -79,7 +94,7 @@ int main() {
                     << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
                 currentGame.display();
-                std::cout << "*Player 1's turn*\n";//only for the first turn
+
             }
 
             else {
@@ -98,7 +113,7 @@ int getInt(const std::string& prompt) {
     int num{};
 
     while (true) {
-        std::cout << "Enter what column you want to play: ";
+        std::cout << prompt;
         std::cin >> num;
 
         if (std::cin.fail() || std::cin.peek() != '\n' || num > 7 || num < 1) {//peek looks at next character in queue
