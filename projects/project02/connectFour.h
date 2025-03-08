@@ -9,22 +9,19 @@ public:
 
 	enum Piece { O, C };
 
-	void setCol(int col);
+	ConnectFour();
 	void setPiece(Piece gamePiece);
-	void setTurns(int turns);
 	void incrementTurn();
-	int const getTurns();
-	void makeBoard();
-	void printBoard();
-	bool canMakeMove();
-	void makeMove();
-	Status gameStatus();
-	void play();
+	int getTurns() const;
+	void display() const;
+	bool canMakeMove(int col);
+	void makeMove(int col);
+	Status status();
+	void play(int col);
 	char pieceToChar();
 
 private://private by default but good to put it out
 	std::vector<std::vector<char>> board;
 	int turns;
-	int col;
 	Piece gamePiece;
 };

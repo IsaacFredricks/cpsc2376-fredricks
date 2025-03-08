@@ -24,7 +24,6 @@ int getInt(const std::string& prompt);
 int main() {
 
     ConnectFour currentGame {};//makes game object
-    currentGame.makeBoard();//creats a new game board
 
     std::cout << "\n======== Connect 4 =======\n\n";
 
@@ -34,24 +33,21 @@ int main() {
         << "*Pieces will go down to the lowest possible row\n"
         << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
+    std::cout << "*Player 1's turn*\n";//only for the first turn
 
-    currentGame.printBoard();
-
-    
-    currentGame.setTurns(1);//sets turns to 1 so player 1 goes first
+    currentGame.display();
 
     while (true) {
 
-        currentGame.setCol(getInt("Enter what column you want to play: ") - 1);
-        currentGame.play();
+         //index starts at 0 so has to be one less than player's input
+        currentGame.play(getInt("Enter what column you want to play: ") - 1);
         
         currentGame.incrementTurn();//the first time running it should increment turns to 1
 
-        std::cout << '\n';
-        currentGame.printBoard();
+        currentGame.display();
 
         //check to see who won
-        ConnectFour::Status stats = currentGame.gameStatus();
+        ConnectFour::Status stats = currentGame.status();
 
         if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
             || stats == ConnectFour::DRAW) {
@@ -74,7 +70,7 @@ int main() {
 
             if (replay) {
                 std::cout << "Starting a new game. Clearing the board\n\n";
-                currentGame.makeBoard();
+                currentGame = ConnectFour{};//resets game
 
                 std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins."
                     << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
@@ -82,9 +78,8 @@ int main() {
                     << "*Pieces will go down to the lowest possible row\n"
                     << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
-                currentGame.printBoard();
-
-                currentGame.setTurns(1);
+                currentGame.display();
+                std::cout << "*Player 1's turn*\n";//only for the first turn
             }
 
             else {
@@ -124,9 +119,6 @@ int getInt(const std::string& prompt) {
 
     return num;
 }
-
-
-
 
 bool playAgain() {//doesn't use instance variables so dont put in class
     while (true) {

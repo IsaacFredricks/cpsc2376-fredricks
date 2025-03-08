@@ -10,7 +10,7 @@
 * play()
 * canMakeMove()
 * makeMove()
-* getGameStatus()
+* status()
 * setCol
 */
 char ConnectFour::pieceToChar(){
@@ -21,16 +21,11 @@ char ConnectFour::pieceToChar(){
     return 'C';
 }
 
-void ConnectFour::setCol(int col) {
-    this->col = col;
-}
-
-
 void ConnectFour::setPiece(Piece gamePiece) {
     this->gamePiece = gamePiece;
 }
 
-void ConnectFour::makeBoard() {
+ConnectFour::ConnectFour() {
     board =
     { {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -38,13 +33,11 @@ void ConnectFour::makeBoard() {
     {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '},
     {' ', ' ', ' ', ' ', ' ', ' ', ' '} };
+    
+    turns = 1;//player one starts first
 }
 
-void ConnectFour::setTurns(int turns) {
-    this->turns = turns;
-}
-
-int const ConnectFour::getTurns() {
+int ConnectFour::getTurns() const {
     return turns;
 }
 
@@ -52,7 +45,7 @@ void ConnectFour::incrementTurn() {
     turns++;
 }
 
-void ConnectFour::printBoard() {
+void ConnectFour::display() const{
     std::cout << " 1  2  3  4  5  6  7\n";
     std::cout << "----------------------\n";
 
@@ -67,7 +60,7 @@ void ConnectFour::printBoard() {
     std::cout << "----------------------\n";
 }
 
-bool ConnectFour::canMakeMove() {
+bool ConnectFour::canMakeMove(int col) {
     if (board.at(0).at(col) == 'C' || board.at(0).at(col) == 'O') {
         std::cout << "All spots on this row are taken. please try again\n";
         return false;
@@ -78,7 +71,7 @@ bool ConnectFour::canMakeMove() {
     }
 }
 
-void ConnectFour::makeMove() {
+void ConnectFour::makeMove(int col) {
     //make a for loop that starts at the end and then works itself backwards until it reaches a spot that isn't taken
 
     for (int i{ static_cast<int>(board.size()) - 1 }; i >= 0; i--) {
@@ -90,7 +83,7 @@ void ConnectFour::makeMove() {
 
 }
 
-ConnectFour::Status ConnectFour::gameStatus() {
+ConnectFour::Status ConnectFour::status() {
 
     //the for loops check each spot and the one right next to it to see if there is a 4 in a row
 
@@ -185,17 +178,16 @@ ConnectFour::Status ConnectFour::gameStatus() {
     return ONGOING;
 }
 
-void ConnectFour::play() {
+void ConnectFour::play(int col) {
     while (true) {
 
-        std::cout << '\n';
-
+       
         if (turns % 2 == 0) {
             setPiece(C);
-            std::cout << "(Player 2's turn)\n";
+            std::cout << "*Player 2's turn*\n";
 
-            if (canMakeMove()) {
-                makeMove();
+            if (canMakeMove(col)) {
+                makeMove(col);
                 break;
             }
 
@@ -206,10 +198,10 @@ void ConnectFour::play() {
 
         else {
             setPiece(O);
-            std::cout << "(Player 1's turn)\n";
+            std::cout << "*Player 1's turn*\n";
 
-            if (canMakeMove()) {
-                makeMove();
+            if (canMakeMove(col)) {
+                makeMove(col);
                 break;
             }
 
