@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream>//no ai used
 #include <limits>
 #include <string>
 #include <cctype>//to convert to lower case
@@ -22,6 +22,7 @@ Repeat until the user types "Done" instead of a potion color.
 */
 
 std::string getPotion(const std::string& prompt);
+float getFloat(const std::string& prompt);
 
 int main() {
     float redPotion{ 0.0f };    // Amount of red potion in mL
@@ -33,11 +34,26 @@ int main() {
 
         if (choice == "red") {
             std::cout << "You chose red\n";
+            flask = &redPotion;
         }
 
         else if (choice == "blue") {
             std::cout << "You chose blue\n";
+            flask = &bluePotion;
         }
+
+        else if (choice == "done") {
+            std::cout << "You chose to be done. Goodbye\n";
+            delete flask;//for good measure
+            break;
+        }
+
+        float amount{getFloat("Enter amount to add to potion: ")};
+        *flask += amount;//derefs flask and adds to selected potion
+
+        std::cout << "Red potion amount: " << redPotion << '\n';
+        std::cout << "Blue potion amount: " << bluePotion << '\n';
+
 
     }
 
@@ -58,7 +74,7 @@ std::string getPotion(const std::string& prompt) {
             lowerCase += tolower(c);
         }
 
-        if (std::cin.fail() || !(lowerCase == "red" || lowerCase == "blue")
+        if (std::cin.fail() || !(lowerCase == "red" || lowerCase == "blue" || lowerCase == "done")
             || std::cin.peek() != '\n') {//peek looks at next character in queue
             std::cin.clear(); //clears the error
 
@@ -75,4 +91,31 @@ std::string getPotion(const std::string& prompt) {
         }
     }
     return lowerCase;
+}
+
+float getFloat(const std::string& prompt) {
+
+    float input{};
+    
+    while (true) {
+        std::cout << prompt;
+        std::cin >> input;
+
+        if (std::cin.fail() || std::cin.peek() != '\n' || input < 0) {
+            //peek looks at next character in queue
+            std::cin.clear(); //clears the error
+
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards invalid input
+
+            std::cout << "Inproper input. please try again.\n";
+        }
+
+        else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards any extra input
+            break;//exits loop
+        }
+    }
+    return input;
 }
