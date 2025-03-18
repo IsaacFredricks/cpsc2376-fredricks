@@ -144,8 +144,12 @@ int main(){
 
     std::ifstream fin("employees.txt");//opens file for reading
 
-    if(fin.is_open()){
+    if(!fin.is_open()){
+        std::cout << "File not opened correctly or not found\n";
+        return 1;
+    }
 
+    else{
         while(true){
             std::string line{};
             std::getline(fin, line);
@@ -164,12 +168,6 @@ int main(){
         for(auto* employee : employees){
             delete employee;//prevents memory leaks
         }
-
-    }
-
-    else{
-        std::cout << "File not opened correctly or not found\n";
-        return 1;
     }
 
     return 0;
