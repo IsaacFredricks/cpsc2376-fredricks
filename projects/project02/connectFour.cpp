@@ -35,6 +35,8 @@ ConnectFour::ConnectFour() {
     {' ', ' ', ' ', ' ', ' ', ' ', ' '} };
     
     turns = 1;//player one starts first
+
+    gamePiece = O;
 }
 
 int ConnectFour::getTurns() const {
@@ -62,7 +64,7 @@ void ConnectFour::display() const{
 
 bool ConnectFour::canMakeMove(int col) {
     if (board.at(0).at(col) == 'C' || board.at(0).at(col) == 'O') {
-        std::cout << "All spots on this row are taken. please try again\n";
+        //std::cout << "All spots on this row are taken. please try again\n";
         return false;
     }
 
@@ -184,30 +186,26 @@ void ConnectFour::play(int col) {
        
         if (turns % 2 == 0) {
             setPiece(C);
-            std::cout << "*Player 2's turn*\n";
-
             if (canMakeMove(col)) {
                 makeMove(col);
                 break;
             }
 
-            else {
-                std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
-            }
+            /*else {
+                //std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+            }*/
         }
 
         else {
             setPiece(O);
-            std::cout << "*Player 1's turn*\n";
-
             if (canMakeMove(col)) {
                 makeMove(col);
                 break;
             }
 
-            else {
+            /*else {
                 std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
-            }
+            }*/
         }
     }
 
