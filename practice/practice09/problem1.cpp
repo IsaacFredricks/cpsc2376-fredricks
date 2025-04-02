@@ -51,8 +51,8 @@ int main() {
         float amount{getFloat("Enter amount to add to potion: ")};
         *flask += amount;//derefs flask and adds to selected potion
 
-        std::cout << "Red potion amount: " << redPotion << '\n';
-        std::cout << "Blue potion amount: " << bluePotion << '\n';
+        std::cout << "Red potion amount: " << redPotion << "ml\n";
+        std::cout << "Blue potion amount: " << bluePotion << "ml\n";
 
 
     }
