@@ -1,14 +1,14 @@
 Program specifications: A program to manage lending out board games. Prints out a list of every game, shows how many of each are available. 
 If someone is using one of the games, show who is using the game, when they took it, and when they need to bring it back.
 
-nouns: games, renters, games, due date, rent date, number of games returned
+**Nouns:** games, renters, due date, rent date, number of games returned
 
-attributes: date, name, copies
+**Attributes:** date, name, copies
 
-verbs: game tracker, list games, print renters, print renter info, add renter, remove renter, add game, remove game
+**Verbs:** game tracker, list games, print renters, print renter info, add renter, remove renter, add game, remove game
 
 ---
-basic code outline:
+**Basic Code Outline:**
 ```
 //GameTracker.h
 class GameTracker{
@@ -49,7 +49,7 @@ public:
 ```
 ---
 
-Mermaid Outline (- is private, + is public):
+**Mermaid Outline (- is private, + is public):**
 
 ```mermaid
 classDiagram
@@ -85,5 +85,5 @@ classDiagram
     }
 
 GameTracker --> Game : contains multiple
-Game --> Renter : can have multiple
+Game --> Renter : affects numCopies and numRenters
 ```
