@@ -7,6 +7,7 @@ attributes: date, name, copies
 
 verbs: game tracker, list games, print renters, print renter info, add renter, remove renter
 
+```
 //GameTracker.h
 class GameTracker{
 private:
@@ -20,7 +21,7 @@ class Game{
 private:
     std::string name;
     int numCopies;
-    std::vector<Renter> renters;
+    std::vector<Renter> numRenters;
 public:
     Game(std::string& name, int numCopies, std::vector<Renter>& renters);
     void printRenters();
@@ -39,6 +40,7 @@ public:
     Renter(std::string& name, std::string& rentDate, std::string& dueDate, std::string& whenReturned);
     void printInfo();
 };
+```
 
 code outline:
 
@@ -53,7 +55,7 @@ classDiagram
     class Game {
         +string name
         +int numCopies
-        -renters : vector~Renter~
+        -numRenters : vector~Renter~
 
         +Game(string name, int numCopies, renters : vector~Renter~)
         +printRenters()
