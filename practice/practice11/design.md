@@ -5,7 +5,7 @@ nouns: games, renters, games, due date, rent date, number of games returned
 
 attributes: date, name, copies
 
-verbs: game tracker, list games, print renters, print renter info, add renter, remove renter
+verbs: game tracker, list games, print renters, print renter info, add renter, remove renter, add game, remove game
 
 basic code outline:
 ```
@@ -15,6 +15,8 @@ private:
     std::vector<Game> games; 
 public:
     void listGames();
+    void addGame(const Game& game);
+    void removeGame(const Game& game);
 };
 
 //Game.h
@@ -28,6 +30,7 @@ public:
     void printRenters();
     void addRenter(const Renter& renter);
     void removeRenter(const Renter& renter);
+    bool isAvailable();
 };
 
 //Renter.h
@@ -52,6 +55,8 @@ classDiagram
         -games : vector~Game~
 
         +listGames()
+        +addGame()
+        +removeGame()
     }
 
     class Game {
@@ -63,6 +68,7 @@ classDiagram
         +printRenters()
         +addRenter(renter : Renter)
         +removeRenter(renter : Renter)
+        +isAvailable() bool
     }
 
     class Renter{
@@ -76,6 +82,7 @@ classDiagram
         +printInfo()
     }
 
-GameTracker --> Game : contains
-Game --> Renter : uses
+LR
+GameTracker --> Game : contains multiple
+Game --> Renter : can have multiple
 ```
