@@ -1,8 +1,11 @@
-Program specifications: A program to manage lending out board games. Prints out a list of every game, shows how many of each are available. If someone is using one of the games, show who is using the game, when they took it, and when they need to bring it back.
+Program specifications: A program to manage lending out board games. Prints out a list of every game, shows how many of each are available. 
+If someone is using one of the games, show who is using the game, when they took it, and when they need to bring it back.
 
-nouns: list of games, list of renters, number of games, number of copies, name of game, name of renter, due date, rent date, number of games returned
+nouns: games, renters, games, due date, rent date, number of games returned
 
-verbs: game tracker, list games, list renters, print renter info, add renter, remove renter
+attributes: date, name, copies
+
+verbs: game tracker, list games, print renters, print renter info, add renter, remove renter
 
 //GameTracker.h
 class GameTracker{
@@ -69,5 +72,6 @@ classDiagram
         +printInfo()
     }
 
-GameTracker --> Game : uses
+GameTracker --> Game : contains
 Game --> Renter : uses
+```
