@@ -7,6 +7,7 @@ attributes: date, name, copies
 
 verbs: game tracker, list games, print renters, print renter info, add renter, remove renter
 
+basic code outline:
 ```
 //GameTracker.h
 class GameTracker{
@@ -42,7 +43,7 @@ public:
 };
 ```
 
-code outline:
+mermaid outline:
 
 ```mermaid
 classDiagram
