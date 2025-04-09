@@ -41,9 +41,10 @@ public:
     Renter(std::string& name, std::string& rentDate, std::string& dueDate, std::string& whenReturned);
     void printInfo();
 };
+
 ```
 
-mermaid outline:
+mermaid outline (- is private, + is public):
 
 ```mermaid
 classDiagram
@@ -54,8 +55,8 @@ classDiagram
     }
 
     class Game {
-        +string name
-        +int numCopies
+        -string name
+        -int numCopies
         -numRenters : vector~Renter~
 
         +Game(string name, int numCopies, renters : vector~Renter~)
@@ -65,10 +66,10 @@ classDiagram
     }
 
     class Renter{
-        +string name
-        +string rentDate
-        +string dueDate
-        +string whenReturned
+        -string name
+        -string rentDate
+        -string dueDate
+        -string whenReturned
 
 
         +Renter(string name, string rentDate, string dueDate, string whenReturned)
