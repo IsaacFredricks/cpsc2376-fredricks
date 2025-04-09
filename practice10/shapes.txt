@@ -1,4 +1,0 @@
-rectangle 10 4
-circle 3
-rectangle 2 8  
-circle 5
