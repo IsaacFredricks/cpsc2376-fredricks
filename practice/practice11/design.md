@@ -1,6 +1,6 @@
 Program specifications: A program to manage lending out board games. Prints out a list of every game, shows how many of each are available. If someone is using one of the games, show who is using the game, when they took it, and when they need to bring it back.
 
-nouns: list of games, list of renters, number of games, number of copies, name of game, name of renter, due date, rent date
+nouns: list of games, list of renters, number of games, number of copies, name of game, name of renter, due date, rent date, number of games returned
 
 verbs: game tracker, list games, list renters, print renter info, add renter, remove renter
 
@@ -31,8 +31,9 @@ private:
     std::string name;
     std::string rentDate;
     std::string dueDate;
+    std::string whenReturned;
 public: 
-    Renter(std::string name, std::string rentDate, std::string dueDate);
+    Renter(std::string& name, std::string& rentDate, std::string& dueDate, std::string& whenReturned);
     void printInfo();
 };
 
@@ -61,8 +62,10 @@ classDiagram
         +string name
         +string rentDate
         +string dueDate
+        +string whenReturned
 
-        +Renter(string name, string rentDate, string dueDate)
+
+        +Renter(string name, string rentDate, string dueDate, string whenReturned)
         +printInfo()
     }
 
