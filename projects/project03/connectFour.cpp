@@ -1,19 +1,12 @@
+#define SDL_MAIN_HANDLED//fixes error in visual studio for sdl
+#include <SDL2/SDL.h>//for graphics
+#include <SDL2/SDL_ttf.h>//for text graphics
 #include <iostream>
 #include <vector>
 #include <limits>
 #include "connectFour.h"
 
 
-/*functions to add :
-* printBoard()
-* makeBoard()
-* play()
-* canMakeMove()
-* makeMove()
-* status()
-* setCol()
-* display()
-*/
 char ConnectFour::pieceToChar() {
     if (gamePiece == O) {
         return 'O';

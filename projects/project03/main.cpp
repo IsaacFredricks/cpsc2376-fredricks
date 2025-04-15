@@ -1,7 +1,6 @@
 #define SDL_MAIN_HANDLED//fixes error in visual studio for sdl
 #include <SDL2/SDL.h>//for graphics
 #include <SDL2/SDL_ttf.h>//for text graphics
-
 #include <iostream>//some ai used. I used the ai summary feature for google search for making clickable buttons and drawing lines using sdl
 #include <vector>//for game Board
 #include <limits>//for edge testing
@@ -17,8 +16,9 @@
 *[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
-*[ ] display text using sdl
+*[x] display text using sdl
 *[ ] display game board using sdl
+*[ ] implement the game logic with the sdl
 */
 
 
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         "Connect4 - Press ESC to Quit",
         SDL_WINDOWPOS_CENTERED,//can also do undefined
         SDL_WINDOWPOS_CENTERED,
-        800, 600,
+        800, 800,
         SDL_WINDOW_SHOWN//makes windows visible
 
     );
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     }
 
     //source: https://thenumb.at/cpp-course/sdl2/07/07.html
-    TTF_Font* font = TTF_OpenFont("OpenSans-Regular.ttf", 24);//font source: https://www.fontsquirrel.com/fonts/open-sans
+    TTF_Font* font = TTF_OpenFont("OpenSans-Regular.ttf", 14);//font source: https://www.fontsquirrel.com/fonts/open-sans
     if (!font) {
         std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -94,23 +94,27 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     SDL_Surface* text;
     SDL_Color color = { 255, 255, 255 };
 
-    text = TTF_RenderText_Solid(font, "======== Connect 4 =======", color);
+    //the blended wrapped ttf allows for line breaking after a certain length
+    text = TTF_RenderText_Blended_Wrapped(font, "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n*Player one is green while Player 2 is blue.\n*Player 1 starts first.\n*Pieces will go down to the lowest possible row\n ONLY Y OR N if you want to play again!\n\n", color, 800);
 
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, text);
     
     SDL_Rect textRect;
-    textRect.x = 225;
-    textRect.y = 45;
+    textRect.x = 0;
+    textRect.y = 0;
     SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 
    
-    SDL_Color defaultColor{ 255, 255, 255, 100 };//white
-    SDL_Color clickedColor{ 0, 255, 0, 100 };
-    ClickableItem centerItem(350, 250, 100, 100, defaultColor, clickedColor);
+    SDL_Color defaultColor{ 255, 255, 255, 25 };//white
+    SDL_Color clickedColor{ 0, 255, 0, 255 };
+    ClickableItem centerColumn(300, 225, 100, 575, defaultColor, clickedColor);
 
     bool running = true;
 
     SDL_Event event;//reads events from event queue
+
+    ConnectFour currentGame{};//makes game object
+
 
     while (running) {
         // Handle events
@@ -123,7 +127,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 running = false;
             }
 
-            centerItem.handleEvent(event);
+            centerColumn.handleEvent(event);
         }
         //actually draws background here
 
@@ -134,19 +138,36 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-        //makes gameboard
+        //makes gameboard:
+        //currentGame.display();//eventually move the draw lines into the display function
 
         //vertical lines
-        SDL_RenderDrawLine(renderer, 300, 100, 300, 500);
+        SDL_RenderDrawLine(renderer, 100, 225, 100, 800);
 
-        SDL_RenderDrawLine(renderer, 500, 100, 500, 500);
+        SDL_RenderDrawLine(renderer, 200, 225, 200, 800);
+
+        SDL_RenderDrawLine(renderer, 300, 225, 300, 800);
+
+        SDL_RenderDrawLine(renderer, 400, 225, 400, 800);
+
+        SDL_RenderDrawLine(renderer, 500, 225, 500, 800);
+
+        SDL_RenderDrawLine(renderer, 600, 225, 600, 800);
 
         //horizontal lines
-        SDL_RenderDrawLine(renderer, 150, 200, 650, 200);
+        SDL_RenderDrawLine(renderer, 25, 300, 675, 300);
 
-        SDL_RenderDrawLine(renderer, 150, 400, 650, 400);
+        SDL_RenderDrawLine(renderer, 25, 400, 675, 400);
 
-        centerItem.render(renderer);
+        SDL_RenderDrawLine(renderer, 25, 500, 675, 500);
+
+        SDL_RenderDrawLine(renderer, 25, 600, 675, 600);
+
+        SDL_RenderDrawLine(renderer, 25, 700, 675, 700);
+
+        centerColumn.render(renderer);
+        //eventually print out the pieces on the board by iterating through the vector
+        //find out how to print a line to see who's turn it is
         
         SDL_RenderPresent(renderer);
         //presents hidden frame
@@ -154,6 +175,8 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         // Optional: Limit framerate
         SDL_Delay(16); // ~60 FPS
     }
+
+    
     /*
     ConnectFour currentGame{};//makes game object
 
