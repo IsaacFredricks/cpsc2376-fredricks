@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{27b07989-2a4b-4477-85c3-5681d6d2db70}</ProjectGuid>
-    <RootNamespace>practice11</RootNamespace>
+    <ProjectGuid>{d4286dae-06df-4c37-9a21-59d758af5dbc}</ProjectGuid>
+    <RootNamespace>chipmunkSDLExample</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="practice11.cpp" />
+    <ClCompile Include="..\practice\practice12\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

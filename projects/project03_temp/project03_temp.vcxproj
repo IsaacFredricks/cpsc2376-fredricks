@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{fb49b4d4-d111-414a-a8da-5b14099d4ccc}</ProjectGuid>
-    <RootNamespace>project03</RootNamespace>
+    <ProjectGuid>{9ea7cce5-c359-4305-8085-622e7e3230ad}</ProjectGuid>
+    <RootNamespace>project03temp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>project03</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -126,6 +127,16 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\project03\connectFour.cpp" />
+    <ClCompile Include="..\project03\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\project03\connectFour.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="OpenSans-Regular.ttf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -11,7 +11,8 @@
 * canMakeMove()
 * makeMove()
 * status()
-* setCol
+* setCol()
+* display()
 */
 char ConnectFour::pieceToChar() {
     if (gamePiece == O) {
