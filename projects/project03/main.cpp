@@ -2,7 +2,7 @@
 #include <SDL2/SDL.h>//for graphics
 #include <SDL2/SDL_ttf.h>//for text graphics
 
-#include <iostream>//no ai used
+#include <iostream>//some ai used. I used the ai summary feature for google search for making clickable buttons and drawing lines using sdl
 #include <vector>//for game Board
 #include <limits>//for edge testing
 #include <string>//for getLine
@@ -26,6 +26,35 @@
 //forward declaration here
 bool playAgain();
 int getInt(const std::string& prompt);
+struct ClickableItem {
+    SDL_Rect rect;
+    SDL_Color color;
+    SDL_Color defaultColor;
+    SDL_Color clickedColor;
+    bool isClicked;
+
+    ClickableItem(int x, int y, int w, int h, SDL_Color defaultColor, SDL_Color clickedColor) : rect({x, y, w, h}), defaultColor(defaultColor), clickedColor(clickedColor), isClicked(false) {}
+
+    void handleEvent(const SDL_Event& event) {//checks if clicked and not clicked
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+            if (event.button.x >= rect.x && event.button.x <= rect.x + rect.w &&
+                event.button.y >= rect.y && event.button.y <= rect.y + rect.h) {
+                isClicked = true;
+                color = clickedColor;
+            }
+        }
+
+        if (event.type == SDL_MOUSEBUTTONUP) {
+            isClicked = false;
+            color = defaultColor;
+        }
+    }
+
+    void render(SDL_Renderer* renderer) {//displays in window
+        SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderFillRect(renderer, &rect);
+    }
+};//from chipmunksdl example
 
 int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
@@ -43,7 +72,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         "Connect4 - Press ESC to Quit",
         SDL_WINDOWPOS_CENTERED,//can also do undefined
         SDL_WINDOWPOS_CENTERED,
-        1280, 720,
+        800, 600,
         SDL_WINDOW_SHOWN//makes windows visible
 
     );
@@ -70,9 +99,14 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, text);
     
     SDL_Rect textRect;
-    textRect.x = 45;
+    textRect.x = 225;
     textRect.y = 45;
     SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
+
+   
+    SDL_Color defaultColor{ 255, 255, 255, 100 };//white
+    SDL_Color clickedColor{ 0, 255, 0, 100 };
+    ClickableItem centerItem(350, 250, 100, 100, defaultColor, clickedColor);
 
     bool running = true;
 
@@ -84,24 +118,36 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
             if (event.type == SDL_QUIT) {
                 running = false;
             }
-            else if (event.type == SDL_KEYDOWN) {
-                if (event.key.keysym.sym == SDLK_ESCAPE) {
-                    running = false;
-                }
+
+            if (event.key.keysym.sym == SDLK_ESCAPE) {
+                running = false;
             }
 
+            centerItem.handleEvent(event);
         }
         //actually draws background here
 
-        // Clear the screen with a background color
-        //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // black background
-        
-        // Present the rendered frame
-
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);//set background to red
         SDL_RenderClear(renderer);
 
         SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+        //makes gameboard
+
+        //vertical lines
+        SDL_RenderDrawLine(renderer, 300, 100, 300, 500);
+
+        SDL_RenderDrawLine(renderer, 500, 100, 500, 500);
+
+        //horizontal lines
+        SDL_RenderDrawLine(renderer, 150, 200, 650, 200);
+
+        SDL_RenderDrawLine(renderer, 150, 400, 650, 400);
+
+        centerItem.render(renderer);
+        
         SDL_RenderPresent(renderer);
         //presents hidden frame
 
@@ -252,4 +298,3 @@ bool playAgain() {//doesn't use instance variables so dont put in class
 
     }
 }
-
