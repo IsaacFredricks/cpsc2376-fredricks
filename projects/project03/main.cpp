@@ -17,7 +17,8 @@
 *[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
-*[ ] display text and game board using sdl
+*[ ] display text using sdl
+*[ ] display game board using sdl
 */
 
 
@@ -25,8 +26,6 @@
 //forward declaration here
 bool playAgain();
 int getInt(const std::string& prompt);
-
-void draw(SDL_Renderer* renderer, const std::string& text);
 
 int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
@@ -66,13 +65,13 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     SDL_Surface* text;
     SDL_Color color = { 255, 255, 255 };
 
-    text = TTF_RenderText_Solid(font, "Connect four: please just work", color);
+    text = TTF_RenderText_Solid(font, "======== Connect 4 =======", color);
 
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, text);
     
     SDL_Rect textRect;
-    textRect.x = 30;
-    textRect.y = 30;
+    textRect.x = 45;
+    textRect.y = 45;
     SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 
     bool running = true;
@@ -188,12 +187,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
             }
         }*/
 
-        //cleanup
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        TTF_CloseFont(font);
-        TTF_Quit();
-        SDL_Quit();//needed. cleans up resources
+    //cleanup
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_CloseFont(font);
+    TTF_Quit();
+    SDL_Quit();//needed. cleans up resources
 
     return 0;
 }

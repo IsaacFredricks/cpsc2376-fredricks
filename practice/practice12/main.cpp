@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
         SDL_RenderFillRect(renderer, &rect2);
 
         if (isSpaceDown) {
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // black background
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // blue background
         }
 
         // Present the rendered frame
