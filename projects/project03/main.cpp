@@ -16,8 +16,9 @@
 *[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
-*[x] display text using sdl
+*[ ] replace all text using sdl
 *[ ] display game board using sdl
+*[ ] display game pieces in display function
 *[ ] implement the game logic with the sdl
 */
 
@@ -56,7 +57,7 @@ struct ClickableItem {
     }
 };//from chipmunksdl example
 
-int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
+int main(int argc, char* argv[]){//copied from chipmunkSDLExample
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {//checks if able to display video
         std::cerr << "SDL Init Error: " << SDL_GetError() << std::endl;
@@ -86,7 +87,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     }
 
     //source: https://thenumb.at/cpp-course/sdl2/07/07.html
-    TTF_Font* font = TTF_OpenFont("OpenSans-Regular.ttf", 14);//font source: https://www.fontsquirrel.com/fonts/open-sans
+    TTF_Font* font = TTF_OpenFont("OpenSans-Regular.ttf", 12);//font source: https://www.fontsquirrel.com/fonts/open-sans
     if (!font) {
         std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
     }
@@ -95,20 +96,25 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     SDL_Color color = { 255, 255, 255 };
 
     //the blended wrapped ttf allows for line breaking after a certain length
-    text = TTF_RenderText_Blended_Wrapped(font, "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n*Player one is green while Player 2 is blue.\n*Player 1 starts first.\n*Pieces will go down to the lowest possible row\n ONLY Y OR N if you want to play again!\n\n", color, 800);
+    text = TTF_RenderText_Blended_Wrapped(font, "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n*Player1 is green and Player 2 is blue.\n*Player 1 starts first.\n*Pieces will go down to the lowest possible row\n*ONLY Y OR N if you want to play again!\n*Click gray square to select column\n\n", color, 800);
 
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, text);
-    
+
     SDL_Rect textRect;
     textRect.x = 0;
     textRect.y = 0;
     SDL_QueryTexture(textTexture, NULL, NULL, &textRect.w, &textRect.h);
 
-   
-    SDL_Color defaultColor{ 255, 255, 255, 25 };//white
-    SDL_Color clickedColor{ 0, 255, 0, 255 };
-    ClickableItem centerColumn(300, 225, 100, 575, defaultColor, clickedColor);
 
+    SDL_Color defaultColor{ 255, 255, 255, 0 };//not done here. make the column transparent later
+    SDL_Color clickedColor{ 0, 255, 0, 255 };
+    ClickableItem column1(5, 200, 90, 25, defaultColor, clickedColor);
+    ClickableItem column2(105, 200, 90, 25, defaultColor, clickedColor);
+    ClickableItem column3(205, 200, 90, 25, defaultColor, clickedColor);
+    ClickableItem column4(305, 200, 90, 25, defaultColor, clickedColor);
+    ClickableItem column5(405, 200, 90, 25, defaultColor, clickedColor);
+    ClickableItem column6(505, 200, 90, 25, defaultColor, clickedColor);
+    ClickableItem column7(605, 200, 90, 25, defaultColor, clickedColor);
     bool running = true;
 
     SDL_Event event;//reads events from event queue
@@ -126,8 +132,13 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
             if (event.key.keysym.sym == SDLK_ESCAPE) {
                 running = false;
             }
-
-            centerColumn.handleEvent(event);
+            column1.handleEvent(event);
+            column2.handleEvent(event);
+            column3.handleEvent(event);
+            column4.handleEvent(event);
+            column5.handleEvent(event);
+            column6.handleEvent(event);
+            column7.handleEvent(event);
         }
         //actually draws background here
 
@@ -139,67 +150,28 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         //makes gameboard:
-        //currentGame.display();//eventually move the draw lines into the display function
+        currentGame.display(renderer);//eventually move the draw lines into the display function
 
-        //vertical lines
-        SDL_RenderDrawLine(renderer, 100, 225, 100, 800);
+        
 
-        SDL_RenderDrawLine(renderer, 200, 225, 200, 800);
+        column1.render(renderer);
+        column2.render(renderer);
+        column3.render(renderer);
+        column4.render(renderer);
+        column5.render(renderer);
+        column6.render(renderer);
+        column7.render(renderer);
 
-        SDL_RenderDrawLine(renderer, 300, 225, 300, 800);
-
-        SDL_RenderDrawLine(renderer, 400, 225, 400, 800);
-
-        SDL_RenderDrawLine(renderer, 500, 225, 500, 800);
-
-        SDL_RenderDrawLine(renderer, 600, 225, 600, 800);
-
-        //horizontal lines
-        SDL_RenderDrawLine(renderer, 25, 300, 675, 300);
-
-        SDL_RenderDrawLine(renderer, 25, 400, 675, 400);
-
-        SDL_RenderDrawLine(renderer, 25, 500, 675, 500);
-
-        SDL_RenderDrawLine(renderer, 25, 600, 675, 600);
-
-        SDL_RenderDrawLine(renderer, 25, 700, 675, 700);
-
-        centerColumn.render(renderer);
         //eventually print out the pieces on the board by iterating through the vector
         //find out how to print a line to see who's turn it is
-        
-        SDL_RenderPresent(renderer);
-        //presents hidden frame
-
-        // Optional: Limit framerate
-        SDL_Delay(16); // ~60 FPS
-    }
-
-    
-    /*
-    ConnectFour currentGame{};//makes game object
-
-    std::cout << "\n======== Connect 4 =======\n\n";
-
-    std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins."
-        << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
-        << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
-        << "*Pieces will go down to the lowest possible row\n"
-        << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
-
-    currentGame.display();
-
-    while (true) {
-        std::cout << '\n';
-
+        /*
         //index starts at 0 so has to be one less than player's input
         if (currentGame.getTurns() % 2 == 0) {
-            std::cout << "Player 2, ";
+            //std::cout << "Player 2, ";
         }
 
         else if (currentGame.getTurns() % 2 > 0) {
-            std::cout << "Player 1, ";
+            //std::cout << "Player 1, ";
         }
 
         int col{ getInt("Enter what column you want to play: ") - 1 };
@@ -209,10 +181,10 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         }
 
         else {
-            std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+            //std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
         }
-       
-        currentGame.display();
+
+        currentGame.display(renderer);
 
         //check to see who won
         ConnectFour::Status stats = currentGame.status();
@@ -220,42 +192,48 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
             || stats == ConnectFour::DRAW) {
             //print who won
-            std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';
+            //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';
 
             if (stats == ConnectFour::PLAYER_1_WINS) {
-                std::cout << "Player 1 wins!\n";
+                //std::cout << "Player 1 wins!\n";
             }
 
             else if (stats == ConnectFour::PLAYER_2_WINS) {
-                std::cout << "Player 2 wins!\n";
+                //std::cout << "Player 2 wins!\n";
             }
 
             else if (stats == ConnectFour::DRAW) {
-                std::cout << "Draw!\n";
+                //std::cout << "Draw!\n";
             }
 
             bool replay{ playAgain() };
 
             if (replay) {
-                std::cout << "Starting a new game. Clearing the board\n\n";
+                //std::cout << "Starting a new game. Clearing the board\n\n";
                 currentGame = ConnectFour{};//resets game
 
                 std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins."
-                    << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
-                    << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
-                    << "*Pieces will go down to the lowest possible row\n"
-                    << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
+                << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
+                << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
+                << "*Pieces will go down to the lowest possible row\n"
+                << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
 
-                currentGame.display();
+                currentGame.display(renderer);
 
             }
 
             else {
-                std::cout << "Ending the game. Goodbye!\n";
+                //std::cout << "Ending the game. Goodbye!\n";
                 break;//ends loop
-            }
-        }*/
+            }*/
 
+            SDL_RenderPresent(renderer);
+            //presents hidden frame
+
+            // Optional: Limit framerate
+            SDL_Delay(16); // ~60 FPS
+        }
+    //}
     //cleanup
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

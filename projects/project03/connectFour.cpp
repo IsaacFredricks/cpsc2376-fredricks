@@ -37,8 +37,8 @@ int ConnectFour::getTurns() const {
     return turns;
 }
 
-void ConnectFour::display() const {
-    std::cout << " 1  2  3  4  5  6  7\n";
+void ConnectFour::display(SDL_Renderer* renderer) const {//replace using sdl
+    /*std::cout << " 1  2  3  4  5  6  7\n";
     std::cout << "----------------------\n";
 
     for (auto row : board) {
@@ -49,7 +49,32 @@ void ConnectFour::display() const {
         std::cout << '|';
         std::cout << '\n';
     }
-    std::cout << "----------------------\n";
+    std::cout << "----------------------\n";*/
+
+    //vertical lines
+    SDL_RenderDrawLine(renderer, 100, 225, 100, 800);
+
+    SDL_RenderDrawLine(renderer, 200, 225, 200, 800);
+
+    SDL_RenderDrawLine(renderer, 300, 225, 300, 800);
+
+    SDL_RenderDrawLine(renderer, 400, 225, 400, 800);
+
+    SDL_RenderDrawLine(renderer, 500, 225, 500, 800);
+
+    SDL_RenderDrawLine(renderer, 600, 225, 600, 800);
+
+    //horizontal lines
+    SDL_RenderDrawLine(renderer, 0, 300, 700, 300);
+
+    SDL_RenderDrawLine(renderer, 0, 400, 700, 400);
+
+    SDL_RenderDrawLine(renderer, 0, 500, 700, 500);
+
+    SDL_RenderDrawLine(renderer, 0, 600, 700, 600);
+
+    SDL_RenderDrawLine(renderer, 0, 700, 700, 700);
+
 }
 
 bool ConnectFour::canMakeMove(int col) {

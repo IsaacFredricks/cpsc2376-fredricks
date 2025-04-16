@@ -1,4 +1,6 @@
 #pragma once
+#include <SDL2/SDL.h>//for graphics
+#include <SDL2/SDL_ttf.h>//for text graphics
 
 class ConnectFour {
 
@@ -12,7 +14,7 @@ public:
 	ConnectFour();
 	void setPiece(Piece gamePiece);
 	int getTurns() const;
-	void display() const;
+	void display(SDL_Renderer* renderer) const;
 	bool canMakeMove(int col);
 	void makeMove(int col);
 	Status status();
