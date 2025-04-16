@@ -7,7 +7,7 @@
 #include "connectFour.h"
 
 
-char ConnectFour::pieceToChar() const{
+char ConnectFour::pieceToChar() {
     if (gamePiece == O) {
         return 'O';
     }

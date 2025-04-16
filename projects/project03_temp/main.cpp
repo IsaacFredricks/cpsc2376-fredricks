@@ -1,7 +1,7 @@
-﻿#define SDL_MAIN_HANDLED//fixes error in visual studio for sdl
+#define SDL_MAIN_HANDLED//fixes error in visual studio for sdl
 #include <SDL2/SDL.h>//for graphics
 #include <SDL2/SDL_ttf.h>//for text graphics
-#include <iostream>//some ai used. I used the ai summary feature for google search for making clickable buttons and drawing lines using sdl and some chatgpt for black screen error in sdl
+#include <iostream>//some ai used. I used the ai summary feature for google search for making clickable buttons and drawing lines using sdl
 #include <vector>//for game Board
 #include <limits>//for edge testing
 #include <string>//for getLine
@@ -9,14 +9,16 @@
 /*GOALS:
 *[x] make game class/object oriented
 *[x] make a text-based game
-*[x] make connect 4
+*[x] makeconnect 4
 *[x] 7x6 two dimensional array
-*[ ] Use x's and o's for pieces using sdl
+*[x] Use C and O for pieces
+*[x] Function for Make grid with | and _
 *[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
 *[ ] replace all text using sdl
-*[ ] display game pieces and board in display function
+*[ ] display game board using sdl
+*[ ] display game pieces in display function
 *[ ] implement the game logic with the sdl
 */
 
@@ -56,7 +58,6 @@ struct ClickableItem {
 };//from chipmunksdl example
 
 int main(int argc, char* argv[]){//copied from chipmunkSDLExample
-    bool mouseClicked{ false };
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {//checks if able to display video
         std::cerr << "SDL Init Error: " << SDL_GetError() << std::endl;
@@ -91,12 +92,12 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
         std::cout << "Failed to load font: " << TTF_GetError() << std::endl;
     }
 
+    SDL_Surface* text;
     SDL_Color color = { 255, 255, 255 };
 
-    SDL_Surface* text = TTF_RenderText_Blended_Wrapped(font, "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n*Player1 is X and Player 2 is O.\n*Pieces will go down to the lowest possible row\n*ONLY Y OR N if you want to play again!\n\n", color, 800);
-
     //the blended wrapped ttf allows for line breaking after a certain length
-  
+    text = TTF_RenderText_Blended_Wrapped(font, "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n*Player1 is green and Player 2 is blue.\n*Player 1 starts first.\n*Pieces will go down to the lowest possible row\n*ONLY Y OR N if you want to play again!\n*Click gray square to select column\n\n", color, 800);
+
     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, text);
 
     SDL_Rect textRect;
@@ -122,8 +123,6 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
 
 
     while (running) {
-        int col{ -1 };//so no accidental moves
-
         // Handle events
         while (SDL_PollEvent(&event)) {//pass in with info. in out parameter
             if (event.type == SDL_QUIT) {
@@ -133,7 +132,6 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
             if (event.key.keysym.sym == SDLK_ESCAPE) {
                 running = false;
             }
-
             column1.handleEvent(event);
             column2.handleEvent(event);
             column3.handleEvent(event);
@@ -141,45 +139,54 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
             column5.handleEvent(event);
             column6.handleEvent(event);
             column7.handleEvent(event);
-
-            if (event.type == SDL_MOUSEBUTTONDOWN && !mouseClicked) {
-                //check which item is clicked
-
-                //col is 1 less than the actual value
-                if (column1.isClicked) col = 0;
-                else if (column2.isClicked) col = 1;
-                else if (column3.isClicked) col = 2;
-                else if (column4.isClicked) col = 3;
-                else if (column5.isClicked) col = 4;
-                else if (column6.isClicked) col = 5;
-                else if (column7.isClicked) col = 6;
-            
-                if (col >= 0 && currentGame.canMakeMove(col)) {
-                    currentGame.play(col);
-                    //std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
-                }
-
-                else {
-                    //std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";//find a way to print this to the sdl text thingy
-                }
-
-                mouseClicked = true;
-            }
-            
-            if (event.type == SDL_MOUSEBUTTONUP) {//undoes bool so no infinite moves
-                mouseClicked = false;
-            }
         }
+        //actually draws background here
 
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);//set background to red
+        SDL_RenderClear(renderer);
+
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+        //makes gameboard:
+        currentGame.display(renderer);//eventually move the draw lines into the display function
+
+        
+
+        column1.render(renderer);
+        column2.render(renderer);
+        column3.render(renderer);
+        column4.render(renderer);
+        column5.render(renderer);
+        column6.render(renderer);
+        column7.render(renderer);
+
+        //eventually print out the pieces on the board by iterating through the vector
+        //find out how to print a line to see who's turn it is
+        /*
         //index starts at 0 so has to be one less than player's input
-        if (currentGame.getTurns() % 2 == 0) {//doesn't currently work
-            //std::cout << "Player 2, click on the grey button to choose the column: ";
+        if (currentGame.getTurns() % 2 == 0) {
+            //std::cout << "Player 2, ";
         }
-        
+
         else if (currentGame.getTurns() % 2 > 0) {
-            //std::cout << "Player 1, click on the grey button to choose the column: ";
+            //std::cout << "Player 1, ";
         }
-        
+
+        int col{ getInt("Enter what column you want to play: ") - 1 };
+
+        if (currentGame.canMakeMove(col)) {
+            currentGame.play(col);
+        }
+
+        else {
+            //std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+        }
+
+        currentGame.display(renderer);
+
+        //check to see who won
         ConnectFour::Status stats = currentGame.status();
 
         if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
@@ -205,41 +212,28 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
                 //std::cout << "Starting a new game. Clearing the board\n\n";
                 currentGame = ConnectFour{};//resets game
 
+                std::cout << "Rules:\n*1st person to get 4 in a row in any diraction horizontally, vertically, and diagonally wins."
+                << "\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n"
+                << "*Player one uses O's while Player 2 uses C's.\n*Player 1 starts first.\n"
+                << "*Pieces will go down to the lowest possible row\n"
+                << "*Do not input Yes or No if you want to play again. ONLY Y OR N!\n\n";
+
                 currentGame.display(renderer);
+
             }
 
             else {
                 //std::cout << "Ending the game. Goodbye!\n";
                 break;//ends loop
-            }
+            }*/
+
+            SDL_RenderPresent(renderer);
+            //presents hidden frame
+
+            // Optional: Limit framerate
+            SDL_Delay(16); // ~60 FPS
         }
-
-        //actually draws background here
-
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);//set background to red
-        SDL_RenderClear(renderer);
-
-        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-        //makes gameboard:
-        currentGame.display(renderer);
-
-        column1.render(renderer);
-        column2.render(renderer);
-        column3.render(renderer);
-        column4.render(renderer);
-        column5.render(renderer);
-        column6.render(renderer);
-        column7.render(renderer);
-
-        SDL_RenderPresent(renderer);
-        //presents hidden frame
-
-        // Optional: Limit framerate
-        //SDL_Delay(16); // ~60 FPS
-    }
+    //}
     //cleanup
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -248,6 +242,32 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
     SDL_Quit();//needed. cleans up resources
 
     return 0;
+}
+
+int getInt(const std::string& prompt) {
+    int num{};
+
+    while (true) {
+        std::cout << prompt;
+        std::cin >> num;
+
+        if (std::cin.fail() || std::cin.peek() != '\n' || num > 7 || num < 1) {//peek looks at next character in queue
+            std::cin.clear(); //clears the error
+
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards invalid input
+
+            std::cout << "Inproper input. please try again.\n";
+        }
+
+        else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //discards any extra input
+            break;//exits loop
+        }
+    }
+
+    return num;
 }
 
 bool playAgain() {//doesn't use instance variables so dont put in class
@@ -279,94 +299,3 @@ bool playAgain() {//doesn't use instance variables so dont put in class
 
     }
 }
-
-
-/*chat gpt prompts: 
-
-*I am making a program using c++ and sdl for a connect four game. Currently I have the actual game board to print but as soon as I implement my game logic my screen goes black. can you explain why this is and how to fix this in bullet points? heres the code for main (the connect four class and header file I know already works): *from previous git pull*
-* 
-*responce: I lost it when I accidently closed out of the tab without signing in but they told me to get rid of duplicate if statements and have render frames at the end of the program
-* 
-* i made a program for connect four. however, when I try to click on one of the column buttons, my game says that I am unable to place a piece here. I already know my connectFour.cpp and connectFour.h files work properly and it does not matter if I restart the program. Can you please explain why it is not working in bullet points? here is the code: *from previos git pull*
-* 
-* Thanks for sharing the code — and nice job building out your Connect Four game with SDL! Since you said your connectFour.cpp and .h files are solid, and your main issue is that clicking on a column results in “UNABLE TO PLACE PIECE THERE!”, here’s a breakdown of why that’s likely happening, based on the code you shared:
-
-🔍 Suspected Problem: isClicked State Is Not Set in Time
-You're checking columnX.isClicked inside the SDL_MOUSEBUTTONDOWN block.
-
-But you only call columnX.handleEvent(event) after that, meaning the isClicked flag hasn’t been updated yet when you check it.
-
-✅ What's Happening Step by Step:
-User clicks mouse – SDL_MOUSEBUTTONDOWN is triggered.
-
-You check if any ClickableItem is clicked via columnX.isClicked.
-
-But isClicked is still false, because you haven't yet called columnX.handleEvent(event).
-
-So col remains -1, and the code hits the else block:
-
-cpp
-Copy
-Edit
-else {
-    std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
-}
-✅ Solution: Reorder the Event Handling
-You need to call each column’s handleEvent() before checking if one was clicked.
-
-🔧 Fix:
-Move these lines above the if (event.type == SDL_MOUSEBUTTONDOWN && !mouseClicked) block:
-
-cpp
-Copy
-Edit
-column1.handleEvent(event);
-column2.handleEvent(event);
-column3.handleEvent(event);
-column4.handleEvent(event);
-column5.handleEvent(event);
-column6.handleEvent(event);
-column7.handleEvent(event);
-So the while (SDL_PollEvent(&event)) block should look like:
-
-cpp
-Copy
-Edit
-while (SDL_PollEvent(&event)) {
-    if (event.type == SDL_QUIT) running = false;
-    if (event.key.keysym.sym == SDLK_ESCAPE) running = false;
-
-    // ✅ Move this up before you check for clicks
-    column1.handleEvent(event);
-    column2.handleEvent(event);
-    column3.handleEvent(event);
-    column4.handleEvent(event);
-    column5.handleEvent(event);
-    column6.handleEvent(event);
-    column7.handleEvent(event);
-
-    if (event.type == SDL_MOUSEBUTTONDOWN && !mouseClicked) {
-        if (column1.isClicked) col = 0;
-        else if (column2.isClicked) col = 1;
-        else if (column3.isClicked) col = 2;
-        else if (column4.isClicked) col = 3;
-        else if (column5.isClicked) col = 4;
-        else if (column6.isClicked) col = 5;
-        else if (column7.isClicked) col = 6;
-
-        if (col >= 0 && currentGame.canMakeMove(col)) {
-            currentGame.play(col);
-            std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
-        } else {
-            std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
-        }
-
-        mouseClicked = true; // ✅ Add this so it's not constantly triggered
-    }
-
-    if (event.type == SDL_MOUSEBUTTONUP) {
-        mouseClicked = false;
-    }
-}
-
-*/
