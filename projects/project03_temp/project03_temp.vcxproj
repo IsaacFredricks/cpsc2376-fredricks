@@ -130,9 +130,11 @@
   <ItemGroup>
     <ClCompile Include="..\project03\connectFour.cpp" />
     <ClCompile Include="..\project03\main.cpp" />
+    <ClCompile Include="Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\project03\connectFour.h" />
+    <ClInclude Include="Engine.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="OpenSans-Regular.ttf" />

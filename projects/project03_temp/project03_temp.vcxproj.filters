@@ -21,9 +21,15 @@
     <ClCompile Include="..\project03\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\project03\connectFour.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #define SDL_MAIN_HANDLED//fixes error in visual studio for sdl
 #include <SDL2/SDL.h>//for graphics
 #include <SDL2/SDL_ttf.h>//for text graphics
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -52,29 +53,30 @@ void ConnectFour::display(SDL_Renderer* renderer) const {//replace using sdl
     std::cout << "----------------------\n";*/
 
     //vertical lines
-    SDL_RenderDrawLine(renderer, 100, 225, 100, 800);
-
-    SDL_RenderDrawLine(renderer, 200, 225, 200, 800);
-
-    SDL_RenderDrawLine(renderer, 300, 225, 300, 800);
-
-    SDL_RenderDrawLine(renderer, 400, 225, 400, 800);
-
-    SDL_RenderDrawLine(renderer, 500, 225, 500, 800);
-
-    SDL_RenderDrawLine(renderer, 600, 225, 600, 800);
+    int minX{ 100 };
+    for (int i{ 0 }; i < 6; i++) {
+        SDL_RenderDrawLine(renderer, minX, 225, minX, 800);
+        minX += 100;
+    }
+    
 
     //horizontal lines
-    SDL_RenderDrawLine(renderer, 0, 300, 700, 300);
+    int minY{ 300 };
+    for (int i{ 0 }; i < 6; i++) {
+        SDL_RenderDrawLine(renderer, 0, minY, 700, minY);
+        minY += 100;
+    }
+  
+    //double for loop. put an X or o depending on the vector. find starting point and center x and center y
+    /*for (int row{0}; row < board.size(); row++) {
+        for (int col{ 0 }; col < board.at(0).size(); col++) {
 
-    SDL_RenderDrawLine(renderer, 0, 400, 700, 400);
+        }
+    }*/
 
-    SDL_RenderDrawLine(renderer, 0, 500, 700, 500);
 
-    SDL_RenderDrawLine(renderer, 0, 600, 700, 600);
 
-    SDL_RenderDrawLine(renderer, 0, 700, 700, 700);
-
+    
 }
 
 bool ConnectFour::canMakeMove(int col) {

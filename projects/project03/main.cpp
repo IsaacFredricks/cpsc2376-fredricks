@@ -1,11 +1,14 @@
 ﻿#define SDL_MAIN_HANDLED//fixes error in visual studio for sdl
 #include <SDL2/SDL.h>//for graphics
 #include <SDL2/SDL_ttf.h>//for text graphics
+#include <SDL2/SDL2_gfxPrimitives.h>//for circles
 #include <iostream>//some ai used. I used the ai summary feature for google search for making clickable buttons and drawing lines using sdl and some chatgpt for black screen error in sdl
 #include <vector>//for game Board
 #include <limits>//for edge testing
 #include <string>//for getLine
 #include "connectFour.h"//works fine in vs if its just .h. Change to .cpp if using codebin or github codespaces
+//#include "Engine.h"
+
 /*GOALS:
 *[x] make game class/object oriented
 *[x] make a text-based game
@@ -20,11 +23,8 @@
 *[ ] implement the game logic with the sdl
 */
 
-
-
 //forward declaration here
 bool playAgain();
-int getInt(const std::string& prompt);
 struct ClickableItem {
     SDL_Rect rect;
     SDL_Color color;
@@ -63,7 +63,7 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
         return 1;
     }
 
-    if (TTF_Init() != 0) {//checks if able to display video
+    if (TTF_Init() != 0) {//checks if able to display text
         std::cerr << "SDL_ttf Init Error: " << TTF_GetError() << std::endl;
         return 1;
     }
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
         "Connect4 - Press ESC to Quit",
         SDL_WINDOWPOS_CENTERED,//can also do undefined
         SDL_WINDOWPOS_CENTERED,
-        800, 800,
+        700, 800,
         SDL_WINDOW_SHOWN//makes windows visible
 
     );
@@ -118,6 +118,7 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
 
     SDL_Event event;//reads events from event queue
 
+    //Engine engine;
     ConnectFour currentGame{};//makes game object
 
 
@@ -216,10 +217,10 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
 
         //actually draws background here
 
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);//set background to red
-        SDL_RenderClear(renderer);
+        SDL_SetRenderDrawColor(renderer, 25, 50, 100, 255);//set background to red
+        SDL_RenderClear(renderer);//paints whole screen that color
 
-        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+        SDL_RenderCopy(renderer, textTexture, NULL, &textRect);//render texture to the renderer. null gives everything
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
@@ -237,8 +238,6 @@ int main(int argc, char* argv[]){//copied from chipmunkSDLExample
         SDL_RenderPresent(renderer);
         //presents hidden frame
 
-        // Optional: Limit framerate
-        //SDL_Delay(16); // ~60 FPS
     }
     //cleanup
     SDL_DestroyRenderer(renderer);
@@ -289,7 +288,7 @@ bool playAgain() {//doesn't use instance variables so dont put in class
 * 
 * i made a program for connect four. however, when I try to click on one of the column buttons, my game says that I am unable to place a piece here. I already know my connectFour.cpp and connectFour.h files work properly and it does not matter if I restart the program. Can you please explain why it is not working in bullet points? here is the code: *from previos git pull*
 * 
-* Thanks for sharing the code — and nice job building out your Connect Four game with SDL! Since you said your connectFour.cpp and .h files are solid, and your main issue is that clicking on a column results in “UNABLE TO PLACE PIECE THERE!”, here’s a breakdown of why that’s likely happening, based on the code you shared:
+*responce: Thanks for sharing the code — and nice job building out your Connect Four game with SDL! Since you said your connectFour.cpp and .h files are solid, and your main issue is that clicking on a column results in “UNABLE TO PLACE PIECE THERE!”, here’s a breakdown of why that’s likely happening, based on the code you shared:
 
 🔍 Suspected Problem: isClicked State Is Not Set in Time
 You're checking columnX.isClicked inside the SDL_MOUSEBUTTONDOWN block.
