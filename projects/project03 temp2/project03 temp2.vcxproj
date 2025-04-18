@@ -18,13 +18,24 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="connectFour.cpp" />
+    <ClCompile Include="engine.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="connectFour.h" />
+    <ClInclude Include="engine.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="OpenSans-Regular.ttf" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{9ea7cce5-c359-4305-8085-622e7e3230ad}</ProjectGuid>
-    <RootNamespace>project03temp</RootNamespace>
+    <ProjectGuid>{0b82c62c-848d-4c46-a9a4-fdab10492636}</ProjectGuid>
+    <RootNamespace>project03temp2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>project03</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -127,18 +138,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\project03\connectFour.cpp" />
-    <ClCompile Include="..\project03\main.cpp" />
-    <ClCompile Include="engine.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\project03\connectFour.h" />
-    <ClInclude Include="engine.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="OpenSans-Regular.ttf" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

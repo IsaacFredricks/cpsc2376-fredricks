@@ -16,16 +16,17 @@ public:
 	Engine(const std::string& title = "Engine Window",
 	int width = 700, int height = 800,
 	const std::string& fontPath = "OpenSans-Regular.ttf",
-	int fontSize = 14) {}
+	int fontSize = 14);
 
 	//destructor to clean up resources like the ptrs
 	~Engine();
 
+	//expose the renderer ptr if further customization is needed
+	SDL_Renderer* getRendrerer() const;
+
 	void flip();//presents frame
 
-	void clear(SDL_Color color = { 0, 0, 0, 255 });
-
-	void draw();
+	void clear(SDL_Color color = { 25, 50, 100, 255 });
 
 	//creates a filled circle
 	void drawCircle(int centerX, int centerY, int radius, SDL_Color color = { 255, 0, 0, 255 });
@@ -34,8 +35,5 @@ public:
 
 	//draws text at specific coordinates
 	void drawText(const std::string& text, int centerX, int centerY, SDL_Color color = {255, 255, 255, 255});
-
-	//expose the renderer ptr if further customization is needed
-	SDL_Renderer* getRendrerer() const;
 	
 };

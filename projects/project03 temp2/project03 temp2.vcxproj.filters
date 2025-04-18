@@ -15,22 +15,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\project03\connectFour.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\project03\main.cpp">
+    <ClCompile Include="connectFour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="connectFour.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\project03\connectFour.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="engine.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

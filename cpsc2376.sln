@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "chipmunkSDLExample", "chipm
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "project03", "projects\project03_temp\project03_temp.vcxproj", "{9EA7CCE5-C359-4305-8085-622E7E3230AD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "project03 temp2", "projects\project03 temp2\project03 temp2.vcxproj", "{0B82C62C-848D-4C46-A9A4-FDAB10492636}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{9EA7CCE5-C359-4305-8085-622E7E3230AD}.Release|x64.Build.0 = Release|x64
 		{9EA7CCE5-C359-4305-8085-622E7E3230AD}.Release|x86.ActiveCfg = Release|Win32
 		{9EA7CCE5-C359-4305-8085-622E7E3230AD}.Release|x86.Build.0 = Release|Win32
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Debug|x64.ActiveCfg = Debug|x64
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Debug|x64.Build.0 = Debug|x64
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Debug|x86.ActiveCfg = Debug|Win32
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Debug|x86.Build.0 = Debug|Win32
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Release|x64.ActiveCfg = Release|x64
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Release|x64.Build.0 = Release|x64
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Release|x86.ActiveCfg = Release|Win32
+		{0B82C62C-848D-4C46-A9A4-FDAB10492636}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

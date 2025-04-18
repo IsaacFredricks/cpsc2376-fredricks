@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL2/SDL.h>//for graphics
 #include <SDL2/SDL_ttf.h>//for text graphics
-
+#include "engine.h"
 class ConnectFour {
 
 public:
@@ -14,15 +14,14 @@ public:
 	ConnectFour();
 	void setPiece(Piece gamePiece);
 	int getTurns() const;
-	void display(SDL_Renderer* renderer) const;
+	void draw(Engine* engine, int col = 0);
 	bool canMakeMove(int col);
 	void makeMove(int col);
 	Status status();
 	void play(int col);
-	char pieceToChar() const;
+	char pieceToChar();
 
 private://private by default but good to put it out
-	//Engine engine();
 	std::vector<std::vector<char>> board;
 	int turns;
 	Piece gamePiece;

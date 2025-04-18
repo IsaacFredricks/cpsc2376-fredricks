@@ -1,14 +1,14 @@
 #define SDL_MAIN_HANDLED//fixes error in visual studio for sdl
 #include <SDL2/SDL.h>//for graphics
 #include <SDL2/SDL_ttf.h>//for text graphics
-#include <SDL2/SDL2_gfxPrimitives.h>
 #include <iostream>
 #include <vector>
 #include <limits>
 #include "connectFour.h"
+#include "engine.h"
 
 
-char ConnectFour::pieceToChar() const{
+char ConnectFour::pieceToChar() {
     if (gamePiece == O) {
         return 'O';
     }
@@ -38,7 +38,7 @@ int ConnectFour::getTurns() const {
     return turns;
 }
 
-void ConnectFour::display(SDL_Renderer* renderer) const {//replace using sdl
+void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
     /*std::cout << " 1  2  3  4  5  6  7\n";
     std::cout << "----------------------\n";
 
@@ -52,43 +52,34 @@ void ConnectFour::display(SDL_Renderer* renderer) const {//replace using sdl
     }
     std::cout << "----------------------\n";*/
 
-    //vertical lines
-    int minX{ 100 };
-    for (int i{ 0 }; i < 6; i++) {
-        SDL_RenderDrawLine(renderer, minX, 225, minX, 800);
-        minX += 100;
-    }
-    
+    engine->clear();
 
-    //horizontal lines
-    int minY{ 300 };
-    for (int i{ 0 }; i < 6; i++) {
-        SDL_RenderDrawLine(renderer, 0, minY, 700, minY);
-        minY += 100;
-    }
-    
 
     //double for loop. put an X or o depending on the vector. find starting point and center x and center y
-    /*for (int row{0}; row < board.size(); row++) {
-        for (int col{ 0 }; col < board.at(0).size(); col++) {
-        //print circles then increment the starting x
-        //use Engine.h:
-        if(turns % 2 > 0){//make it red
-            //engine.drawCircle();
+    for (int r{0}; r < board.size(); r++) {
+        for (int c{ 0 }; c < board.at(0).size(); c++) {
+            //print circles then increment the center x
+            //use Engine.h:
+            int cx{ 50 + 100 * c };
+            int cy{ 250 + 100 * r };
+            engine->drawRectangle(cx, cy, 95, 95, { 255, 255, 255, 255 });
+
+            if (c == col) {
+                engine->drawRectangle(cx, cy, 95, 95, { 0, 255, 0, 255 });
+            }
+
+            if (board.at(r).at(c) == 'O') {//make it red
+                engine->drawCircle(cx, cy, 45, { 255, 0, 0, 255 });
+            }
+
+            else if (board.at(r).at(c) == 'C') {
+                engine->drawCircle(cx, cy, 45, { 0, 0, 255, 255 });//make it blue
+            }
+
         }
+    }
 
-        if(turns & 2 == 0){
-            //engine.drawCircle();//make it blue
-        }
-        
-        }
-
-        increment the starting y here
-    }*/
-
-
-
-    
+    engine->flip();
 }
 
 bool ConnectFour::canMakeMove(int col) {

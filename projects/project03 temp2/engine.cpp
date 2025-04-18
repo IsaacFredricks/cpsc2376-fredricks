@@ -7,7 +7,7 @@
 #include <stdexcept>
 
 Engine::Engine(const std::string& title, int width, int height,
-const std::string& fontPath, int fontSize) : window(nullptr), renderer(nullptr), font(nullptr){
+	const std::string& fontPath, int fontSize) : window(nullptr), renderer(nullptr){
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {//checks if able to display video
 		std::cerr << "SDL Init Error: " << SDL_GetError() << std::endl;
 		throw std::runtime_error("sdl init failed");
@@ -70,18 +70,18 @@ Engine::~Engine(){//cleans up ptrs so no memory leaks
 	SDL_Quit();
 }
 
+SDL_Renderer* Engine::getRendrerer() const {
+	return renderer;
+}
+
 void Engine::flip(){//presents frame
-	SDL_RenderPresent(getRenderer());
+	SDL_RenderPresent(renderer);
 }
 
 void Engine::clear(SDL_Color color){
 	//clear screen (set background to blue):
-	SDL_SetRenderDrawColor(getRenderer(), color.r, color.g, color.b, color.a);
-	SDL_RenderClear(getRenderer());
-}
-
-void Engine::draw(){
-
+	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_RenderClear(renderer);
 }
 
 void Engine::drawRectangle(int centerX, int centerY, int w, int h, SDL_Color color) {
@@ -96,7 +96,7 @@ void Engine::drawRectangle(int centerX, int centerY, int w, int h, SDL_Color col
 	SDL_RenderFillRect(renderer, &rect);
 }
 
-void Engine::drawCircle(int centerX, int centerY, int radius, SDL_Color color = { 255, 0, 0, 255 }) {
+void Engine::drawCircle(int centerX, int centerY, int radius, SDL_Color color) {
 	filledCircleRGBA(renderer, centerX, centerY, radius, color.r, color.g, color.b, color.a);
 }
 
@@ -128,8 +128,4 @@ void Engine::drawText(const std::string& text, int centerX, int centerY, SDL_Col
 
 	SDL_DestroyTexture(textTexture);
 	SDL_FreeSurface(textSurface);
-}
-
-SDL_Renderer* Engine::getRendrerer() const {
-	return renderer;
 }
