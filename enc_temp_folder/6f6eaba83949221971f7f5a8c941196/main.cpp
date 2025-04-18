@@ -36,6 +36,9 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     ConnectFour currentGame{};//makes game object
     int col{};
     int row{};
+
+    //text doesn't show up
+    engine.drawText("======== Connect 4 =======", 350, 25);
      
     while (running) {
         //engine.clear();
@@ -124,8 +127,6 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
             }
         }
 
-        //text flickers
-        engine.drawText("======== Connect 4 =======", 350, 25);
 
         //presents hidden frame
         engine.flip();
