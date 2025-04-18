@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         engine.clear();
 
         //text doesn't show up
-        engine.drawText("======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw.\n*Player1 is red and Player 2 is blue.\n*Pieces will go down to the lowest possible row\n*ONLY Y OR N if you want to play again!\n\n", 0, 0);
+        engine.drawText("======== Connect 4 =======", 400, 25);
         
         // Handle events
         while (SDL_PollEvent(&event)) {//pass in with info. in out parameter
@@ -252,5 +252,56 @@ while (SDL_PollEvent(&event)) {
         mouseClicked = false;
     }
 }
+
+*prompt: how do I easily make multi line text using sdl with my drawText() function and can you explain it in bullet points?
+* responce:Update your drawText() function to split the string on \n and render each line one at a time.
+
+🔧 Replace your drawText() with this:
+cpp
+Copy
+Edit
+void Engine::drawText(const std::string& text, int x, int y, SDL_Color color) {
+    int lineHeight = TTF_FontLineSkip(font); // Space between lines
+    int yOffset = 0;
+
+    std::istringstream stream(text);
+    std::string line;
+
+    while (std::getline(stream, line)) {
+        SDL_Surface* textSurface = TTF_RenderText_Blended(font, line.c_str(), color);
+        if (!textSurface) {
+            std::cerr << "unable to render text surface! ttf error: " << TTF_GetError() << '\n';
+            continue;
+        }
+
+        SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+        if (!textTexture) {
+            std::cerr << "unable to render text texture from rendered text! sdl error: " << SDL_GetError() << '\n';
+            SDL_FreeSurface(textSurface);
+            continue;
+        }
+
+        SDL_Rect destRect;
+        destRect.w = textSurface->w;
+        destRect.h = textSurface->h;
+        destRect.x = x;
+        destRect.y = y + yOffset;
+
+        SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
+
+        SDL_DestroyTexture(textTexture);
+        SDL_FreeSurface(textSurface);
+
+        yOffset += lineHeight;
+    }
+}
+🧠 What Changed?
+We now split the string into lines using std::getline.
+
+Each line is rendered at increasing Y positions using y + yOffset.
+
+TTF_FontLineSkip() handles spacing automatically.
+
+
 
 */

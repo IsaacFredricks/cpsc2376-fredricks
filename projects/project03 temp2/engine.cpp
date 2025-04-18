@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <sstream>
 
 Engine::Engine(const std::string& title, int width, int height,
 	const std::string& fontPath, int fontSize) : window(nullptr), renderer(nullptr){
@@ -101,31 +102,42 @@ void Engine::drawCircle(int centerX, int centerY, int radius, SDL_Color color) {
 }
 
 void Engine::drawText(const std::string& text, int centerX, int centerY, SDL_Color color) {
-	//render the text to a surface using the loaded font
-	SDL_Surface* textSurface = TTF_RenderText_Blended(font, text.c_str(), color);
+	int lineHeight = TTF_FontLineSkip(font);
+	int yOffSet = 0;
 
-	if (!textSurface) {
-		std::cerr << "unable to render text surface! ttf error: " << TTF_GetError() << '\n';
-		return;
-	}
+	std::istringstream stream(text);
+	std::string line{};
 
-	//make texture from surface
-	SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-	if (!textTexture) {
-		std::cerr << "unable to render text texture from rendered text! sdl error: " << SDL_GetError() << '\n';
+	while (std::getline(stream, line)) {
+		//render the text to a surface using the loaded font
+		SDL_Surface* textSurface = TTF_RenderText_Blended(font, text.c_str(), color);
+
+		if (!textSurface) {
+			std::cerr << "unable to render text surface! ttf error: " << TTF_GetError() << '\n';
+			return;
+		}
+
+		//make texture from surface
+		SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+		if (!textTexture) {
+			std::cerr << "unable to render text texture from rendered text! sdl error: " << SDL_GetError() << '\n';
+			SDL_FreeSurface(textSurface);
+			return;
+		}
+
+		//calculate destination rectangle to center the text
+		SDL_Rect destRect;
+		destRect.w = textSurface->w;
+		destRect.h = textSurface->h;
+		destRect.x = centerX - destRect.w / 2;
+		destRect.y = centerY - destRect.h / 2 + yOffSet;
+
+		SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
+		
+		yOffSet += lineHeight;
+
+		SDL_DestroyTexture(textTexture);
 		SDL_FreeSurface(textSurface);
-		return;
 	}
-
-	//calculate destination rectangle to center the text
-	SDL_Rect destRect;
-	destRect.w = textSurface->w;
-	destRect.h = textSurface->h;
-	destRect.x = centerX - destRect.w / 2;
-	destRect.y = centerY - destRect.h / 2;
-
-	SDL_RenderCopy(renderer, textTexture, nullptr, &destRect);
-
-	SDL_DestroyTexture(textTexture);
-	SDL_FreeSurface(textSurface);
+	
 }
