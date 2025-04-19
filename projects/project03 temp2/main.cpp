@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     int row{};
      
     while (running) {
-        //engine.clear();
+        engine.clear();
 
         // Handle events
         while (SDL_PollEvent(&event)) {//pass in with info. in out parameter
@@ -80,10 +80,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         //index starts at 0 so has to be one less than player's input
         if (currentGame.getTurns() % 2 == 0) {//doesn't currently work
             //std::cout << "Player 2, click on the grey button to choose the column: ";
+            engine.drawText("Player 2, click on the column you want to play: ", 0, 50);
         }
 
         else if (currentGame.getTurns() % 2 > 0) {
             //std::cout << "Player 1, click on the grey button to choose the column: ";
+            engine.drawText("Player 1, click on the column you want to play: ", 0, 40);
         }
 
         //makes gameboard
@@ -94,24 +96,28 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
             || stats == ConnectFour::DRAW) {
             //print who won
-            std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';
+            std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
 
             if (stats == ConnectFour::PLAYER_1_WINS) {
-                std::cout << "Player 1 wins!\n";
+                //std::cout << "Player 1 wins!\n";
+                engine.drawText("Player 1 Wins! ", 0, 50);
             }
 
             else if (stats == ConnectFour::PLAYER_2_WINS) {
-                std::cout << "Player 2 wins!\n";
+                //std::cout << "Player 2 wins!\n";
+                engine.drawText("Player 2 Wins! ", 0, 50);
             }
 
             else if (stats == ConnectFour::DRAW) {
-                std::cout << "Draw!\n";
+                //std::cout << "Draw!\n";
+                engine.drawText("Draw! ", 0, 50);
             }
 
             bool replay{ playAgain() };
 
             if (replay) {
                 //std::cout << "Starting a new game. Clearing the board\n\n";
+                engine.drawText("Starting a new game. Clearing the board", 0, 50);
                 currentGame = ConnectFour{};//resets game
 
                 engine.clear();
@@ -120,6 +126,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
             else {
                 //std::cout << "Ending the game. Goodbye!\n";
+                engine.drawText("Ending the game. Goodbye!", 0, 50);
                 break;//ends loop
             }
         }
