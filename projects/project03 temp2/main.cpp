@@ -5,7 +5,7 @@
 #include <iostream>//some ai used. I used the ai summary feature for google search for making clickable buttons and drawing lines using sdl and some chatgpt for black screen error in sdl
 #include <vector>//for game Board
 #include <limits>//for edge testing
-#include <string>//for getLine
+#include <string>//for getline and to_string
 #include "connectFour.h"//works fine in vs if its just .h. Change to .cpp if using codebin or github codespaces
 #include "engine.h"
 
@@ -18,10 +18,11 @@
 *[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
-*[ ] startup screen maybe
-*[ ] replace all text using sdl
+*[ ] startup screen using enter to disapear
+*[X] replace all text using sdl
 *[x] display game pieces and board in display function
 *[x] implement the game logic with the sdl
+*[ ] have a way to replay the game
 */
 
 //forward declaration here
@@ -36,6 +37,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     ConnectFour currentGame{};//makes game object
     int col{};
     int row{};
+
      
     while (running) {
         engine.clear();
@@ -95,29 +97,33 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
         if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
             || stats == ConnectFour::DRAW) {
+           
             //print who won
-            std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
+            //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
+            
+            engine.drawText("Total number of turns: ", 100, 80);
+            engine.drawText(std::to_string(currentGame.getTurns()), 180, 80);//to string in string header
 
             if (stats == ConnectFour::PLAYER_1_WINS) {
                 //std::cout << "Player 1 wins!\n";
-                engine.drawText("Player 1 Wins! ", 0, 50);
+                engine.drawText("Player 1 Wins! ", 100, 60);
             }
 
             else if (stats == ConnectFour::PLAYER_2_WINS) {
                 //std::cout << "Player 2 wins!\n";
-                engine.drawText("Player 2 Wins! ", 0, 50);
+                engine.drawText("Player 2 Wins! ", 100, 60);
             }
 
             else if (stats == ConnectFour::DRAW) {
                 //std::cout << "Draw!\n";
-                engine.drawText("Draw! ", 0, 50);
+                engine.drawText("Draw! ", 100, 60);
             }
 
-            bool replay{ playAgain() };
+            bool replay{ playAgain() };//turn into sdl
 
             if (replay) {
                 //std::cout << "Starting a new game. Clearing the board\n\n";
-                engine.drawText("Starting a new game. Clearing the board", 0, 50);
+                engine.drawText("Starting a new game. Clearing the board", 100, 50);
                 currentGame = ConnectFour{};//resets game
 
                 engine.clear();
@@ -126,7 +132,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
             else {
                 //std::cout << "Ending the game. Goodbye!\n";
-                engine.drawText("Ending the game. Goodbye!", 0, 50);
+                engine.drawText("Ending the game. Goodbye!", 100, 50);
                 break;//ends loop
             }
         }

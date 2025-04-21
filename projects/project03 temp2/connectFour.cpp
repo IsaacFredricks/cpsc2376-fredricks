@@ -79,7 +79,7 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
         }
     }
 
-    engine->flip();
+    //engine->flip();//causes flickering
 }
 
 bool ConnectFour::canMakeMove(int col) {
