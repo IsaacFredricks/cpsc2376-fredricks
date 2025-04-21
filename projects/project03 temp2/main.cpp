@@ -77,19 +77,19 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
             }
         }
 
+        //makes gameboard
+        currentGame.draw(&engine, col);
+
         //index starts at 0 so has to be one less than player's input
         if (currentGame.getTurns() % 2 == 0) {//doesn't currently work
             //std::cout << "Player 2, click on the grey button to choose the column: ";
-            engine.drawText("Player 2, click on the column you want to play: ", 0, 50);
+            engine.drawText("Player 2, click on the column you want to play: ", 200, 40);
         }
 
         else if (currentGame.getTurns() % 2 > 0) {
             //std::cout << "Player 1, click on the grey button to choose the column: ";
-            engine.drawText("Player 1, click on the column you want to play: ", 0, 40);
+            engine.drawText("Player 1, click on the column you want to play: ", 200, 40);
         }
-
-        //makes gameboard
-        currentGame.draw(&engine, col);
 
         ConnectFour::Status stats = currentGame.status();
 
