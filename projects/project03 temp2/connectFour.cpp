@@ -8,7 +8,7 @@
 #include "engine.h"
 
 
-char ConnectFour::pieceToChar() {
+char ConnectFour::pieceToChar() const{
     if (gamePiece == O) {
         return 'O';
     }
@@ -61,7 +61,7 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
             //print circles then increment the center x
             //use Engine.h:
             int cx{ 50 + 100 * c };
-            //engine->drawText(std::to_string(r + 1), cx, 180, {0, 0, 0, 255});//doesn't currently work. just black blobs
+            engine->drawText(std::to_string(r + 1), cx, 180, {0, 0, 0, 255});//doesn't currently work. just black blobs
             int cy{ 250 + 100 * r };
             engine->drawRectangle(cx, cy, 95, 95, { 255, 255, 255, 255 });
 

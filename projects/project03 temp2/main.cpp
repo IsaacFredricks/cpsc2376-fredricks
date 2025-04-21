@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
             //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
             
             engine.drawText("Total number of turns: ", 100, 80);
-            engine.drawText(std::to_string(currentGame.getTurns()), 180, 80);//to string in string header
+            engine.drawText(std::to_string(currentGame.getTurns()), 190, 80);//to string in string header
 
             if (stats == ConnectFour::PLAYER_1_WINS) {
                 //std::cout << "Player 1 wins!\n";
@@ -179,7 +179,7 @@ bool playAgain() {//doesn't use instance variables so dont put in class
         }
 
     }
-}
+}//by Isaac Fredricks
 
 
 /*chat gpt prompts:

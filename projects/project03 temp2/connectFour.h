@@ -19,7 +19,7 @@ public:
 	void makeMove(int col);
 	Status status();
 	void play(int col);
-	char pieceToChar();
+	char pieceToChar() const;
 
 private://private by default but good to put it out
 	std::vector<std::vector<char>> board;
