@@ -26,6 +26,7 @@
   <ItemGroup>
     <ClInclude Include="connectFour.h" />
     <ClInclude Include="engine.h" />
+    <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="OpenSans-Regular.ttf" />

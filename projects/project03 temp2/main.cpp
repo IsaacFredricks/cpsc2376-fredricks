@@ -8,6 +8,7 @@
 #include <string>//for getline and to_string
 #include "connectFour.h"//works fine in vs if its just .h. Change to .cpp if using codebin or github codespaces
 #include "engine.h"
+#include "main.h"
 
 /*GOALS:
 *[x] make game class/object oriented
@@ -18,7 +19,6 @@
 *[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
-*[ ] startup screen using enter to disapear
 *[X] replace all text using sdl
 *[x] display game pieces and board in display function
 *[x] implement the game logic with the sdl
@@ -26,7 +26,7 @@
 */
 
 //forward declaration here
-bool playAgain();
+void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& currentGame);
 
 int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
@@ -38,7 +38,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     int col{};
     int row{};
 
-     
+    //rules:
+    std::cout << "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,"
+    << "\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw."
+    << "\n*Player1 is red and Player 2 is blue.\n*Pieces will go down to the lowest possible row\n*Press space you want to play again!\n\n";
+
+    //the actual game
     while (running) {
         engine.clear();
 
@@ -56,7 +61,6 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 //check which item is clicked
                 col = event.button.x / 100;//so no accidental moves
 
-
                 if (col >= 0 && currentGame.canMakeMove(col)) {
                     currentGame.play(col);
                     //std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
@@ -69,9 +73,19 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 mouseClicked = true;
             }
 
+            /*else if (event.type == SDL_KEYDOWN) {
+
+                if () {
+
+                }
+                if (currentGame.status() != ConnectFour::ONGOING) currentGame = ConnectFour();
+            }*/
+
             else if (event.type == SDL_MOUSEMOTION && !mouseClicked) {
                 //check which item is clicked
                 col = event.motion.x / 100;//so no accidental moves
+
+                if (currentGame.status() != ConnectFour::ONGOING) col = -1;
             }
 
             if (event.type == SDL_MOUSEBUTTONUP) {//undoes bool so no infinite moves
@@ -85,60 +99,18 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         //index starts at 0 so has to be one less than player's input
         if (currentGame.getTurns() % 2 == 0) {//doesn't currently work
             //std::cout << "Player 2, click on the grey button to choose the column: ";
-            engine.drawText("Player 2, click on the column you want to play: ", 200, 40);
+            engine.drawText("Player 2, click on the column you want to play: ", 175, 150);
         }
 
         else if (currentGame.getTurns() % 2 > 0) {
             //std::cout << "Player 1, click on the grey button to choose the column: ";
-            engine.drawText("Player 1, click on the column you want to play: ", 200, 40);
+            engine.drawText("Player 1, click on the column you want to play: ", 175, 150);
         }
 
         ConnectFour::Status stats = currentGame.status();
 
-        if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
-            || stats == ConnectFour::DRAW) {
-            
-            //print who won
-            //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
-            
-            engine.drawText("Total number of turns: ", 100, 80);
-            engine.drawText(std::to_string(currentGame.getTurns()), 190, 80);//to string in string header
-
-            if (stats == ConnectFour::PLAYER_1_WINS) {
-                //std::cout << "Player 1 wins!\n";
-                engine.drawText("Player 1 Wins! ", 100, 60);
-            }
-
-            else if (stats == ConnectFour::PLAYER_2_WINS) {
-                //std::cout << "Player 2 wins!\n";
-                engine.drawText("Player 2 Wins! ", 100, 60);
-            }
-
-            else if (stats == ConnectFour::DRAW) {
-                //std::cout << "Draw!\n";
-                engine.drawText("Draw! ", 100, 60);
-            }
-
-            //presents hidden frame
-            engine.flip();//fixes issue of the last turn not rendering
-
-            bool replay{ playAgain() };//turn into sdl
-
-            if (replay) {
-                //std::cout << "Starting a new game. Clearing the board\n\n";
-                engine.drawText("Starting a new game. Clearing the board", 100, 50);
-                currentGame = ConnectFour{};//resets game
-
-                engine.clear();
-                currentGame.draw(&engine);
-            }
-
-            else {
-                //std::cout << "Ending the game. Goodbye!\n";
-                engine.drawText("Ending the game. Goodbye!", 100, 50);
-                break;//ends loop
-            }
-        }
+        
+        drawWinScreen(stats, engine, currentGame);
 
         //text flickers
         engine.drawText("======== Connect 4 =======", 350, 25);
@@ -151,35 +123,49 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     return 0;
 }
 
-bool playAgain() {//doesn't use instance variables so dont put in class
-    while (true) {
-        std::cout << "Want to play again? y or n: ";
-        std::string letter{};//make a button instead
-        getline(std::cin, letter);
 
-        if (letter == "y" || letter == "Y") {
-            std::cout << "Here we go again!\n";
-            return true;
+void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& currentGame)
+{
+    if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
+        || stats == ConnectFour::DRAW) {
+
+        //print who won
+        //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
+        std::string msg;
+        SDL_Color bgColor;
+
+        if (stats == ConnectFour::PLAYER_1_WINS) {
+            //std::cout << "Player 1 wins!\n";
+            
+            msg = "Player 1 Wins! ";
+            bgColor = { 128, 0, 0, 100 };
+
         }
 
-        else if (letter == "n" || letter == "N") {
-            return false;
+        else if (stats == ConnectFour::PLAYER_2_WINS) {
+            //std::cout << "Player 2 wins!\n";
+
+            msg = "Player 2 Wins! ";
+            bgColor = { 0, 0, 128, 100 };
         }
 
-        else if (letter.size() > 1) {
-            std::cout << "Too long of an input. Don't input anything more than Y or N\n";
+        else if (stats == ConnectFour::DRAW) {
+            //std::cout << "Draw!\n";
+
+            msg = "Draw";
+            bgColor = { 0, 128, 0, 100 };
         }
 
-        else if (letter.size() == 0) {
-            std::cout << "You inputed nothing! Try again\n";
-        }
+        engine.drawRectangle(350, 400, 700, 800, bgColor);
+        engine.drawText(msg, 350, 350);
+        engine.drawText("Press Space to play again", 350, 600);
+        engine.drawText("Total number of turns: " + std::to_string(currentGame.getTurns()), 100, 80);
 
-        else {
-            std::cout << "Invalid input. Try again\n";
-        }
-
+        //presents hidden frame
+        engine.flip();//fixes issue of the last turn not rendering
     }
-}//by Isaac Fredricks
+}
+//by Isaac Fredricks
 
 
 /*chat gpt prompts:

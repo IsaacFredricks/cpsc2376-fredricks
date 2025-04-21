@@ -52,16 +52,22 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
     }
     std::cout << "----------------------\n";*/
 
-    engine->clear();
+    int radius{ 45 };
 
-    //double for loop. put an X or o depending on the vector. find starting point and center x and center y
+    //for loop for row numbers. gave me blobs in other loop.
+    for (int i{ 1 }; i <= 7; i++) {
+        int cx{ 50 + 100 * (i - 1) };
+        engine->drawText(std::to_string(i), cx, 180, { 0, 240, 120, 255 });//doesn't currently work. just black blobs
+    }
+
+    //double for loop for board. put an X or o depending on the vector. find starting point and center x and center y
     for (int r{0}; r < board.size(); r++) {
         for (int c{ 0 }; c < board.at(0).size(); c++) {
             
             //print circles then increment the center x
             //use Engine.h:
             int cx{ 50 + 100 * c };
-            engine->drawText(std::to_string(r + 1), cx, 180, {0, 0, 0, 255});//doesn't currently work. just black blobs
+            
             int cy{ 250 + 100 * r };
             engine->drawRectangle(cx, cy, 95, 95, { 255, 255, 255, 255 });
 
@@ -70,11 +76,11 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
             }
 
             if (board.at(r).at(c) == 'O') {//make it red
-                engine->drawCircle(cx, cy, 45, { 255, 0, 0, 255 });
+                engine->drawCircle(cx, cy, radius, { 255, 0, 0, 255 });
             }
 
             else if (board.at(r).at(c) == 'C') {
-                engine->drawCircle(cx, cy, 45, { 0, 0, 255, 255 });//make it blue
+                engine->drawCircle(cx, cy, radius, { 0, 0, 255, 255 });//make it blue
             }
 
         }

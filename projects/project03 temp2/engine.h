@@ -10,6 +10,7 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	TTF_Font* font;
+	int fontSize;
 
 public:
 	//constructor for sdl stuff
