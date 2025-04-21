@@ -54,13 +54,14 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
 
     engine->clear();
 
-
     //double for loop. put an X or o depending on the vector. find starting point and center x and center y
     for (int r{0}; r < board.size(); r++) {
         for (int c{ 0 }; c < board.at(0).size(); c++) {
+            
             //print circles then increment the center x
             //use Engine.h:
             int cx{ 50 + 100 * c };
+            //engine->drawText(std::to_string(r + 1), cx, 180, {0, 0, 0, 255});//doesn't currently work. just black blobs
             int cy{ 250 + 100 * r };
             engine->drawRectangle(cx, cy, 95, 95, { 255, 255, 255, 255 });
 

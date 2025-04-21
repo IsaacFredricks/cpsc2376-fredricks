@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
         if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
             || stats == ConnectFour::DRAW) {
-           
+            
             //print who won
             //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
             
@@ -118,6 +118,9 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 //std::cout << "Draw!\n";
                 engine.drawText("Draw! ", 100, 60);
             }
+
+            //presents hidden frame
+            engine.flip();//fixes issue of the last turn not rendering
 
             bool replay{ playAgain() };//turn into sdl
 
