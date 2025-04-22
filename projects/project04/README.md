@@ -13,10 +13,11 @@ Pieces will go down to the lowest possible row. Play only within the game board!
 - Press `Esc` to exit
  
 ## Screenshots
- While playing:
+While playing:
 ![Screenshot](screenshot.png)
 
 Results Screen Example:
+![Screenshot](screenshot2.png)
  
 ## Extra Features
  

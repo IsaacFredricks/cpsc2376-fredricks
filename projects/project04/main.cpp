@@ -53,13 +53,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 running = false;
             }
 
-            if (event.key.keysym.sym == SDLK_ESCAPE) {
-                running = false;
-            }
-
             if (event.type == SDL_KEYDOWN) {//resets game
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    running = false;
+                }
 
-                if (event.key.keysym.sym == SDLK_KP_ENTER) {//if keypress is enter
+                else if (event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_KP_ENTER) {//if keypress is enter
                     if (currentGame.status() != ConnectFour::ONGOING) currentGame = ConnectFour();
                 }
             }
@@ -134,6 +133,7 @@ void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& curre
     //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
     std::string msg;
     SDL_Color bgColor;
+    SDL_Color textColor{ 200, 255, 0, 255 };
 
     if (stats == ConnectFour::PLAYER_1_WINS) {
        //std::cout << "Player 1 wins!\n";
@@ -158,9 +158,9 @@ void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& curre
     }
 
     engine.drawRectangle(350, 400, 700, 800, bgColor);
-    engine.drawText(msg, 350, 350);
-    engine.drawText("Press Enter to play again", 350, 600);
-    engine.drawText("Total number of turns: " + std::to_string(currentGame.getTurns()), 100, 80);
+    engine.drawText(msg, 350, 350, textColor);
+    engine.drawText("Press Enter to play again", 350, 500, textColor);
+    engine.drawText("Total number of turns: " + std::to_string(currentGame.getTurns()), 100, 80, textColor);
 
 }
 //by Isaac Fredricks

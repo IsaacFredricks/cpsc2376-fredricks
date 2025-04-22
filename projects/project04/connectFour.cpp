@@ -52,12 +52,13 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
     }
     std::cout << "----------------------\n";*/
 
-    int radius{ 45 };
+    int radius{ 40 };
 
     //for loop for row numbers. gave me blobs in other loop.
+    engine->drawRectangle(350, 180, 700, 40, { 0, 0, 0, 120 });
     for (int i{ 1 }; i <= 7; i++) {
         int cx{ 50 + 100 * (i - 1) };
-        engine->drawText(std::to_string(i), cx, 180, { 0, 240, 120, 255 });//doesn't currently work. just black blobs
+        engine->drawText(std::to_string(i), cx, 180, { 0, 240, 120, 255 });
     }
 
     //double for loop for board. put an X or o depending on the vector. find starting point and center x and center y
@@ -77,11 +78,13 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
 
             if (board.at(r).at(c) == 'O') {//make it red
                 engine->drawRectangle(cx, cy, 95, 95, { 120, 240, 0, 255 });
+                engine->drawCircle(cx + 5, cy + 5, radius, { 0, 0, 0, 100 });//drop shadow
                 engine->drawCircle(cx, cy, radius, { 200, 20, 0, 255 });
             }
 
             else if (board.at(r).at(c) == 'C') {
                 engine->drawRectangle(cx, cy, 95, 95, { 120, 240, 0, 255 });
+                engine->drawCircle(cx + 5, cy + 5, radius, { 0, 0, 0, 100 });//drop shadow
                 engine->drawCircle(cx, cy, radius, { 0, 10, 192, 255 });//make it blue
             }
 
@@ -92,7 +95,7 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
 }
 
 bool ConnectFour::canMakeMove(int col) {
-    if (board.at(0).at(col) == 'C' || board.at(0).at(col) == 'O') {
+    if ( status() != ConnectFour::ONGOING || board.at(0).at(col) == 'C' || board.at(0).at(col) == 'O') {
         //std::cout << "All spots on this row are taken. please try again\n";
         return false;
     }
