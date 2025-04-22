@@ -1,6 +1,6 @@
 # Project 04 – Connect Four
  
-## Description
+## Brief Description
  
 This is Connect Four written in C++ using SDL2. Players take turns placing pieces the mouse. Player 1 is red and Player 2 blue.
 The first person to get 4 in a row vertically, horizontally, or diagonally wins. 
@@ -19,6 +19,9 @@ Pieces will go down to the lowest possible row.
 ## Extra Features
  
 - Rules displayed in the terminal
-- Show's who's turn it is using text in SDL
+- Shows who's turn it is using text in SDL
 - Shows number of turns when done
 - Column that the player is hoving over is highlighted green
+- Shows if player is unable to play if the column is full
+- If the click inside the window but outside the gameboard, the move won't count
+- Background the game board will change color depending if there is a piece in that specific row and column

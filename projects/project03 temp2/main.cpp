@@ -38,10 +38,11 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     int col{};
     int row{};
 
-    //rules:
+    //rules display in terminal:
     std::cout << "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,"
     << "\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw."
-    << "\n*Player1 is red and Player 2 is blue.\n*Pieces will go down to the lowest possible row\n*Press space you want to play again!\n\n";
+    << "\n*Player1 is red and Player 2 is blue.\n*Pieces will go down to the lowest possible row\n*Press space you want to play again!"
+    << "\n*Only click the row you want inside the game board! Else it won't count\n\n";
 
     //the actual game
     while (running) {
@@ -67,14 +68,16 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
             if (event.type == SDL_MOUSEBUTTONDOWN && !mouseClicked) {
                 //check which item is clicked
                 col = event.button.x / 100;//so no accidental moves
+                row = event.button.y / 100;//want to only play inside the gameboard
 
-                if (col >= 0 && currentGame.canMakeMove(col)) {
+                if (col >= 0 && row >= 2 && currentGame.canMakeMove(col)) {
                     currentGame.play(col);
                     //std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
                 }
 
                 else {
                     //std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";//find a way to print this to the sdl text thingy
+                    engine.drawText("UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT", 175, 100);
                 }
 
                 mouseClicked = true;
@@ -108,10 +111,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
         ConnectFour::Status stats = currentGame.status();
 
-        
-        drawWinScreen(stats, engine, currentGame);
+        if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
+        || stats == ConnectFour::DRAW) {
+            drawWinScreen(stats, engine, currentGame);
+        }
 
-        //text flickers
+        //logo
         engine.drawText("======== Connect 4 =======", 350, 25);
 
         //presents hidden frame
@@ -125,44 +130,40 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
 void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& currentGame)
 {
-    if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
-        || stats == ConnectFour::DRAW) {
+    //print who won
+    //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
+    std::string msg;
+    SDL_Color bgColor;
 
-        //print who won
-        //std::cout << "Total number of turns: " << currentGame.getTurns() << '\n';//idk how to print the turns in sdl
-        std::string msg;
-        SDL_Color bgColor;
-
-        if (stats == ConnectFour::PLAYER_1_WINS) {
-            //std::cout << "Player 1 wins!\n";
+    if (stats == ConnectFour::PLAYER_1_WINS) {
+       //std::cout << "Player 1 wins!\n";
             
-            msg = "Player 1 Wins! ";
-            bgColor = { 128, 0, 0, 100 };
+       msg = "Player 1 Wins! ";
+       bgColor = { 128, 0, 0, 50 };
 
-        }
-
-        else if (stats == ConnectFour::PLAYER_2_WINS) {
-            //std::cout << "Player 2 wins!\n";
-
-            msg = "Player 2 Wins! ";
-            bgColor = { 0, 0, 128, 100 };
-        }
-
-        else if (stats == ConnectFour::DRAW) {
-            //std::cout << "Draw!\n";
-
-            msg = "Draw";
-            bgColor = { 0, 128, 0, 100 };
-        }
-
-        engine.drawRectangle(350, 400, 700, 800, bgColor);
-        engine.drawText(msg, 350, 350);
-        engine.drawText("Press Enter to play again", 350, 600);
-        engine.drawText("Total number of turns: " + std::to_string(currentGame.getTurns()), 100, 80);
-
-        //presents hidden frame
-        //engine.flip();//fixes issue of the last turn not rendering
     }
+
+    else if (stats == ConnectFour::PLAYER_2_WINS) {
+        //std::cout << "Player 2 wins!\n";
+
+        msg = "Player 2 Wins! ";
+        bgColor = { 0, 0, 128, 50 };
+    }
+
+    else if (stats == ConnectFour::DRAW) {
+       //std::cout << "Draw!\n";
+
+       msg = "Draw";
+       bgColor = { 0, 128, 0, 50 };
+    }
+
+    engine.drawRectangle(350, 400, 700, 800, bgColor);
+    engine.drawText(msg, 350, 350);
+    engine.drawText("Press Enter to play again", 350, 600);
+    engine.drawText("Total number of turns: " + std::to_string(currentGame.getTurns()), 100, 80);
+
+    //presents hidden frame
+    //engine.flip();//fixes issue of the last turn not rendering
 }
 //by Isaac Fredricks
 
