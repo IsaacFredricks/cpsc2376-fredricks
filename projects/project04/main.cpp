@@ -8,7 +8,6 @@
 #include <string>//for getline and to_string
 #include "connectFour.h"//works fine in vs if its just .h. Change to .cpp if using codebin or github codespaces
 #include "engine.h"
-#include "main.h"
 
 /*GOALS:
 *[x] make game class/object oriented

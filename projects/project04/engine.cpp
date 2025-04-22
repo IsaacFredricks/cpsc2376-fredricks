@@ -37,7 +37,7 @@ Engine::Engine(const std::string& title, int width, int height,
 
 	//makes renderer
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);//fixes transparency issue
+	
 	if (!renderer) {
 		std::cerr << "renderer couldn't be created sdl error: " << SDL_GetError() << '\n';
 		TTF_Quit();
@@ -81,7 +81,7 @@ void Engine::flip(){//presents frame
 }
 
 void Engine::clear(SDL_Color color){
-	//clear screen (set background to blue):
+	//clear screen:
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(renderer);
 }
@@ -95,10 +95,12 @@ void Engine::drawRectangle(int centerX, int centerY, int w, int h, SDL_Color col
 	rect.h = h;
 
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);//fixes transparency issue
 	SDL_RenderFillRect(renderer, &rect);
 }
 
 void Engine::drawCircle(int centerX, int centerY, int radius, SDL_Color color) {
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);//fixes transparency issue
 	filledCircleRGBA(renderer, centerX, centerY, radius, color.r, color.g, color.b, color.a);
 }
 
