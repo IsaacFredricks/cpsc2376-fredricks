@@ -57,6 +57,13 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 running = false;
             }
 
+            if (event.type == SDL_KEYDOWN) {//resets game
+
+                if (event.key.keysym.sym == SDLK_KP_ENTER) {//if keypress is enter
+                    if (currentGame.status() != ConnectFour::ONGOING) currentGame = ConnectFour();
+                }
+            }
+
             if (event.type == SDL_MOUSEBUTTONDOWN && !mouseClicked) {
                 //check which item is clicked
                 col = event.button.x / 100;//so no accidental moves
@@ -72,14 +79,6 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
                 mouseClicked = true;
             }
-
-            /*else if (event.type == SDL_KEYDOWN) {
-
-                if () {
-
-                }
-                if (currentGame.status() != ConnectFour::ONGOING) currentGame = ConnectFour();
-            }*/
 
             else if (event.type == SDL_MOUSEMOTION && !mouseClicked) {
                 //check which item is clicked
@@ -158,11 +157,11 @@ void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& curre
 
         engine.drawRectangle(350, 400, 700, 800, bgColor);
         engine.drawText(msg, 350, 350);
-        engine.drawText("Press Space to play again", 350, 600);
+        engine.drawText("Press Enter to play again", 350, 600);
         engine.drawText("Total number of turns: " + std::to_string(currentGame.getTurns()), 100, 80);
 
         //presents hidden frame
-        engine.flip();//fixes issue of the last turn not rendering
+        //engine.flip();//fixes issue of the last turn not rendering
     }
 }
 //by Isaac Fredricks

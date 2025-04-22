@@ -19,9 +19,4 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <Font Include="OpenSans-Regular.ttf">
-      <Filter>Source Files</Filter>
-    </Font>
-  </ItemGroup>
 </Project>
