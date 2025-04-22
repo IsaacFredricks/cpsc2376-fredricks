@@ -19,7 +19,7 @@
 *[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
-*[X] replace all text using sdl
+*[X] replace all text except for rules using sdl
 *[x] display game pieces and board in display function
 *[x] implement the game logic with the sdl
 *[ ] have a way to replay the game

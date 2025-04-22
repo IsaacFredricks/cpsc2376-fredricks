@@ -76,11 +76,13 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
             }
 
             if (board.at(r).at(c) == 'O') {//make it red
-                engine->drawCircle(cx, cy, radius, { 255, 0, 0, 255 });
+                engine->drawRectangle(cx, cy, 95, 95, { 120, 240, 0, 255 });
+                engine->drawCircle(cx, cy, radius, { 200, 20, 0, 255 });
             }
 
             else if (board.at(r).at(c) == 'C') {
-                engine->drawCircle(cx, cy, radius, { 0, 0, 255, 255 });//make it blue
+                engine->drawRectangle(cx, cy, 95, 95, { 120, 240, 0, 255 });
+                engine->drawCircle(cx, cy, radius, { 0, 10, 192, 255 });//make it blue
             }
 
         }

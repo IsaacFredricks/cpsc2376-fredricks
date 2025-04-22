@@ -26,10 +26,12 @@
   <ItemGroup>
     <ClInclude Include="connectFour.h" />
     <ClInclude Include="engine.h" />
-    <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="OpenSans-Regular.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="screenshot.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

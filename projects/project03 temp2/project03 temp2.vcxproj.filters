@@ -27,12 +27,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="connectFour.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="engine.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -40,5 +37,10 @@
     <Font Include="OpenSans-Regular.ttf">
       <Filter>Source Files</Filter>
     </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="screenshot.png">
+      <Filter>Source Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
