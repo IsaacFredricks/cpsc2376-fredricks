@@ -39,10 +39,10 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="screenshot.png">
+    <Image Include="screenshot2.png">
       <Filter>Source Files</Filter>
     </Image>
-    <Image Include="screenshot2.png">
+    <Image Include="screenshot.png">
       <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>
