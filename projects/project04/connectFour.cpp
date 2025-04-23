@@ -38,7 +38,7 @@ int ConnectFour::getTurns() const {
     return turns;
 }
 
-void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
+void ConnectFour::draw(Engine* engine, int col, bool pressedStart) {//replace using sdl
     /*std::cout << " 1  2  3  4  5  6  7\n";
     std::cout << "----------------------\n";
 
@@ -72,7 +72,7 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
             int cy{ 250 + 100 * r };
             engine->drawRectangle(cx, cy, 95, 95, { 255, 255, 255, 255 });
 
-            if (c == col) {
+            if (c == col && status() == ONGOING && pressedStart) {
                 engine->drawRectangle(cx, cy, 95, 95, { 0, 255, 0, 255 });
             }
 
@@ -94,7 +94,7 @@ void ConnectFour::draw(Engine* engine, int col) {//replace using sdl
     //engine->flip();//causes flickering
 }
 
-bool ConnectFour::canMakeMove(int col) {
+bool ConnectFour::canMakeMove(int col){
     if ( status() != ConnectFour::ONGOING || board.at(0).at(col) == 'C' || board.at(0).at(col) == 'O') {
         //std::cout << "All spots on this row are taken. please try again\n";
         return false;

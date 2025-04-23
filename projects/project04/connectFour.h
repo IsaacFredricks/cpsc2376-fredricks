@@ -14,7 +14,7 @@ public:
 	ConnectFour();
 	void setPiece(Piece gamePiece);
 	int getTurns() const;
-	void draw(Engine* engine, int col = 0);
+	void draw(Engine* engine, int col = 0, bool pressedStart = false);
 	bool canMakeMove(int col);
 	void makeMove(int col);
 	Status status();
