@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                     //std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
                 }
 
-                else {
+                else if(pressedStart) {//jank, but makes sure no error message if player clicks on col before game starts
                     isError = true;
                 }
 
