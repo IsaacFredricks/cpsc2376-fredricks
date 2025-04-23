@@ -11,37 +11,32 @@
 
 /*GOALS:
 *[x] make game class/object oriented
-*[x] make a text-based game
 *[x] make connect 4
 *[x] 7x6 two dimensional array
 *[X] Use circles for pieces using sdl
-*[x] Way to replay the game
 *[x] Functions to check input
 *[x] If at end no person wins, its a draw
 *[X] replace all text except for rules using sdl
 *[x] display game pieces and board in display function
 *[x] implement the game logic with the sdl
-*[ ] have a way to replay the game
+*[X] have a way to replay the game
+*[x] have a title screen
 */
 
 //forward declaration here
+void drawTitleScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& currentGame);//do later
 void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& currentGame);
 
 int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
     bool running{ true };
     bool mouseClicked{ false };
+    bool pressedStart{ false };
     SDL_Event event;
     Engine engine{"Connect four - press escape to exit"};
     ConnectFour currentGame{};//makes game object
     int col{};
     int row{};
-
-    //rules display in terminal:
-    std::cout << "======== Connect 4 =======\nRules:\n*1st person to get 4 in a row in any diraction horizontally, vertically,"
-    << "\n and diagonally wins.\n*If all of the spaces are taken and no one has won, the game ends in a draw."
-    << "\n*Player1 is red and Player 2 is blue.\n*Pieces will go down to the lowest possible row\n*Press space you want to play again!"
-    << "\n*Only click the row you want inside the game board! Else it won't count\n\n";
 
     //the actual game
     while (running) {
@@ -53,13 +48,18 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 running = false;
             }
 
-            if (event.type == SDL_KEYDOWN) {//resets game
+            if (event.type == SDL_KEYDOWN) {
                 if (event.key.keysym.sym == SDLK_ESCAPE) {
                     running = false;
                 }
 
                 else if (event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_KP_ENTER) {//if keypress is enter
-                    if (currentGame.status() != ConnectFour::ONGOING) currentGame = ConnectFour();
+                    if (currentGame.status() != ConnectFour::ONGOING) currentGame = ConnectFour();//resets game
+                    pressedStart = false;
+                }
+
+                else if (event.key.keysym.sym == SDLK_SPACE && !pressedStart) {//if keypress is enter
+                    pressedStart = true;
                 }
             }
 
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                 col = event.button.x / 100;//so no accidental moves
                 row = event.button.y / 100;//want to only play inside the gameboard
 
-                if (col >= 0 && row >= 2 && currentGame.canMakeMove(col)) {
+                if (col >= 0 && row >= 2 && currentGame.canMakeMove(col) && pressedStart) {
                     currentGame.play(col);
                     //std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
                 }
@@ -97,12 +97,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         currentGame.draw(&engine, col);
 
         //index starts at 0 so has to be one less than player's input
-        if (currentGame.getTurns() % 2 == 0) {//doesn't currently work
+        if (currentGame.getTurns() % 2 == 0 && pressedStart) {
             //std::cout << "Player 2, click on the grey button to choose the column: ";
             engine.drawText("Player 2, click on the column you want to play: ", 175, 150);
         }
 
-        else if (currentGame.getTurns() % 2 > 0) {
+        else if (currentGame.getTurns() % 2 > 0 && pressedStart) {
             //std::cout << "Player 1, click on the grey button to choose the column: ";
             engine.drawText("Player 1, click on the column you want to play: ", 175, 150);
         }
@@ -113,6 +113,10 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         || stats == ConnectFour::DRAW) {
             currentGame.draw(&engine);
             drawWinScreen(stats, engine, currentGame);
+        }
+
+        if (!pressedStart) {
+            drawTitleScreen(stats, engine, currentGame);
         }
 
         //logo
@@ -126,6 +130,20 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     return 0;
 }
 
+void drawTitleScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& currentGame) {
+    engine.drawRectangle(350, 400, 700, 800, {128, 0, 128, 150});
+    engine.drawText("Press Space to Start", 350, 500);
+
+    engine.drawText("Rules:", 350, 50);
+    engine.drawText("*1st person to get 4 in a row in any diraction horizontally, vertically, or diagonally wins", 350, 70);
+    engine.drawText("*If all of the spaces are taken and no one has won, the game ends in a draw.", 350, 90);
+    engine.drawText("*Player1 is red and Player 2 is blue.", 350, 110);
+    engine.drawText("*Pieces will go down to the lowest possible row", 350, 130);
+    engine.drawText("*If all of the spaces are taken and no one has won, the game ends in a draw.", 350, 150);
+    engine.drawText("*Only click the row you want inside the game board! Else it won't count", 350, 170);
+    engine.drawText("*Resetting the game will take you back to the title screen.", 350, 190);
+    
+}
 
 void drawWinScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& currentGame)
 {
