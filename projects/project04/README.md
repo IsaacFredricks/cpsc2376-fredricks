@@ -2,7 +2,7 @@
  
 ## Brief Description
  
-This is Connect Four written in C++ using SDL2. Players take turns placing pieces the mouse. Player 1 is red and Player 2 blue.
+This is the game Connect Four written in C++ using SDL2. Players take turns placing pieces the mouse. Player 1 is red and Player 2 blue.
 The first person to get 4 in a row vertically, horizontally, or diagonally wins. 
 Pieces will go down to the lowest possible row. Play only within the game board!
 Resetting the game will take you back to the title screen.
@@ -16,9 +16,11 @@ Resetting the game will take you back to the title screen.
  
 ## Screenshots
 While playing:
+
 ![Screenshot](screenshot.png)
 
 Results Screen Example:
+
 ![Screenshot](screenshot2.png)
  
 ## Extra Features
