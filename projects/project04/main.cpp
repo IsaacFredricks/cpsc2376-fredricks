@@ -37,6 +37,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
     ConnectFour currentGame{};//makes game object
     int col{};
     int row{};
+    bool isError{};//for error message
 
     //the actual game
     while (running) {
@@ -70,12 +71,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
 
                 if (col >= 0 && row >= 2 && currentGame.canMakeMove(col) && pressedStart) {
                     currentGame.play(col);
+                    isError = false;
                     //std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
                 }
 
-                else {
-                    //std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";//find a way to print this to the sdl text thingy
-                    engine.drawText("UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT", 175, 100);
+                else if(pressedStart) {//jank, but makes sure no error message if player clicks on col before game starts
+                    isError = true;
                 }
 
                 mouseClicked = true;
@@ -94,7 +95,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         }
 
         //makes gameboard
-        currentGame.draw(&engine, col);
+        currentGame.draw(&engine, col, pressedStart);
 
         //index starts at 0 so has to be one less than player's input
         if (currentGame.getTurns() % 2 == 0 && pressedStart) {
@@ -108,6 +109,12 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         }
 
         ConnectFour::Status stats = currentGame.status();
+
+        if (isError && pressedStart && stats == ConnectFour::ONGOING) {//so it doesn't show a message during the title screen or end screen
+            //std::cout << "UNABLE TO PLACE PIECE THERE! TRY ANOTHER SPOT\n";
+            engine.drawText("UNABLE TO PLACE PIECE THERE! Place in another column!", 350, 100);
+        }
+
 
         if (stats == ConnectFour::PLAYER_1_WINS || stats == ConnectFour::PLAYER_2_WINS
         || stats == ConnectFour::DRAW) {
@@ -125,7 +132,7 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
         //presents hidden frame
         engine.flip();
 
-        SDL_Delay(16);
+        SDL_Delay(16);//fps: 60
     }
     return 0;
 }
@@ -142,6 +149,7 @@ void drawTitleScreen(ConnectFour::Status stats, Engine& engine, ConnectFour& cur
     engine.drawText("*If all of the spaces are taken and no one has won, the game ends in a draw.", 350, 150);
     engine.drawText("*Only click the row you want inside the game board! Else it won't count", 350, 170);
     engine.drawText("*Resetting the game will take you back to the title screen.", 350, 190);
+    engine.drawText("*If you play in a full column, it won't count. Play on a not full column to get rid of error", 350, 210);
     
 }
 
