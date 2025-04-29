@@ -73,10 +73,17 @@ int main(int argc, char* argv[]) {//copied from chipmunkSDLExample
                     currentGame.play(col);
                     isError = false;
                     //std::cout << "column clicked on and turn is " << currentGame.getTurns() << '\n';
+
+
+                    // Flush any lingering mouse click events to prevent phantom inputs
+                    SDL_PumpEvents(); // Update the event queue
+                    SDL_FlushEvent(SDL_MOUSEBUTTONDOWN); // Remove mouse down events
                 }
 
-                else if(pressedStart) {//jank, but makes sure no error message if player clicks on col before game starts
-                    isError = true;
+                //hides error if click on window before starting the game
+                else if (event.key.keysym.sym == SDLK_SPACE && !pressedStart) {
+                    pressedStart = true;
+                    isError = false;
                 }
 
                 mouseClicked = true;
@@ -330,5 +337,54 @@ Each line is rendered at increasing Y positions using y + yOffset.
 TTF_FontLineSkip() handles spacing automatically.
 
 
+text: on the if statement where its checking to see if I can play in that area and gives an unable to play there error if you can't, if finish a game, click on the screen while its in the title screen, and then start the game, it shows that unable to play piece there error. Is there a way to fix that?
 
+*responce: Yes, you’ve pinpointed a subtle but common logic issue related to event order and state cleanup. Here’s what’s happening:
+
+❗ Problem:
+When you click after a game ends, and before starting a new game (while still on the title screen), that mouse click is stored. Once the game starts, that stored click is processed immediately, which causes it to trigger an invalid move — leading to the "UNABLE TO PLACE PIECE" error right after pressing space.
+
+✅ Fix Overview:
+You need to clear any pending mouse input when transitioning from the title screen to game start, so the game doesn't treat a previous click as part of the new session.
+
+✅ Solution Option 1 (Recommended):
+Manually flush the event queue right after the game starts by calling:
+
+cpp
+Copy
+Edit
+SDL_PumpEvents();
+SDL_FlushEvent(SDL_MOUSEBUTTONDOWN);
+🔧 Modify this part in your event loop:
+Find this block:
+
+cpp
+Copy
+Edit
+else if (event.key.keysym.sym == SDLK_SPACE && !pressedStart) {
+    pressedStart = true;
+}
+Update it to:
+
+cpp
+Copy
+Edit
+else if (event.key.keysym.sym == SDLK_SPACE && !pressedStart) {
+    pressedStart = true;
+
+    // Flush any lingering mouse click events to prevent phantom inputs
+    SDL_PumpEvents(); // Update the event queue
+    SDL_FlushEvent(SDL_MOUSEBUTTONDOWN); // Remove mouse down events
+}
+✅ Alternative Option 2: Reset isError at start
+Another (less precise) way would be to also reset the isError flag to false when starting the game:
+
+cpp
+Copy
+Edit
+else if (event.key.keysym.sym == SDLK_SPACE && !pressedStart) {
+    pressedStart = true;
+    isError = false;
+}
+But this doesn't prevent a leftover mouse click from triggering an action, it just hides the error message — so Option 1 is preferred.
 */
