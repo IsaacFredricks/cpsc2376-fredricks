@@ -82,7 +82,7 @@ int main()
     * read line by line and push back each shape into the vector
     * deletes all pointers when done
     */
-    std::vector<std::unique_ptr<Shape>> shapes{};//use unique ptrs to avoid obj slicing
+    std::vector<std::unique_ptr<Shape>> shapes{};//use ptrs to avoid obj slicing
 
     std::string fileName{ "shapes.txt" };
 
